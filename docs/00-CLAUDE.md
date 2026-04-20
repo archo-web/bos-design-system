@@ -46,6 +46,7 @@ vibe coding 작업 유형에 따라 아래 문서를 **반드시 먼저** 참조
 | 페이지 레이아웃 잡기 | `layout-patterns.md` | 새 페이지 구조 설계 시 |
 | 상태/인터랙션 정의 | `interaction-patterns.md` | hover/loading/empty/error 등 정의 시 |
 | 한국어 문구 작성 | `ux-writing.md` | 라벨, 메시지, 안내 문구 작성 시 |
+| 웹 접근성 준수 | `accessibility.md` | 모든 구현 작업 (WCAG AA 기준) |
 | 디자인 토큰 (색상/간격/폰트) | `bos4-design-tokens.css` | 모든 스타일링 작업 |
 
 ---
@@ -134,7 +135,9 @@ const themes = (await figma.variables.getLocalVariableCollectionsAsync())
    ↓
 7. ux-writing.md 기준으로 모든 문구 검토
    ↓
-8. 코드 생성
+8. accessibility.md 체크리스트 점검 (WCAG AA, 키보드, ARIA, 대비비)
+   ↓
+9. 코드 생성
 ```
 
 ---
@@ -148,6 +151,8 @@ const themes = (await figma.variables.getLocalVariableCollectionsAsync())
 - ❌ 인라인 스타일로 토큰 우회 (`style={{ color: '#3851DD' }}` 금지)
 - ❌ `lorem ipsum` — 한국어 더미 텍스트 사용 (예: "프로젝트 알파", "홍길동")
 - ❌ 다크 모드 무시 — 모든 컴포넌트는 Light/Dark 모두 동작해야 함
+- ❌ 접근성 무시 — `<button>` 대신 `<div onClick>` 금지, 아이콘 버튼에 `aria-label` 누락 금지, `<label>` 없는 폼 필드 금지 (상세: `accessibility.md`)
+- ❌ `outline: none` — focus ring 제거 금지 (키보드 사용자 차단). `:focus-visible` 사용
 
 ---
 
@@ -158,6 +163,8 @@ const themes = (await figma.variables.getLocalVariableCollectionsAsync())
 1. **모든 컴포넌트를 외우려 하지 않음** — `figma.search_design_system`을 적극적으로 사용
 2. **자주 쓰이는 핵심 10개 컴포넌트는 `component-usage.md`에 인덱스화** — 나머지는 필요할 때 검색
 3. **variant 매트릭스가 클수록 신중하게 선택** — Button은 500개 variant가 있으니 "Color/Size/State"를 명확히 정해야 함
+4. **다크모드 색조 동조 함정** — 같은 hue 계열 배경+텍스트는 다크모드에서 묻혀 보입니다. Active/Selected 상태는 흰 텍스트 또는 좌측 indicator 사용. 상세: `05-interaction-patterns.md §1.3`
+5. **접근성은 구현 단계에서 체크** — 디자인만 이쁘게 만들고 끝이 아님. 모든 인터랙티브 요소는 키보드 접근 가능해야 하고, 폼 필드는 label 연결, 아이콘 버튼은 aria-label 필수. 상세: `07-accessibility.md`
 
 ---
 
@@ -171,3 +178,4 @@ const themes = (await figma.variables.getLocalVariableCollectionsAsync())
   - 다크 모드 정식 지원
   - 컴포넌트 철학 변경: 목적별 → 속성 조합형
 - `2026-04-20 (동기화 워크플로우 보강)` — Figma-코드 4단계 동기화 룰 명시 (Figma → CSS → HTML inline → Publish). 정기 검증 방법 추가
+- `2026-04-20 (접근성 가이드 추가)` — `07-accessibility.md` 신설. WCAG 2.1 AA 기준 실무 가이드. 시멘틱 토큰 대비비 검증, 키보드/ARIA/폼 접근성, 한국어 특수사항, 개발자 체크리스트 포함. 문서 라우팅·의사결정 순서·금지 사항에도 접근성 반영

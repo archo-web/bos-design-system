@@ -2,7 +2,7 @@
 
 > Flowbite + Tailwind 기반 한국어 디자인 시스템. 시멘틱 토큰, 다크 모드 정식 지원, 47개 컴포넌트 카테고리.
 
-**🌐 라이브 사이트**: `https://archo-web.github.io/bos-design-system/`
+**🌐 라이브 사이트**: `https://<your-github-username>.github.io/bos4-design-system/site/`
 (GitHub Pages 설정 후 실제 URL로 교체하세요)
 
 **🎨 Figma 파일**: [`jmK75D3yVgpYh0wHAlsAwy`](https://figma.com/design/jmK75D3yVgpYh0wHAlsAwy)
@@ -62,14 +62,15 @@ bos4-design-system/
 ├── README.md                       ← 이 파일
 ├── CONTRIBUTING.md                 ← 기여 방법
 ├── SETUP.md                        ← GitHub 관리법 (디자이너용)
-├── docs/                           ← 가이드라인 문서 7개
+├── docs/                           ← 가이드라인 문서 8개
 │   ├── 00-CLAUDE.md                ← 마스터 진입점
 │   ├── 01-design-tokens.md         ← 토큰 카탈로그
 │   ├── 02-design-principles.md     ← 6가지 디자인 원칙
 │   ├── 03-component-usage.md       ← 47개 카테고리 + 핵심 10개 가이드
 │   ├── 04-layout-patterns.md       ← 5가지 페이지 패턴
 │   ├── 05-interaction-patterns.md  ← 상태/인터랙션 표준
-│   └── 06-ux-writing.md            ← 한국어 UX 라이팅
+│   ├── 06-ux-writing.md            ← 한국어 UX 라이팅
+│   └── 07-accessibility.md         ← 웹 접근성 가이드 (WCAG AA)
 ├── tokens/
 │   └── bos4-design-tokens.css      ← 단일 진실 공급원 (489 토큰)
 └── site/                           ← 인터랙티브 사이트 (GitHub Pages 배포)
