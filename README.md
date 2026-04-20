@@ -2,7 +2,7 @@
 
 > Flowbite + Tailwind 기반 한국어 디자인 시스템. 시멘틱 토큰, 다크 모드 정식 지원, 47개 컴포넌트 카테고리.
 
-**🌐 라이브 사이트**: `https://<your-github-username>.github.io/bos4-design-system/site/`
+**🌐 라이브 사이트**: `https://archo-web.github.io/bos-design-system/`
 (GitHub Pages 설정 후 실제 URL로 교체하세요)
 
 **🎨 Figma 파일**: [`jmK75D3yVgpYh0wHAlsAwy`](https://figma.com/design/jmK75D3yVgpYh0wHAlsAwy)
