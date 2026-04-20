@@ -1,0 +1,1874 @@
+<!doctype html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>컴포넌트 — BOS 4.0</title>
+<link rel="preconnect" href="https://fastly.jsdelivr.net" />
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css" />
+<style>
+/* ==========================================================
+   bos4-design-tokens.css — BOS 4.0 Design System
+   Source: Figma file `jmK75D3yVgpYh0wHAlsAwy`
+   ==========================================================
+   토큰 구조 (3-tier):
+   1. Primitives — 원시 값 (white, gray/900, brand/500, spacing/4, ...)
+   2. Themes (Light) — 시멘틱 매핑 (text-heading → gray/900)
+   3. Themes (Dark)  — 같은 시멘틱이 다른 원시 값을 참조 (text-heading → white)
+   
+   사용 규칙:
+   - 컴포넌트는 항상 시멘틱 토큰 사용 (var(--colors-text-text-heading))
+   - 원시 토큰은 새 시멘틱 토큰을 정의할 때만 사용
+   ========================================================== */
+
+/* ==========================================================
+   PRIMITIVES — 원시 값 (Light/Dark 동일)
+   ========================================================== */
+:root {
+  /* Base */
+  --white: #ffffff;
+  --black: #000000;
+
+  /* Spacing — 4px base, Tailwind 호환 */
+  --spacing-0:    0px;
+  --spacing-px:   1px;
+  --spacing-0_5:  2px;   /* 0.5 */
+  --spacing-1:    4px;
+  --spacing-1_5:  6px;
+  --spacing-2:    8px;
+  --spacing-2_5:  10px;
+  --spacing-3:    12px;
+  --spacing-3_5:  14px;
+  --spacing-4:    16px;
+  --spacing-4_5:  18px;
+  --spacing-5:    20px;
+  --spacing-6:    24px;
+  --spacing-7:    28px;
+  --spacing-8:    32px;
+  --spacing-9:    36px;
+  --spacing-10:   40px;
+  --spacing-11:   44px;
+  --spacing-12:   48px;
+  --spacing-14:   56px;
+  --spacing-16:   64px;
+  --spacing-20:   80px;
+  --spacing-24:   96px;
+  --spacing-28:   112px;
+  --spacing-32:   128px;
+  --spacing-36:   144px;
+  --spacing-40:   160px;
+  --spacing-48:   192px;
+  --spacing-56:   224px;
+  --spacing-64:   256px;
+  --spacing-72:   288px;
+  --spacing-80:   320px;
+  --spacing-96:   384px;
+
+  /* Container widths */
+  --container-xs:   380px;
+  --container-sm:   640px;
+  --container-md:   768px;
+  --container-lg:   1024px;
+  --container-xl:   1280px;
+  --container-2xl:  1440px;
+
+  /* ----------------------------------------------------------
+     Color — Brand (BOS 4.0 메인, 기존 Bos PB와 동일)
+     ---------------------------------------------------------- */
+  --colors-brand-050: #e9eafb;
+  --colors-brand-100: #c7cbf5;
+  --colors-brand-200: #a1aaef;
+  --colors-brand-300: #7988e9;
+  --colors-brand-400: #5a6ce4;
+  --colors-brand-500: #3851dd;  /* main brand */
+  --colors-brand-600: #3248d2;
+  --colors-brand-700: #283dc5;
+  --colors-brand-800: #3b3d9e;
+  --colors-brand-900: #011ba7;
+  --colors-brand-950: #28207d;
+
+  /* ----------------------------------------------------------
+     Color — Gray (Tailwind gray)
+     ---------------------------------------------------------- */
+  --colors-gray-050: #f9fafb;
+  --colors-gray-100: #f3f4f6;
+  --colors-gray-200: #e5e7eb;
+  --colors-gray-300: #d1d5dc;
+  --colors-gray-400: #99a1af;
+  --colors-gray-500: #6a7282;
+  --colors-gray-600: #4a5565;
+  --colors-gray-700: #333e4f;
+  --colors-gray-800: #1e2939;
+  --colors-gray-900: #101828;
+  --colors-gray-950: #030712;
+
+  /* ----------------------------------------------------------
+     Color — Slate / Zinc / Neutral / Stone (보조 그레이 계열)
+     ---------------------------------------------------------- */
+  --colors-slate-050: #f8fafc;
+  --colors-slate-100: #f1f5f9;
+  --colors-slate-500: #62748e;
+  --colors-slate-700: #314158;
+  --colors-slate-900: #131c34;
+
+  /* ----------------------------------------------------------
+     Color — Status Palettes
+     ---------------------------------------------------------- */
+  /* Red / Rose (Danger) */
+  --colors-rose-050: #fef0f2;
+  --colors-rose-100: #fee2e8;
+  --colors-rose-200: #fecdd6;
+  --colors-rose-500: #f43f5e;
+  --colors-rose-600: #e11d48;
+  --colors-rose-700: #c70036;
+  --colors-rose-800: #a50036;
+  --colors-rose-900: #881337;
+  --colors-rose-950: #4c0519;
+
+  /* Orange (Warning) */
+  --colors-orange-050: #fff8f1;
+  --colors-orange-100: #feecdc;
+  --colors-orange-200: #fcd9bd;
+  --colors-orange-300: #fdba8c;
+  --colors-orange-400: #ff8a4c;
+  --colors-orange-500: #ff5a1f;
+  --colors-orange-600: #d03801;
+  --colors-orange-700: #b43403;
+  --colors-orange-800: #8a2c0d;
+  --colors-orange-900: #771d1d;
+
+  /* Green / Emerald (Success) */
+  --colors-emerald-050: #ecfdf5;
+  --colors-emerald-100: #d0fae5;
+  --colors-emerald-200: #a7f3d0;
+  --colors-emerald-300: #6ee7b7;
+  --colors-emerald-500: #10b981;
+  --colors-emerald-600: #059669;
+  --colors-emerald-700: #047857;
+  --colors-emerald-800: #065f46;
+  --colors-emerald-900: #064e3b;
+
+  /* Yellow */
+  --colors-yellow-050: #fefce8;
+  --colors-yellow-300: #ffdf20;
+  --colors-yellow-400: #fdc700;
+  --colors-yellow-500: #f0b100;
+
+  /* Sky / Cyan / Teal / Indigo / Purple / Pink — 데이터 시각화용 */
+  --colors-sky-500:    #0ea5e9;
+  --colors-cyan-500:   #06b6d4;
+  --colors-teal-500:   #14b8a6;
+  --colors-teal-600:   #0d9488;
+  --colors-indigo-500: #6366f1;
+  --colors-indigo-600: #4f46e5;
+  --colors-purple-500: #a855f7;
+  --colors-purple-600: #9333ea;
+  --colors-pink-500:   #ec4899;
+  --colors-pink-600:   #db2777;
+
+  /* ----------------------------------------------------------
+     Border Radius
+     ---------------------------------------------------------- */
+  --border-radius-rounded-0:    0px;
+  --border-radius-rounded-xxs:  2px;
+  --border-radius-rounded-xs:   4px;
+  --border-radius-rounded-sm:   6px;
+  --border-radius-rounded:      8px;
+  --border-radius-rounded-md:   10px;
+  --border-radius-rounded-base: 12px;  /* DEFAULT for buttons, inputs */
+  --border-radius-rounded-lg:   16px;
+  --border-radius-rounded-xl:   20px;
+  --border-radius-rounded-2xl:  24px;
+  --border-radius-rounded-full: 9999px;
+
+  /* ----------------------------------------------------------
+     Border Width
+     ---------------------------------------------------------- */
+  --border-width-border:    1px;
+  --border-width-border-md: 2px;
+  --border-width-border-lg: 4px;
+
+  /* ----------------------------------------------------------
+     Shadow
+     ---------------------------------------------------------- */
+  --shadow-xs: 0 1px 0.5px 0.05px rgba(29, 41, 61, 0.02);
+  --shadow-sm: 0 1px 2px 0 rgba(29, 41, 61, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(29, 41, 61, 0.10), 0 2px 4px -2px rgba(29, 41, 61, 0.10);
+  --shadow-lg: 0 10px 15px -3px rgba(29, 41, 61, 0.10), 0 4px 6px -4px rgba(29, 41, 61, 0.10);
+  --shadow-xl: 0 20px 25px -5px rgba(29, 41, 61, 0.10), 0 8px 10px -6px rgba(29, 41, 61, 0.10);
+
+  /* ----------------------------------------------------------
+     Typography
+     ---------------------------------------------------------- */
+  --typography-font-family-base: "Wanted Sans Variable", "Wanted Sans", "Inter", system-ui, -apple-system, sans-serif;
+
+  /* Font sizes */
+  --typography-font-size-text-xxs: 8px;
+  --typography-font-size-text-xs:  12px;
+  --typography-font-size-text-sm:  14px;
+  --typography-font-size-text-base:16px;
+  --typography-font-size-text-lg:  18px;
+  --typography-font-size-text-xl:  20px;
+  --typography-font-size-text-2xl: 24px;
+  --typography-font-size-text-3xl: 30px;
+  --typography-font-size-text-4xl: 36px;
+  --typography-font-size-text-5xl: 48px;
+  --typography-font-size-text-6xl: 60px;
+
+  /* Line heights (px) */
+  --typography-line-height-leading-none: 1;
+  --typography-line-height-leading-3:    12px;
+  --typography-line-height-leading-4:    16px;
+  --typography-line-height-leading-5:    20px;
+  --typography-line-height-leading-6:    24px;
+  --typography-line-height-leading-7:    28px;
+  --typography-line-height-leading-8:    32px;
+  --typography-line-height-leading-9:    36px;
+  --typography-line-height-leading-10:   40px;
+
+  /* Font weights */
+  --typography-font-weight-font-normal:   400;
+  --typography-font-weight-font-medium:   500;
+  --typography-font-weight-font-semibold: 600;
+  --typography-font-weight-font-bold:     700;
+}
+
+
+/* ==========================================================
+   THEMES — LIGHT MODE (default)
+   시멘틱 토큰: 컴포넌트가 사용하는 의미 기반 변수
+   ========================================================== */
+:root,
+[data-theme="light"] {
+  /* ----- Background ----- */
+  --colors-background-bg-white:           var(--white);
+  --colors-background-bg-primary:         var(--white);
+  --colors-background-bg-primary-soft:    var(--white);
+  --colors-background-bg-primary-medium:  var(--white);
+  --colors-background-bg-primary-strong:  var(--white);
+
+  --colors-background-bg-secondary:        var(--colors-gray-050);
+  --colors-background-bg-secondary-soft:   var(--colors-gray-050);
+  --colors-background-bg-secondary-medium: var(--colors-gray-050);
+  --colors-background-bg-secondary-strong: var(--colors-gray-050);
+
+  --colors-background-bg-tertiary:         var(--colors-gray-100);
+  --colors-background-bg-tertiary-soft:    var(--colors-gray-100);
+  --colors-background-bg-tertiary-medium:  var(--colors-gray-100);
+
+  --colors-background-bg-quaternary:        var(--colors-gray-200);
+  --colors-background-bg-quaternary-medium: var(--colors-gray-200);
+
+  --colors-background-bg-gray:     var(--colors-gray-300);
+  --colors-background-bg-dark:     var(--colors-gray-800);
+  --colors-background-bg-dark-strong: var(--colors-gray-900);
+  --colors-background-bg-disabled: var(--colors-gray-100);
+
+  /* Brand backgrounds */
+  --colors-background-bg-brand-softer: var(--colors-brand-050);
+  --colors-background-bg-brand-soft:   var(--colors-brand-100);
+  --colors-background-bg-brand-medium: var(--colors-brand-200);
+  --colors-background-bg-brand:        var(--colors-brand-700);  /* main */
+  --colors-background-bg-brand-strong: var(--colors-brand-800);
+
+  /* Status backgrounds */
+  --colors-background-bg-success-soft:   var(--colors-emerald-050);
+  --colors-background-bg-success-medium: var(--colors-emerald-100);
+  --colors-background-bg-success:        var(--colors-emerald-700);
+  --colors-background-bg-success-strong: var(--colors-emerald-800);
+
+  --colors-background-bg-danger-soft:    var(--colors-rose-050);
+  --colors-background-bg-danger-medium:  var(--colors-rose-100);
+  --colors-background-bg-danger:         var(--colors-rose-700);
+  --colors-background-bg-danger-strong:  var(--colors-rose-800);
+
+  --colors-background-bg-warning-soft:   var(--colors-orange-050);
+  --colors-background-bg-warning-medium: var(--colors-orange-100);
+  --colors-background-bg-warning:        var(--colors-orange-500);
+  --colors-background-bg-warning-strong: var(--colors-orange-700);
+
+  /* ----- Text ----- */
+  --colors-text-text-white:   var(--white);
+  --colors-text-text-black:   var(--colors-gray-900);
+  --colors-text-text-heading: var(--colors-gray-900);
+  --colors-text-text-body:    var(--colors-gray-600);
+  --colors-text-text-body-subtle: var(--colors-gray-500);
+
+  --colors-text-text-fg-brand-subtle: var(--colors-brand-200);
+  --colors-text-text-fg-brand:        var(--colors-brand-700);
+  --colors-text-text-fg-brand-strong: var(--colors-brand-900);
+
+  --colors-text-text-fg-success:        var(--colors-emerald-700);
+  --colors-text-text-fg-success-strong: var(--colors-emerald-900);
+  --colors-text-text-fg-danger:         var(--colors-rose-700);
+  --colors-text-text-fg-danger-strong:  var(--colors-rose-900);
+  --colors-text-text-fg-warning-subtle: var(--colors-orange-600);
+  --colors-text-text-fg-warning:        var(--colors-orange-900);
+
+  --colors-text-text-fg-info:     var(--colors-brand-900);
+  --colors-text-text-fg-disabled: var(--colors-gray-400);
+
+  /* ----- Border ----- */
+  --colors-border-border-buffer:        var(--white);
+  --colors-border-border-buffer-medium: var(--white);
+  --colors-border-border-muted:         var(--colors-gray-050);
+  --colors-border-border-light-subtle:  var(--colors-gray-100);
+  --colors-border-border-light:         var(--colors-gray-100);
+  --colors-border-border-light-medium:  var(--colors-gray-100);
+  --colors-border-border-base-subtle:   var(--colors-gray-200);
+  --colors-border-border-base:          var(--colors-gray-200);
+  --colors-border-border-base-medium:   var(--colors-gray-200);
+  --colors-border-border-base-strong:   var(--colors-gray-200);
+  --colors-border-border-dark:          var(--colors-gray-800);
+  --colors-border-border-dark-subtle:   var(--colors-gray-800);
+
+  --colors-border-border-brand-subtle:  var(--colors-brand-200);
+  --colors-border-border-brand-light:   var(--colors-brand-600);
+  --colors-border-border-brand:         var(--colors-brand-700);
+
+  --colors-border-border-success-subtle: var(--colors-emerald-200);
+  --colors-border-border-success:        var(--colors-emerald-700);
+  --colors-border-border-danger-subtle:  var(--colors-rose-200);
+  --colors-border-border-danger:         var(--colors-rose-700);
+  --colors-border-border-warning-subtle: var(--colors-orange-200);
+  --colors-border-border-warning:        var(--colors-orange-600);
+}
+
+
+/* ==========================================================
+   THEMES — DARK MODE
+   Light와 동일한 시멘틱 키, 다른 원시 참조
+   ========================================================== */
+[data-theme="dark"] {
+  /* ----- Background ----- */
+  --colors-background-bg-white:           var(--white);
+  --colors-background-bg-primary:         var(--colors-gray-950);
+  --colors-background-bg-primary-soft:    var(--colors-gray-900);
+  --colors-background-bg-primary-medium:  var(--colors-gray-800);
+  --colors-background-bg-primary-strong:  var(--colors-gray-700);
+
+  --colors-background-bg-secondary:        var(--colors-gray-950);
+  --colors-background-bg-secondary-soft:   var(--colors-gray-900);
+  --colors-background-bg-secondary-medium: var(--colors-gray-800);
+  --colors-background-bg-secondary-strong: var(--colors-gray-700);
+
+  --colors-background-bg-tertiary:         var(--colors-gray-800);
+  --colors-background-bg-tertiary-soft:    var(--colors-gray-900);
+  --colors-background-bg-tertiary-medium:  var(--colors-gray-700);
+
+  --colors-background-bg-quaternary:        var(--colors-gray-700);
+  --colors-background-bg-quaternary-medium: var(--colors-gray-600);
+
+  --colors-background-bg-gray:     var(--colors-gray-600);
+  --colors-background-bg-dark:     var(--colors-gray-800);
+  --colors-background-bg-dark-strong: var(--colors-gray-700);
+  --colors-background-bg-disabled: var(--colors-gray-800);
+
+  /* Brand backgrounds */
+  --colors-background-bg-brand-softer: var(--colors-brand-950);
+  --colors-background-bg-brand-soft:   var(--colors-brand-900);
+  --colors-background-bg-brand-medium: var(--colors-brand-900);
+  --colors-background-bg-brand:        var(--colors-brand-600);
+  --colors-background-bg-brand-strong: var(--colors-brand-700);
+
+  /* Status backgrounds */
+  --colors-background-bg-success-soft:   var(--colors-emerald-900);
+  --colors-background-bg-success-medium: var(--colors-emerald-900);
+  --colors-background-bg-success:        var(--colors-emerald-600);
+  --colors-background-bg-success-strong: var(--colors-emerald-700);
+
+  --colors-background-bg-danger-soft:    var(--colors-rose-950);
+  --colors-background-bg-danger-medium:  var(--colors-rose-900);
+  --colors-background-bg-danger:         var(--colors-rose-700);
+  --colors-background-bg-danger-strong:  var(--colors-rose-800);
+
+  --colors-background-bg-warning-soft:   var(--colors-orange-900);
+  --colors-background-bg-warning-medium: var(--colors-orange-900);
+  --colors-background-bg-warning:        var(--colors-orange-600);
+  --colors-background-bg-warning-strong: var(--colors-orange-700);
+
+  /* ----- Text ----- */
+  --colors-text-text-white:   var(--white);
+  --colors-text-text-black:   var(--colors-gray-900);
+  --colors-text-text-heading: var(--white);
+  --colors-text-text-body:    var(--colors-gray-400);
+  --colors-text-text-body-subtle: var(--colors-gray-400);
+
+  --colors-text-text-fg-brand-subtle: var(--colors-brand-200);
+  --colors-text-text-fg-brand:        var(--colors-brand-500);
+  --colors-text-text-fg-brand-strong: var(--colors-brand-100);
+
+  --colors-text-text-fg-success:        var(--colors-emerald-600);
+  --colors-text-text-fg-success-strong: var(--colors-emerald-300);
+  --colors-text-text-fg-danger:         var(--colors-rose-500);
+  --colors-text-text-fg-danger-strong:  var(--colors-rose-300);
+  --colors-text-text-fg-warning-subtle: var(--colors-orange-500);
+  --colors-text-text-fg-warning:        var(--colors-orange-300);
+
+  --colors-text-text-fg-info:     var(--colors-brand-300);
+  --colors-text-text-fg-disabled: var(--colors-gray-600);
+
+  /* ----- Border ----- */
+  --colors-border-border-buffer:        var(--colors-gray-950);
+  --colors-border-border-buffer-medium: var(--colors-gray-900);
+  --colors-border-border-muted:         var(--colors-gray-900);
+  --colors-border-border-light-subtle:  var(--colors-gray-900);
+  --colors-border-border-light:         var(--colors-gray-800);
+  --colors-border-border-light-medium:  var(--colors-gray-700);
+  --colors-border-border-base-subtle:   var(--colors-gray-900);
+  --colors-border-border-base:          var(--colors-gray-800);
+  --colors-border-border-base-medium:   var(--colors-gray-700);
+  --colors-border-border-base-strong:   var(--colors-gray-600);
+  --colors-border-border-dark:          var(--colors-gray-600);
+  --colors-border-border-dark-subtle:   var(--colors-gray-700);
+
+  --colors-border-border-brand-subtle:  var(--colors-brand-900);
+  --colors-border-border-brand-light:   var(--colors-brand-600);
+  --colors-border-border-brand:         var(--colors-brand-500);
+
+  --colors-border-border-success-subtle: var(--colors-emerald-900);
+  --colors-border-border-success:        var(--colors-emerald-600);
+  --colors-border-border-danger-subtle:  var(--colors-rose-900);
+  --colors-border-border-danger:         var(--colors-rose-600);
+  --colors-border-border-warning-subtle: var(--colors-orange-900);
+  --colors-border-border-warning:        var(--colors-orange-500);
+}
+
+
+/* ==========================================================
+   사용 예시 (참고용 — 실제 컴포넌트는 별도 CSS)
+   ========================================================== */
+/*
+.example-button-primary {
+  background: var(--colors-background-bg-brand);
+  color: var(--colors-text-text-white);
+  padding: var(--spacing-2_5) var(--spacing-4);
+  border-radius: var(--border-radius-rounded-base);
+  font-size: var(--typography-font-size-text-sm);
+  font-weight: var(--typography-font-weight-font-medium);
+  font-family: var(--typography-font-family-base);
+}
+
+.example-card {
+  background: var(--colors-background-bg-primary);
+  border: var(--border-width-border) solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-base);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-sm);
+}
+
+.example-text-body {
+  color: var(--colors-text-text-body);
+  font-size: var(--typography-font-size-text-sm);
+  line-height: var(--typography-line-height-leading-5);
+}
+*/
+
+/* ==========================================================
+   사이트 셸 스타일 (shared.css)
+   ========================================================== */
+
+/* ==========================================================
+   shared.css — BOS 4.0 Design System 사이트 공통
+   사이트 자체도 BOS 4.0 토큰으로 만듦 (eat your own dog food)
+   ==========================================================
+   import 순서:
+   1. Wanted Sans (Google Fonts → CDN)
+   2. bos4-design-tokens.css (단일 진실 공급원)
+   3. shared.css (이 파일 — 사이트 셸 스타일)
+   ========================================================== */
+
+
+/* Reset & base */
+*,*::before,*::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--typography-font-family-base);
+  font-size: var(--typography-font-size-text-sm);
+  line-height: var(--typography-line-height-leading-5);
+  color: var(--colors-text-text-body);
+  background: var(--colors-background-bg-secondary);
+  -webkit-font-smoothing: antialiased;
+  transition: background var(--d-base, 200ms) ease-out, color var(--d-base, 200ms) ease-out;
+}
+button { font-family: inherit; cursor: pointer; border: 0; background: transparent; color: inherit; }
+input { font-family: inherit; }
+ul, ol { list-style: none; padding: 0; margin: 0; }
+svg { display: block; }
+a { color: inherit; text-decoration: none; }
+code { font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace; font-size: 0.92em; }
+
+/* ==========================================================
+   사이트 셸 — Sidebar + Main
+   ========================================================== */
+.ds-app {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+}
+
+.ds-sidebar {
+  background: var(--colors-background-bg-primary);
+  border-right: 1px solid var(--colors-border-border-base);
+  padding: var(--spacing-5);
+  display: flex; flex-direction: column;
+  gap: var(--spacing-5);
+  height: 100vh;
+  position: sticky; top: 0;
+  overflow-y: auto;
+}
+
+.ds-sidebar__brand {
+  display: flex; align-items: center; gap: var(--spacing-3);
+  padding: var(--spacing-1) var(--spacing-2);
+  text-decoration: none;
+}
+.ds-sidebar__logo {
+  width: 32px; height: 32px;
+  border-radius: var(--border-radius-rounded);
+  background: var(--colors-background-bg-brand);
+  color: var(--colors-text-text-white);
+  display: grid; place-items: center;
+  font-weight: var(--typography-font-weight-font-bold);
+  font-size: 16px;
+}
+.ds-sidebar__name {
+  font-size: var(--typography-font-size-text-base);
+  font-weight: var(--typography-font-weight-font-semibold);
+  color: var(--colors-text-text-heading);
+  letter-spacing: -0.01em;
+}
+.ds-sidebar__name-sub {
+  font-size: var(--typography-font-size-text-xs);
+  color: var(--colors-text-text-body-subtle);
+}
+
+.ds-nav { display: flex; flex-direction: column; gap: var(--spacing-1); }
+.ds-nav-group + .ds-nav-group {
+  margin-top: var(--spacing-3);
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--colors-border-border-light);
+}
+.ds-nav-label {
+  padding: var(--spacing-2) var(--spacing-2);
+  font-size: var(--typography-font-size-text-xs);
+  font-weight: var(--typography-font-weight-font-semibold);
+  color: var(--colors-text-text-disabled);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.ds-nav-link {
+  display: flex; align-items: center; gap: var(--spacing-2_5);
+  height: 32px;
+  padding: 0 var(--spacing-2_5);
+  border-radius: var(--border-radius-rounded);
+  font-size: var(--typography-font-size-text-sm);
+  color: var(--colors-text-text-body);
+  font-weight: var(--typography-font-weight-font-medium);
+  transition: background 150ms ease-out, color 150ms ease-out;
+}
+.ds-nav-link:hover {
+  background: var(--colors-background-bg-tertiary);
+  color: var(--colors-text-text-heading);
+}
+.ds-nav-link--active {
+  background: var(--colors-background-bg-brand-softer);
+  color: var(--colors-text-text-fg-brand);
+  font-weight: var(--typography-font-weight-font-semibold);
+}
+[data-theme="dark"] .ds-nav-link--active {
+  background: var(--colors-background-bg-brand);  /* 진한 brand 배경 — 명확한 active 표시 */
+  color: var(--colors-text-text-white);            /* 흰색 텍스트 — 최고 대비, 표준 패턴 */
+}
+.ds-nav-link__count {
+  margin-left: auto;
+  font-size: var(--typography-font-size-text-xs);
+  color: var(--colors-text-text-body-subtle);
+}
+
+.ds-sidebar__footer { margin-top: auto; }
+
+/* Theme toggle */
+.theme-toggle {
+  display: flex; gap: var(--spacing-1);
+  padding: var(--spacing-1);
+  background: var(--colors-background-bg-secondary);
+  border-radius: var(--border-radius-rounded);
+}
+.theme-toggle button {
+  flex: 1;
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--spacing-1_5);
+  height: 28px;
+  border-radius: var(--border-radius-rounded-sm);
+  font-size: var(--typography-font-size-text-xs);
+  font-weight: var(--typography-font-weight-font-medium);
+  color: var(--colors-text-text-body);
+  transition: all 150ms ease-out;
+}
+.theme-toggle button:hover { color: var(--colors-text-text-heading); }
+.theme-toggle button[aria-pressed="true"] {
+  background: var(--colors-background-bg-primary);
+  color: var(--colors-text-text-heading);
+  box-shadow: var(--shadow-xs);
+}
+.theme-toggle svg { width: 14px; height: 14px; }
+
+/* Main */
+.ds-main {
+  padding: var(--spacing-10) var(--spacing-12);
+  max-width: 1200px;
+}
+
+/* ==========================================================
+   페이지 헤더 (모든 사이트 페이지 공통)
+   ========================================================== */
+.ds-page-header {
+  margin-bottom: var(--spacing-10);
+}
+.ds-eyebrow {
+  font-size: var(--typography-font-size-text-xs);
+  font-weight: var(--typography-font-weight-font-semibold);
+  color: var(--colors-text-text-fg-brand);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--spacing-2);
+}
+.ds-h1 {
+  font-size: var(--typography-font-size-text-4xl);
+  font-weight: var(--typography-font-weight-font-bold);
+  color: var(--colors-text-text-heading);
+  margin: 0;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+.ds-lead {
+  font-size: var(--typography-font-size-text-lg);
+  color: var(--colors-text-text-body);
+  margin: var(--spacing-3) 0 0;
+  max-width: 640px;
+  line-height: var(--typography-line-height-leading-7);
+}
+
+/* ==========================================================
+   섹션
+   ========================================================== */
+.ds-section { margin-bottom: var(--spacing-12); }
+.ds-section + .ds-section { padding-top: var(--spacing-8); }
+.ds-h2 {
+  font-size: var(--typography-font-size-text-2xl);
+  font-weight: var(--typography-font-weight-font-bold);
+  color: var(--colors-text-text-heading);
+  margin: 0 0 var(--spacing-2);
+  letter-spacing: -0.015em;
+}
+.ds-h3 {
+  font-size: var(--typography-font-size-text-lg);
+  font-weight: var(--typography-font-weight-font-semibold);
+  color: var(--colors-text-text-heading);
+  margin: 0 0 var(--spacing-2);
+  letter-spacing: -0.01em;
+}
+.ds-section-desc {
+  font-size: var(--typography-font-size-text-sm);
+  color: var(--colors-text-text-body);
+  margin: 0 0 var(--spacing-6);
+  max-width: 640px;
+  line-height: var(--typography-line-height-leading-6);
+}
+.ds-prose p { margin: 0 0 var(--spacing-3); line-height: var(--typography-line-height-leading-6); }
+.ds-prose strong { color: var(--colors-text-text-heading); font-weight: var(--typography-font-weight-font-semibold); }
+
+/* ==========================================================
+   Demo block (라이브 컴포넌트 + 코드)
+   ========================================================== */
+.ds-demo {
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-lg);
+  background: var(--colors-background-bg-primary);
+  margin-bottom: var(--spacing-6);
+  overflow: hidden;
+}
+.ds-demo__preview {
+  padding: var(--spacing-8);
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent 0,
+      transparent 10px,
+      var(--colors-background-bg-secondary) 10px,
+      var(--colors-background-bg-secondary) 11px
+    ),
+    var(--colors-background-bg-primary);
+  display: flex; align-items: center; justify-content: center;
+  flex-wrap: wrap; gap: var(--spacing-4);
+  min-height: 120px;
+}
+.ds-demo__preview--vertical { flex-direction: column; align-items: stretch; }
+.ds-demo__preview--clean {
+  background: var(--colors-background-bg-primary);
+  display: block;
+  padding: var(--spacing-6);
+}
+.ds-demo__caption {
+  padding: var(--spacing-3) var(--spacing-5);
+  font-size: var(--typography-font-size-text-xs);
+  color: var(--colors-text-text-body-subtle);
+  background: var(--colors-background-bg-secondary);
+  border-top: 1px solid var(--colors-border-border-base);
+}
+.ds-demo__code {
+  border-top: 1px solid var(--colors-border-border-base);
+  background: var(--colors-background-bg-secondary);
+  padding: var(--spacing-4) var(--spacing-5);
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace;
+  font-size: 12px;
+  color: var(--colors-text-text-body);
+  overflow-x: auto;
+  white-space: pre;
+  line-height: 1.6;
+}
+
+/* Token color swatch grid */
+.ds-swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-6);
+}
+.ds-swatch {
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded);
+  overflow: hidden;
+  background: var(--colors-background-bg-primary);
+}
+.ds-swatch__color {
+  height: 64px;
+  display: block;
+}
+.ds-swatch__info {
+  padding: var(--spacing-2_5) var(--spacing-3);
+}
+.ds-swatch__name {
+  font-size: var(--typography-font-size-text-xs);
+  font-weight: var(--typography-font-weight-font-semibold);
+  color: var(--colors-text-text-heading);
+  font-family: ui-monospace, monospace;
+  word-break: break-all;
+}
+.ds-swatch__hex {
+  font-size: 11px;
+  color: var(--colors-text-text-body-subtle);
+  font-family: ui-monospace, monospace;
+  margin-top: 2px;
+}
+
+/* Token table */
+.ds-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--spacing-6);
+  background: var(--colors-background-bg-primary);
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-lg);
+  overflow: hidden;
+}
+.ds-table th, .ds-table td {
+  padding: var(--spacing-3) var(--spacing-4);
+  text-align: left;
+  font-size: var(--typography-font-size-text-sm);
+  border-bottom: 1px solid var(--colors-border-border-light);
+}
+.ds-table tr:last-child td { border-bottom: 0; }
+.ds-table th {
+  background: var(--colors-background-bg-secondary);
+  font-size: var(--typography-font-size-text-xs);
+  font-weight: var(--typography-font-weight-font-semibold);
+  color: var(--colors-text-text-body);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.ds-table td { color: var(--colors-text-text-body); }
+.ds-table td.token-name {
+  font-family: ui-monospace, monospace;
+  color: var(--colors-text-text-heading);
+  font-size: 12px;
+  font-weight: var(--typography-font-weight-font-medium);
+}
+.ds-table td.token-value {
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--colors-text-text-fg-brand);
+}
+
+/* Spacing visualization */
+.spacing-row { display: flex; align-items: center; gap: var(--spacing-4); margin-bottom: var(--spacing-2); }
+.spacing-bar { background: var(--colors-background-bg-brand); height: 16px; border-radius: 4px; flex: none; }
+.spacing-info { display: flex; gap: var(--spacing-3); font-family: ui-monospace, monospace; font-size: 12px; color: var(--colors-text-text-body); }
+.spacing-info code { color: var(--colors-text-text-heading); font-weight: var(--typography-font-weight-font-semibold); }
+
+/* Type sample */
+.type-sample {
+  display: flex; align-items: baseline; gap: var(--spacing-4);
+  padding: var(--spacing-4) 0;
+  border-bottom: 1px solid var(--colors-border-border-light);
+}
+.type-sample:last-child { border-bottom: 0; }
+.type-sample__meta {
+  flex: none; min-width: 220px;
+  font-family: ui-monospace, monospace;
+  font-size: var(--typography-font-size-text-xs);
+  color: var(--colors-text-text-body-subtle);
+}
+.type-sample__meta-name { color: var(--colors-text-text-heading); font-weight: var(--typography-font-weight-font-semibold); display: block; }
+.type-sample__example { color: var(--colors-text-text-heading); flex: 1; }
+
+/* Card grid */
+.ds-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-6);
+}
+.ds-card {
+  display: block;
+  padding: var(--spacing-5);
+  background: var(--colors-background-bg-primary);
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-lg);
+  transition: all 150ms ease-out;
+  text-decoration: none;
+}
+.ds-card:hover {
+  border-color: var(--colors-border-border-base-strong, var(--colors-border-border-base));
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.ds-card__icon {
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border-radius: var(--border-radius-rounded);
+  background: var(--colors-background-bg-brand-softer);
+  color: var(--colors-text-text-fg-brand);
+  margin-bottom: var(--spacing-3);
+}
+.ds-card__icon svg { width: 20px; height: 20px; }
+.ds-card__title {
+  font-size: var(--typography-font-size-text-base);
+  font-weight: var(--typography-font-weight-font-semibold);
+  color: var(--colors-text-text-heading);
+  margin: 0 0 var(--spacing-1);
+}
+.ds-card__desc {
+  font-size: var(--typography-font-size-text-sm);
+  color: var(--colors-text-text-body);
+  line-height: var(--typography-line-height-leading-5);
+  margin: 0;
+}
+
+/* Variant table — for component variants */
+.variant-row { display: flex; align-items: center; gap: var(--spacing-4); padding: var(--spacing-4); border-bottom: 1px solid var(--colors-border-border-light); }
+.variant-row:last-child { border-bottom: 0; }
+.variant-row__label {
+  flex: none; width: 120px;
+  font-size: var(--typography-font-size-text-sm);
+  font-weight: var(--typography-font-weight-font-medium);
+  color: var(--colors-text-text-body);
+  font-family: ui-monospace, monospace;
+}
+.variant-row__samples {
+  display: flex; gap: var(--spacing-3); flex-wrap: wrap; flex: 1; align-items: center;
+}
+
+/* Badge / pill (for category labels in this site) */
+.ds-pill {
+  display: inline-flex; align-items: center;
+  height: 22px; padding: 0 var(--spacing-2);
+  border-radius: var(--border-radius-rounded-full);
+  font-size: 11px;
+  font-weight: var(--typography-font-weight-font-medium);
+  background: var(--colors-background-bg-secondary);
+  color: var(--colors-text-text-body-subtle);
+}
+.ds-pill--brand {
+  background: var(--colors-background-bg-brand-softer);
+  color: var(--colors-text-text-fg-brand);
+}
+.ds-pill--success {
+  background: var(--colors-background-bg-success-soft);
+  color: var(--colors-text-text-fg-success);
+}
+.ds-pill--warning {
+  background: var(--colors-background-bg-warning-soft);
+  color: var(--colors-text-text-fg-warning);
+}
+[data-theme="dark"] .ds-pill--brand {
+  background: var(--colors-background-bg-brand-soft);
+  color: var(--colors-text-text-fg-brand-strong);
+}
+
+/* Note callout */
+.ds-callout {
+  display: flex; gap: var(--spacing-3);
+  padding: var(--spacing-4) var(--spacing-5);
+  background: var(--colors-background-bg-brand-softer);
+  border-left: 3px solid var(--colors-border-border-brand);
+  border-radius: var(--border-radius-rounded);
+  margin-bottom: var(--spacing-5);
+  color: var(--colors-text-text-body);
+}
+[data-theme="dark"] .ds-callout {
+  background: var(--colors-background-bg-brand-soft);
+  border-left-color: var(--colors-border-border-brand);
+}
+.ds-callout__icon {
+  width: 20px; height: 20px; flex: none;
+  color: var(--colors-text-text-fg-brand);
+  margin-top: 1px;
+}
+.ds-callout strong { color: var(--colors-text-text-heading); }
+
+/* ==========================================================
+   Search bar (사이트 상단)
+   ========================================================== */
+.ds-search {
+  position: relative;
+  margin-bottom: var(--spacing-3);
+}
+.ds-search__icon {
+  position: absolute; left: var(--spacing-3); top: 50%; transform: translateY(-50%);
+  width: 14px; height: 14px;
+  color: var(--colors-text-text-body-subtle);
+}
+.ds-search__input {
+  width: 100%; height: 36px;
+  padding: 0 var(--spacing-3) 0 var(--spacing-9);
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded);
+  background: var(--colors-background-bg-secondary);
+  color: var(--colors-text-text-heading);
+  font-size: var(--typography-font-size-text-sm);
+  font-family: var(--typography-font-family-base);
+  outline: none;
+}
+.ds-search__input:focus {
+  border-color: var(--colors-border-border-brand);
+  box-shadow: 0 0 0 2px var(--colors-border-border-brand-subtle);
+  background: var(--colors-background-bg-primary);
+}
+.ds-search__input::placeholder { color: var(--colors-text-text-body-subtle); }
+
+/* ==========================================================
+   반응형 (간단)
+   ========================================================== */
+@media (max-width: 1024px) {
+  .ds-app { grid-template-columns: 1fr; }
+  .ds-sidebar { position: static; height: auto; }
+  .ds-main { padding: var(--spacing-6); }
+}
+
+</style>
+
+<style>
+/* ==========================================================
+   컴포넌트 전용 스타일 (실제 컴포넌트들)
+   shared.css의 토큰을 사용 — 다크모드 자동 대응
+   ========================================================== */
+
+/* ===== Button ===== */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: var(--spacing-1_5);
+  font-family: var(--typography-font-family-base);
+  font-weight: var(--typography-font-weight-font-medium);
+  border-radius: var(--border-radius-rounded-base);
+  transition: all 150ms ease-out;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.btn:focus-visible { outline: 2px solid var(--colors-border-border-brand); outline-offset: 2px; }
+.btn:disabled { background: var(--colors-background-bg-disabled); color: var(--colors-text-text-disabled); cursor: not-allowed; border-color: var(--colors-border-border-base); }
+.btn svg { width: 14px; height: 14px; }
+.btn--xs   { height: 24px; padding: 0 var(--spacing-2); font-size: var(--typography-font-size-text-xs); }
+.btn--sm   { height: 32px; padding: 0 var(--spacing-3); font-size: var(--typography-font-size-text-xs); }
+.btn--base { height: 40px; padding: 0 var(--spacing-4); font-size: var(--typography-font-size-text-sm); }
+.btn--lg   { height: 48px; padding: 0 var(--spacing-5); font-size: var(--typography-font-size-text-base); }
+.btn--xl   { height: 56px; padding: 0 var(--spacing-6); font-size: var(--typography-font-size-text-base); }
+
+.btn--brand     { background: var(--colors-background-bg-brand); color: var(--colors-text-text-white); box-shadow: var(--shadow-xs); }
+.btn--brand:hover:not(:disabled) { background: var(--colors-background-bg-brand-strong); }
+
+.btn--secondary { background: var(--colors-background-bg-secondary); border: 1px solid var(--colors-border-border-base); color: var(--colors-text-text-body); box-shadow: var(--shadow-xs); }
+.btn--secondary:hover:not(:disabled) { background: var(--colors-background-bg-tertiary); }
+
+.btn--success   { background: var(--colors-background-bg-success); color: var(--colors-text-text-white); box-shadow: var(--shadow-xs); }
+.btn--danger    { background: var(--colors-background-bg-danger); color: var(--colors-text-text-white); box-shadow: var(--shadow-xs); }
+.btn--danger:hover:not(:disabled) { background: var(--colors-background-bg-danger-strong); }
+.btn--warning   { background: var(--colors-background-bg-warning); color: var(--colors-text-text-white); box-shadow: var(--shadow-xs); }
+.btn--dark      { background: var(--colors-background-bg-dark, var(--colors-text-text-heading)); color: var(--colors-text-text-white); }
+.btn--ghost     { background: transparent; color: var(--colors-text-text-body); }
+.btn--ghost:hover:not(:disabled) { background: var(--colors-background-bg-tertiary); color: var(--colors-text-text-heading); }
+
+.btn--outline.btn--brand { background: transparent; color: var(--colors-text-text-fg-brand); border: 1px solid var(--colors-border-border-brand); }
+.btn--outline.btn--brand:hover { background: var(--colors-background-bg-brand-softer); }
+.btn--outline.btn--danger { background: transparent; color: var(--colors-text-text-fg-danger); border: 1px solid var(--colors-border-border-danger); }
+.btn--outline.btn--danger:hover { background: var(--colors-background-bg-danger-soft); }
+
+.btn--icon { width: 36px; height: 36px; padding: 0; }
+.btn--icon svg { width: 16px; height: 16px; }
+
+/* ===== Input field ===== */
+.input-form { display: flex; flex-direction: column; gap: var(--spacing-2_5); }
+.label { font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-medium); color: var(--colors-text-text-heading); }
+.field {
+  position: relative;
+  display: flex; align-items: center;
+  height: 40px;
+  background: var(--colors-background-bg-secondary);
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-base);
+  transition: all 150ms ease-out;
+}
+.field:focus-within {
+  border-color: var(--colors-border-border-brand);
+  box-shadow: 0 0 0 2px var(--colors-border-border-brand-subtle);
+  background: var(--colors-background-bg-primary);
+}
+.field--sm { height: 32px; }
+.field--lg { height: 48px; }
+.field--xl { height: 56px; }
+.field--success { border-color: var(--colors-border-border-success); }
+.field--danger { border-color: var(--colors-border-border-danger); background: var(--colors-background-bg-danger-soft); }
+[data-theme="dark"] .field--danger { background: var(--colors-background-bg-secondary); }
+.field__icon { width: 16px; height: 16px; margin-left: var(--spacing-3); color: var(--colors-text-text-body-subtle); flex: none; }
+.field--success .field__icon { color: var(--colors-text-text-fg-success); }
+.field--danger .field__icon { color: var(--colors-text-text-fg-danger); }
+.field__input {
+  flex: 1; min-width: 0; height: 100%;
+  padding: 0 var(--spacing-3); border: 0; outline: none;
+  background: transparent; color: var(--colors-text-text-heading);
+  font-size: var(--typography-font-size-text-sm); font-family: var(--typography-font-family-base);
+}
+.field__input::placeholder { color: var(--colors-text-text-body-subtle); }
+.field__input:disabled { color: var(--colors-text-text-disabled); cursor: not-allowed; }
+.helper { font-size: var(--typography-font-size-text-xs); color: var(--colors-text-text-body-subtle); }
+.helper--danger { color: var(--colors-text-text-fg-danger); }
+.helper--success { color: var(--colors-text-text-fg-success); }
+
+/* ===== Alert ===== */
+.alert {
+  display: flex; gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--border-radius-rounded-base);
+  font-size: var(--typography-font-size-text-sm);
+}
+.alert__icon { width: 20px; height: 20px; flex: none; }
+.alert__icon svg { width: 100%; height: 100%; }
+.alert__content { flex: 1; }
+.alert__title { font-weight: var(--typography-font-weight-font-semibold); margin: 0 0 2px; }
+.alert__msg { margin: 0; opacity: 0.9; }
+.alert--info    { background: var(--colors-background-bg-brand-softer); color: var(--colors-text-text-fg-brand-strong); border: 1px solid var(--colors-border-border-brand-subtle); }
+[data-theme="dark"] .alert--info { background: var(--colors-background-bg-brand-soft); }
+.alert--success { background: var(--colors-background-bg-success-soft); color: var(--colors-text-text-fg-success); border: 1px solid var(--colors-border-border-success-subtle); }
+.alert--warning { background: var(--colors-background-bg-warning-soft); color: var(--colors-text-text-fg-warning); border: 1px solid var(--colors-border-border-warning-subtle, var(--colors-border-border-base)); }
+.alert--danger  { background: var(--colors-background-bg-danger-soft); color: var(--colors-text-text-fg-danger); border: 1px solid var(--colors-border-border-danger-subtle); }
+
+/* ===== Badge ===== */
+.badge {
+  display: inline-flex; align-items: center; gap: var(--spacing-1);
+  height: 22px; padding: 0 var(--spacing-2);
+  border-radius: var(--border-radius-rounded-full);
+  font-size: var(--typography-font-size-text-xs);
+  font-weight: var(--typography-font-weight-font-medium);
+  line-height: 1; white-space: nowrap;
+}
+.badge--lg { height: 26px; padding: 0 var(--spacing-2_5); font-size: var(--typography-font-size-text-sm); }
+.badge--gray    { background: var(--colors-background-bg-tertiary); color: var(--colors-text-text-body); }
+.badge--brand   { background: var(--colors-background-bg-brand-softer); color: var(--colors-text-text-fg-brand-strong); }
+[data-theme="dark"] .badge--brand { background: var(--colors-background-bg-brand-soft); }
+.badge--success { background: var(--colors-background-bg-success-soft); color: var(--colors-text-text-fg-success); }
+.badge--danger  { background: var(--colors-background-bg-danger-soft); color: var(--colors-text-text-fg-danger); }
+.badge--warning { background: var(--colors-background-bg-warning-soft); color: var(--colors-text-text-fg-warning); }
+.badge--with-dot::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+/* ===== Avatar ===== */
+.avatar {
+  display: inline-grid; place-items: center;
+  border-radius: 50%;
+  background: var(--colors-background-bg-brand-softer);
+  color: var(--colors-text-text-fg-brand);
+  font-weight: var(--typography-font-weight-font-semibold);
+  flex: none;
+}
+.avatar--sm { width: 24px; height: 24px; font-size: 11px; }
+.avatar--md { width: 32px; height: 32px; font-size: 12px; }
+.avatar--lg { width: 40px; height: 40px; font-size: 14px; }
+
+/* ===== Card (UI demo) ===== */
+.card-demo {
+  background: var(--colors-background-bg-primary);
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-base);
+  padding: var(--spacing-5);
+  box-shadow: var(--shadow-sm);
+  width: 280px;
+}
+.card-demo__title { font-size: var(--typography-font-size-text-base); font-weight: var(--typography-font-weight-font-semibold); color: var(--colors-text-text-heading); margin: 0 0 var(--spacing-2); }
+.card-demo__desc { font-size: var(--typography-font-size-text-sm); color: var(--colors-text-text-body); margin: 0 0 var(--spacing-4); line-height: var(--typography-line-height-leading-5); }
+
+/* ===== Modal mock ===== */
+.modal-mock {
+  width: 480px;
+  background: var(--colors-background-bg-primary);
+  border-radius: var(--border-radius-rounded-base);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--colors-border-border-base);
+  overflow: hidden;
+}
+.modal-mock__header { padding: var(--spacing-5); border-bottom: 1px solid var(--colors-border-border-base); display: flex; align-items: center; justify-content: space-between; }
+.modal-mock__title { font-size: var(--typography-font-size-text-lg); font-weight: var(--typography-font-weight-font-semibold); color: var(--colors-text-text-heading); margin: 0; }
+.modal-mock__close { width: 32px; height: 32px; display: grid; place-items: center; color: var(--colors-text-text-body-subtle); border-radius: var(--border-radius-rounded-sm); }
+.modal-mock__close:hover { background: var(--colors-background-bg-tertiary); color: var(--colors-text-text-heading); }
+.modal-mock__body { padding: var(--spacing-5); color: var(--colors-text-text-body); }
+.modal-mock__footer { padding: var(--spacing-4) var(--spacing-5); border-top: 1px solid var(--colors-border-border-base); display: flex; justify-content: flex-end; gap: var(--spacing-2); background: var(--colors-background-bg-secondary); }
+
+/* ===== Toast ===== */
+.toast-mock {
+  display: flex; align-items: center; gap: var(--spacing-2_5);
+  padding: var(--spacing-4);
+  background: var(--colors-background-bg-primary);
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-base);
+  box-shadow: var(--shadow-md);
+  width: 360px;
+}
+.toast-mock__icon { width: 20px; height: 20px; flex: none; color: var(--colors-text-text-fg-success); }
+.toast-mock__msg {
+  flex: 1; min-width: 0; padding-left: var(--spacing-4);
+  border-left: 1px solid var(--colors-border-border-base);
+  font-size: var(--typography-font-size-text-sm); color: var(--colors-text-text-body);
+}
+.toast-mock__action { font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-semibold); color: var(--colors-text-text-fg-brand); padding: 0 var(--spacing-2); }
+.toast-mock__close { width: 32px; height: 32px; display: grid; place-items: center; border-radius: var(--border-radius-rounded-lg); color: var(--colors-text-text-body-subtle); }
+.toast-mock__close:hover { background: var(--colors-background-bg-tertiary); }
+
+/* ===== Dropdown mock ===== */
+.dropdown-mock {
+  width: 220px;
+  background: var(--colors-background-bg-primary);
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-base);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-1);
+  overflow: hidden;
+}
+.dropdown-item {
+  display: flex; align-items: center; gap: var(--spacing-2_5);
+  padding: var(--spacing-2) var(--spacing-3);
+  font-size: var(--typography-font-size-text-sm);
+  color: var(--colors-text-text-body);
+  border-radius: var(--border-radius-rounded-sm);
+  cursor: pointer;
+  transition: background 150ms;
+}
+.dropdown-item:hover { background: var(--colors-background-bg-tertiary); color: var(--colors-text-text-heading); }
+.dropdown-item--danger { color: var(--colors-text-text-fg-danger); }
+.dropdown-item svg { width: 14px; height: 14px; }
+.dropdown-divider { height: 1px; background: var(--colors-border-border-light); margin: var(--spacing-1) 0; }
+
+/* ===== Navbar mock ===== */
+.navbar-mock {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--spacing-5);
+  height: 60px;
+  background: var(--colors-background-bg-primary);
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded);
+  width: 100%;
+  max-width: 720px;
+}
+.navbar-mock__brand { display: flex; align-items: center; gap: var(--spacing-2_5); font-weight: var(--typography-font-weight-font-bold); color: var(--colors-text-text-heading); font-size: var(--typography-font-size-text-base); }
+.navbar-mock__logo { width: 28px; height: 28px; border-radius: var(--border-radius-rounded-sm); background: var(--colors-background-bg-brand); color: var(--colors-text-text-white); display: grid; place-items: center; font-size: 13px; }
+.navbar-mock__nav { display: flex; align-items: center; gap: var(--spacing-1); }
+.nav-link {
+  height: 36px; padding: 0 var(--spacing-3);
+  display: inline-flex; align-items: center;
+  border-radius: var(--border-radius-rounded);
+  font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-medium);
+  color: var(--colors-text-text-body);
+}
+.nav-link:hover { background: var(--colors-background-bg-tertiary); color: var(--colors-text-text-heading); }
+.nav-link--active { color: var(--colors-text-text-fg-brand); background: var(--colors-background-bg-brand-softer); }
+[data-theme="dark"] .nav-link--active { background: var(--colors-background-bg-brand-soft); color: var(--colors-text-text-fg-brand-strong); }
+
+/* ===== Sidebar mock (작은 버전) ===== */
+.sidebar-mock {
+  width: 240px;
+  background: var(--colors-background-bg-primary);
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-base);
+  padding: var(--spacing-4);
+  display: flex; flex-direction: column; gap: var(--spacing-4);
+}
+.sidebar-mock__header { display: flex; align-items: center; gap: var(--spacing-2_5); padding: var(--spacing-1) var(--spacing-2); }
+.sidebar-mock__items { display: flex; flex-direction: column; gap: 2px; }
+.sidebar-item {
+  display: flex; align-items: center; gap: var(--spacing-2_5);
+  height: 32px; padding: 0 var(--spacing-2_5);
+  border-radius: var(--border-radius-rounded);
+  font-size: var(--typography-font-size-text-sm);
+  color: var(--colors-text-text-body);
+  font-weight: var(--typography-font-weight-font-medium);
+  cursor: pointer;
+}
+.sidebar-item:hover { background: var(--colors-background-bg-tertiary); color: var(--colors-text-text-heading); }
+.sidebar-item--active { background: var(--colors-background-bg-brand-softer); color: var(--colors-text-text-fg-brand); font-weight: var(--typography-font-weight-font-semibold); }
+[data-theme="dark"] .sidebar-item--active { background: var(--colors-background-bg-brand-soft); color: var(--colors-text-text-fg-brand-strong); }
+.sidebar-item svg { width: 16px; height: 16px; }
+</style>
+
+</head>
+<body>
+<div class="ds-app">
+
+  <aside class="ds-sidebar">
+    <a href="index.html" class="ds-sidebar__brand">
+      <span class="ds-sidebar__logo">B</span>
+      <div>
+        <div class="ds-sidebar__name">BOS 4.0</div>
+        <div class="ds-sidebar__name-sub">Design System</div>
+      </div>
+    </a>
+    <div class="ds-search">
+      <svg class="ds-search__icon" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="4"/><path d="M9 9l3 3"/></svg>
+      <input class="ds-search__input" type="search" placeholder="검색" disabled />
+    </div>
+    <nav class="ds-nav">
+      <div class="ds-nav-group">
+        <div class="ds-nav-label">시작하기</div>
+        <a class="ds-nav-link" href="index.html">개요</a>
+      </div>
+      <div class="ds-nav-group">
+        <div class="ds-nav-label">Foundation</div>
+        <a class="ds-nav-link" href="tokens.html">디자인 토큰<span class="ds-nav-link__count">489</span></a>
+      </div>
+      <div class="ds-nav-group">
+        <div class="ds-nav-label">Components</div>
+        <a class="ds-nav-link ds-nav-link--active" href="components.html">컴포넌트<span class="ds-nav-link__count">10</span></a>
+      </div>
+      <div class="ds-nav-group">
+        <div class="ds-nav-label">Patterns</div>
+        <a class="ds-nav-link" href="patterns.html">레이아웃 패턴<span class="ds-nav-link__count">5</span></a>
+      </div>
+    </nav>
+    <div class="ds-sidebar__footer">
+      <div class="theme-toggle" role="group" aria-label="테마 전환">
+        <button data-theme-set="light" aria-pressed="true">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="7" cy="7" r="2.5"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.8 2.8l1 1M10.2 10.2l1 1M2.8 11.2l1-1M10.2 3.8l1-1"/></svg>
+          라이트
+        </button>
+        <button data-theme-set="dark" aria-pressed="false">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 8.5A5 5 0 015.5 2.5a5 5 0 106 6z"/></svg>
+          다크
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="ds-main">
+
+    <header class="ds-page-header">
+      <div class="ds-eyebrow">Components</div>
+      <h1 class="ds-h1">컴포넌트</h1>
+      <p class="ds-lead">
+        BOS 4.0의 핵심 10개 컴포넌트. 47개 카테고리 중 가장 자주 쓰이는 것들을 라이브로 확인하세요.
+        나머지 37개 카테고리는 Figma 라이브러리에서 직접 확인합니다.
+      </p>
+    </header>
+
+    <!-- ===== 1. Button ===== -->
+    <section class="ds-section" id="button">
+      <h2 class="ds-h2">1. Button <span class="ds-pill ds-pill--brand">500 variants</span></h2>
+      <p class="ds-section-desc">Color × Size × State × Outline × Icon-only 매트릭스. 가장 자주 쓰이는 컴포넌트.</p>
+
+      <h3 class="ds-h3">Color (8가지)</h3>
+      <div class="ds-demo">
+        <div class="ds-demo__preview">
+          <button class="btn btn--brand btn--base">Brand</button>
+          <button class="btn btn--secondary btn--base">Secondary</button>
+          <button class="btn btn--success btn--base">Success</button>
+          <button class="btn btn--danger btn--base">Danger</button>
+          <button class="btn btn--warning btn--base">Warning</button>
+          <button class="btn btn--dark btn--base">Dark</button>
+          <button class="btn btn--ghost btn--base">Ghost</button>
+        </div>
+        <div class="ds-demo__caption">Color는 액션의 의미를 결정 — 빨간색 "확인"을 만들지 마세요</div>
+      </div>
+
+      <h3 class="ds-h3">Size (5가지)</h3>
+      <div class="ds-demo">
+        <div class="ds-demo__preview">
+          <button class="btn btn--brand btn--xs">xs (24)</button>
+          <button class="btn btn--brand btn--sm">sm (32)</button>
+          <button class="btn btn--brand btn--base">base (40)</button>
+          <button class="btn btn--brand btn--lg">lg (48)</button>
+          <button class="btn btn--brand btn--xl">xl (56)</button>
+        </div>
+        <div class="ds-demo__caption">기본은 base. 모바일 풀폭 CTA는 xl, 테이블 행 액션은 sm</div>
+      </div>
+
+      <h3 class="ds-h3">Outline / Icon only</h3>
+      <div class="ds-demo">
+        <div class="ds-demo__preview">
+          <button class="btn btn--brand btn--base btn--outline">Outline Brand</button>
+          <button class="btn btn--danger btn--base btn--outline">Outline Danger</button>
+          <button class="btn btn--brand btn--base btn--icon" aria-label="아이콘 버튼">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
+          </button>
+          <button class="btn btn--secondary btn--base btn--icon" aria-label="아이콘 버튼">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 14l1.5-.5L13 4l-1.5-1.5L2 12l0 2zM12 4l1.5 1.5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <h3 class="ds-h3">State</h3>
+      <div class="ds-demo">
+        <div class="ds-demo__preview">
+          <button class="btn btn--brand btn--base">Initial</button>
+          <button class="btn btn--brand btn--base" style="background: var(--colors-background-bg-brand-strong);">Hover</button>
+          <button class="btn btn--brand btn--base" style="outline: 2px solid var(--colors-border-border-brand); outline-offset: 2px;">Focus</button>
+          <button class="btn btn--brand btn--base" disabled>Disabled</button>
+        </div>
+        <div class="ds-demo__caption">BOS 4.0의 4가지 표준 상태 (구 Bos의 5상태에서 단순화)</div>
+        <div class="ds-demo__code">&lt;button class="btn btn--brand btn--base"&gt;Initial&lt;/button&gt;
+&lt;button class="btn btn--brand btn--base" disabled&gt;Disabled&lt;/button&gt;</div>
+      </div>
+    </section>
+
+    <!-- ===== 2. Input field ===== -->
+    <section class="ds-section" id="input">
+      <h2 class="ds-h2">2. Input field <span class="ds-pill ds-pill--brand">140 variants</span></h2>
+      <p class="ds-section-desc">Type × Size × State 매트릭스. 7가지 상태 (Initial / Focus/Typing / Filled / Disabled / Read-only / Success / Danger).</p>
+
+      <h3 class="ds-h3">Type & Size</h3>
+      <div class="ds-demo">
+        <div class="ds-demo__preview ds-demo__preview--vertical">
+          <div class="input-form" style="max-width: 360px;">
+            <label class="label">기본 — Type: Default</label>
+            <div class="field">
+              <input class="field__input" placeholder="이름 입력" type="text" />
+            </div>
+          </div>
+
+          <div class="input-form" style="max-width: 360px;">
+            <label class="label">아이콘 — Type: Add-on icon</label>
+            <div class="field">
+              <svg class="field__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg>
+              <input class="field__input" placeholder="검색" type="search" />
+            </div>
+          </div>
+
+          <div class="input-form" style="max-width: 360px;">
+            <label class="label">사이즈 — Size: lg (48px)</label>
+            <div class="field field--lg">
+              <input class="field__input" placeholder="큰 입력 필드" type="text" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="ds-h3">State (7가지)</h3>
+      <div class="ds-demo">
+        <div class="ds-demo__preview ds-demo__preview--vertical">
+          <div class="input-form" style="max-width: 360px;">
+            <label class="label">Initial</label>
+            <div class="field"><input class="field__input" placeholder="비어있는 상태" /></div>
+          </div>
+          <div class="input-form" style="max-width: 360px;">
+            <label class="label">Filled</label>
+            <div class="field"><input class="field__input" value="ara.cho@bos.team" readonly /></div>
+          </div>
+          <div class="input-form" style="max-width: 360px;">
+            <label class="label">Success</label>
+            <div class="field field--success">
+              <input class="field__input" value="ara.cho@bos.team" readonly />
+              <svg class="field__icon" style="margin-right: var(--spacing-3); margin-left: 0;" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.5"/><path d="M5 8l2 2 4-4"/></svg>
+            </div>
+            <div class="helper helper--success">사용 가능한 이메일입니다</div>
+          </div>
+          <div class="input-form" style="max-width: 360px;">
+            <label class="label">Danger</label>
+            <div class="field field--danger">
+              <input class="field__input" value="invalid-email" />
+            </div>
+            <div class="helper helper--danger">이메일 형식이 올바르지 않습니다</div>
+          </div>
+          <div class="input-form" style="max-width: 360px;">
+            <label class="label">Disabled</label>
+            <div class="field"><input class="field__input" placeholder="입력 불가" disabled /></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 3. Alert ===== -->
+    <section class="ds-section" id="alert">
+      <h2 class="ds-h2">3. Alert <span class="ds-pill ds-pill--brand">20 variants</span></h2>
+      <p class="ds-section-desc">영구적 알림. 일시적인 알림은 Toast를 사용하세요.</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview ds-demo__preview--vertical">
+          <div class="alert alert--info">
+            <div class="alert__icon">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M10 9v4M10 6v.5"/></svg>
+            </div>
+            <div class="alert__content">
+              <p class="alert__title">새 업데이트가 있습니다</p>
+              <p class="alert__msg">시스템이 v4.0으로 업그레이드되었습니다. 새 기능을 확인해 보세요.</p>
+            </div>
+          </div>
+          <div class="alert alert--success">
+            <div class="alert__icon">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M6 10l3 3 5-6"/></svg>
+            </div>
+            <div class="alert__content">
+              <p class="alert__title">변경사항이 저장되었습니다</p>
+              <p class="alert__msg">모든 변경 내용이 안전하게 저장되었습니다.</p>
+            </div>
+          </div>
+          <div class="alert alert--warning">
+            <div class="alert__icon">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M10 6v4M10 13v.5"/></svg>
+            </div>
+            <div class="alert__content">
+              <p class="alert__title">결제 수단을 확인해 주세요</p>
+              <p class="alert__msg">등록된 카드의 유효 기간이 곧 만료됩니다.</p>
+            </div>
+          </div>
+          <div class="alert alert--danger">
+            <div class="alert__icon">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M7 7l6 6M13 7l-6 6"/></svg>
+            </div>
+            <div class="alert__content">
+              <p class="alert__title">데이터를 불러올 수 없습니다</p>
+              <p class="alert__msg">네트워크 연결을 확인하고 다시 시도해 주세요.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 4. Toast ===== -->
+    <section class="ds-section" id="toast">
+      <h2 class="ds-h2">4. Toast <span class="ds-pill ds-pill--brand">9 variants</span></h2>
+      <p class="ds-section-desc">일시적인 알림. 3-6초 후 자동으로 사라지거나 사용자가 닫을 때까지 표시.</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview ds-demo__preview--vertical">
+          <div class="toast-mock">
+            <div class="toast-mock__icon">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M6 10l3 3 5-6"/></svg>
+            </div>
+            <p class="toast-mock__msg">'프로젝트 알파'가 저장되었습니다</p>
+            <button class="toast-mock__close">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+            </button>
+          </div>
+          <div class="toast-mock">
+            <div class="toast-mock__icon" style="color: var(--colors-text-text-fg-brand);">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M10 9v4M10 6v.5"/></svg>
+            </div>
+            <p class="toast-mock__msg">5개 항목이 보관함으로 이동되었습니다</p>
+            <button class="toast-mock__action">실행 취소</button>
+            <button class="toast-mock__close">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="ds-demo__caption">위: Icon & text (기본). 아래: Avatar & button 변형 (Undo CTA 포함)</div>
+      </div>
+
+      <div class="ds-callout">
+        <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 13v.5"/></svg>
+        <div><strong>9가지 변형</strong> — Icon & text / Icon shape & text / Avatar & button / With header / Icon shape & buttons / With progress bar / Warning / Error / With illustration. 사용 시점은 <code>component-usage.md §4</code> 참조.</div>
+      </div>
+    </section>
+
+    <!-- ===== 5. Modal ===== -->
+    <section class="ds-section" id="modal">
+      <h2 class="ds-h2">5. Modal <span class="ds-pill ds-pill--brand">10 types</span></h2>
+      <p class="ds-section-desc">중요한 결정/확인이 필요할 때. Esc로 닫기, Primary CTA는 우측 하단.</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview" style="background: var(--colors-background-bg-secondary);">
+          <div class="modal-mock">
+            <div class="modal-mock__header">
+              <h3 class="modal-mock__title">프로젝트를 삭제하시겠습니까?</h3>
+              <button class="modal-mock__close">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+              </button>
+            </div>
+            <div class="modal-mock__body">
+              <p style="margin: 0; line-height: var(--typography-line-height-leading-6);">
+                '프로젝트 알파'를 삭제하면 연결된 12개 작업도 함께 삭제됩니다. 이 작업은 되돌릴 수 없습니다.
+              </p>
+            </div>
+            <div class="modal-mock__footer">
+              <button class="btn btn--secondary btn--base">취소</button>
+              <button class="btn btn--danger btn--base">삭제</button>
+            </div>
+          </div>
+        </div>
+        <div class="ds-demo__caption">파괴적 액션 확인 (Type: Popup) — Primary는 "삭제"로 명시 (일반적인 "확인" 사용 금지)</div>
+      </div>
+    </section>
+
+    <!-- ===== 6. Card ===== -->
+    <section class="ds-section" id="card">
+      <h2 class="ds-h2">6. Card <span class="ds-pill ds-pill--brand">18 types</span></h2>
+      <p class="ds-section-desc">정보 단위. Type별로 18가지 (Default, With Image, Login form, Pricing, Testimonial, Crypto 등).</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview" style="background: var(--colors-background-bg-secondary);">
+          <div style="display: flex; gap: var(--spacing-4); flex-wrap: wrap;">
+            <div class="card-demo">
+              <h4 class="card-demo__title">기본 카드</h4>
+              <p class="card-demo__desc">정보를 묶어 표시하는 가장 기본적인 카드입니다. 패딩 24px, radius 12px.</p>
+              <button class="btn btn--brand btn--sm">자세히 보기</button>
+            </div>
+            <div class="card-demo">
+              <div style="display: flex; align-items: center; gap: var(--spacing-3); margin-bottom: var(--spacing-3);">
+                <span class="avatar avatar--lg">조</span>
+                <div>
+                  <div style="font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-semibold); color: var(--colors-text-text-heading);">조아라</div>
+                  <div style="font-size: var(--typography-font-size-text-xs); color: var(--colors-text-text-body-subtle);">UI/UX Designer</div>
+                </div>
+              </div>
+              <p class="card-demo__desc">디자인 시스템과 사용자 경험에 관심이 많습니다.</p>
+              <div style="display: flex; gap: var(--spacing-2);">
+                <button class="btn btn--brand btn--sm">팔로우</button>
+                <button class="btn btn--secondary btn--sm">메시지</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-demo__caption">왼쪽: Default. 오른쪽: User profile 변형</div>
+      </div>
+    </section>
+
+    <!-- ===== 7. Badge ===== -->
+    <section class="ds-section" id="badge">
+      <h2 class="ds-h2">7. Badge <span class="ds-pill ds-pill--brand">84 variants</span></h2>
+      <p class="ds-section-desc">Theme × Size × Type 매트릭스. 카테고리, 상태, 카운트 표시.</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview">
+          <span class="badge badge--gray">Default</span>
+          <span class="badge badge--brand">Brand</span>
+          <span class="badge badge--success">Success</span>
+          <span class="badge badge--danger">Danger</span>
+          <span class="badge badge--warning">Warning</span>
+          <span class="badge badge--success badge--with-dot">활성</span>
+          <span class="badge badge--warning badge--with-dot">대기</span>
+          <span class="badge badge--gray badge--with-dot">비활성</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 8. Dropdown ===== -->
+    <section class="ds-section" id="dropdown">
+      <h2 class="ds-h2">8. Dropdown menu <span class="ds-pill ds-pill--brand">16 types</span></h2>
+      <p class="ds-section-desc">사용자 메뉴, 옵션 선택, 필터 등. 16가지 type (User profile, with separator, Checkbox, ...).</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview" style="background: var(--colors-background-bg-secondary);">
+          <div class="dropdown-mock">
+            <div class="dropdown-item">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12c0-2.5 2-4 5-4s5 1.5 5 4"/></svg>
+              내 프로필
+            </div>
+            <div class="dropdown-item">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="2"/><path d="M11 7c0-.4-.04-.7-.1-1l1.25-1-.9-1.55-1.5.55c-.5-.45-1.05-.8-1.7-1L7.75 1.5h-1.5L6 3c-.65.2-1.2.55-1.7 1l-1.5-.55-.9 1.55 1.25 1c-.06.3-.1.6-.1 1s.04.7.1 1l-1.25 1 .9 1.55 1.5-.55c.5.45 1.05.8 1.7 1l.25 1.5h1.5L8 12.5c.65-.2 1.2-.55 1.7-1l1.5.55.9-1.55-1.25-1c.06-.3.1-.6.1-1z"/></svg>
+              설정
+            </div>
+            <div class="dropdown-item">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3M7 9v.5"/></svg>
+              도움말
+            </div>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-item dropdown-item--danger">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 10l3-3-3-3M12 7H4M5 13H3a1 1 0 01-1-1V2a1 1 0 011-1h2"/></svg>
+              로그아웃
+            </div>
+          </div>
+        </div>
+        <div class="ds-demo__caption">User profile 변형 — 프로필/설정/도움말 + 구분선 + 로그아웃 (Danger)</div>
+      </div>
+    </section>
+
+    <!-- ===== 9. Navbar ===== -->
+    <section class="ds-section" id="navbar">
+      <h2 class="ds-h2">9. Navbar</h2>
+      <p class="ds-section-desc">전역 상단 네비게이션. 단순 메뉴 4-7개에 적합. 카테고리가 많으면 Megamenu 사용.</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview">
+          <div class="navbar-mock">
+            <div class="navbar-mock__brand">
+              <span class="navbar-mock__logo">B</span>
+              BOS
+            </div>
+            <nav class="navbar-mock__nav">
+              <a class="nav-link nav-link--active" href="#">대시보드</a>
+              <a class="nav-link" href="#">프로젝트</a>
+              <a class="nav-link" href="#">멤버</a>
+              <a class="nav-link" href="#">설정</a>
+            </nav>
+            <button class="btn btn--secondary btn--sm">로그인</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 10. Sidebar ===== -->
+    <section class="ds-section" id="sidebar">
+      <h2 class="ds-h2">10. Sidebar</h2>
+      <p class="ds-section-desc">좌측 LNB 또는 마스터-디테일 패턴. Figma 표준: 288px, padding 20.</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview">
+          <div class="sidebar-mock">
+            <div class="sidebar-mock__header">
+              <span class="navbar-mock__logo">B</span>
+              <span style="font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-bold); color: var(--colors-text-text-heading);">BOS 4.0</span>
+            </div>
+            <div class="sidebar-mock__items">
+              <div class="sidebar-item">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="5" height="6" rx="1"/><rect x="9" y="2" width="5" height="3" rx="1"/><rect x="9" y="7" width="5" height="6" rx="1"/><rect x="2" y="10" width="5" height="3" rx="1"/></svg>
+                대시보드
+              </div>
+              <div class="sidebar-item">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4a1.5 1.5 0 011.5-1.5H6l1.5 1.5h5A1.5 1.5 0 0114 5.5v6.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 12V4z"/></svg>
+                프로젝트
+              </div>
+              <div class="sidebar-item sidebar-item--active">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><path d="M2 14c0-2.5 2-4 4-4s4 1.5 4 4"/></svg>
+                멤버
+              </div>
+              <div class="sidebar-item">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M2 7h12M5 3V1.5M11 3V1.5"/></svg>
+                일정
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-demo__caption">사이드바 예시 — "멤버"가 active 상태. 테마 토글로 라이트/다크 비교해 보세요.</div>
+      </div>
+
+      <h3 class="ds-h3">Navigation list item 컴포넌트 스펙</h3>
+      <p style="color: var(--colors-text-text-body); margin: 0 0 var(--spacing-3); font-size: var(--typography-font-size-text-sm);">
+        Figma 컴포넌트: <code>Navigation list item</code> (id <code>1149:82699</code>). 7개 variant.
+      </p>
+
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th>State</th>
+            <th>배경 토큰</th>
+            <th>텍스트 토큰</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="token-name">Initial</td>
+            <td>— (투명)</td>
+            <td class="token-value">text-body</td>
+          </tr>
+          <tr>
+            <td class="token-name">Hover / Active</td>
+            <td class="token-value">bg-brand-softer</td>
+            <td class="token-value">text-fg-brand</td>
+          </tr>
+          <tr>
+            <td class="token-name">Disabled</td>
+            <td>— (투명)</td>
+            <td class="token-value">text-fg-disabled</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="ds-callout" style="background: var(--colors-background-bg-warning-soft); border-left-color: var(--colors-border-border-warning); color: var(--colors-text-text-fg-warning);">
+        <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" style="color: var(--colors-text-text-fg-warning);"><circle cx="10" cy="10" r="8"/><path d="M10 6v4M10 13v.5"/></svg>
+        <div>
+          <strong style="color: var(--colors-text-text-fg-warning);">다크모드 구현 주의</strong> — Figma의 Active 스펙(`bg-brand-softer` + `text-fg-brand`)은 다크모드에서 같은 hue 동조로 가독성이 약합니다. 웹 구현 시 다크모드만 override하세요. 아래 "Selected / Active 상태" 섹션에서 라이브 비교 가능.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Selected / Active 상태 가이드 =====
+         (기존 섹션 유지)
+    ===== -->
+
+    <!-- ===== Selected / Active 상태 가이드 ===== -->
+    <section class="ds-section" id="active-state">
+      <h2 class="ds-h2">Selected / Active 상태 — 디자인 가이드</h2>
+      <p class="ds-section-desc">
+        선택됨을 표시하는 컴포넌트(네비, 탭, 토글 등)의 표준 패턴.
+        <strong style="color: var(--colors-text-text-heading);">테마 토글로 다크 모드를 켜고 비교해 보세요</strong> — 차이가 명확히 보입니다.
+      </p>
+
+      <div class="ds-callout" style="background: var(--colors-background-bg-danger-soft); border-left-color: var(--colors-border-border-danger);">
+        <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" style="color: var(--colors-text-text-fg-danger);"><circle cx="10" cy="10" r="8"/><path d="M10 6v4M10 13v.5"/></svg>
+        <div>
+          <strong style="color: var(--colors-text-text-fg-danger);">흔한 함정</strong> — 다크 배경 위에 같은 hue 텍스트(brand 배경 + brand 텍스트)는
+          <strong style="color: var(--colors-text-text-fg-danger);">색조 동조 효과</strong>로 묻혀 보입니다. WCAG 대비비 3:1 미만으로 떨어지는 경우가 많아요.
+        </div>
+      </div>
+
+      <h3 class="ds-h3">패턴 A: 진한 brand 배경 + 흰 텍스트 <span class="ds-pill ds-pill--success">권장</span></h3>
+      <p style="color: var(--colors-text-text-body); margin: 0 0 var(--spacing-3); font-size: var(--typography-font-size-text-sm);">가장 표준적. Material, Linear, GitHub 모두 이 패턴. 대비비 7:1+ (WCAG AAA).</p>
+      <div class="ds-demo">
+        <div class="ds-demo__preview" style="background: var(--colors-background-bg-secondary);">
+          <div style="display: flex; flex-direction: column; gap: 4px; width: 220px;">
+            <div style="display: flex; align-items: center; gap: var(--spacing-2_5); height: 36px; padding: 0 var(--spacing-3); border-radius: var(--border-radius-rounded); color: var(--colors-text-text-body); font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-medium);">대시보드</div>
+            <div style="display: flex; align-items: center; gap: var(--spacing-2_5); height: 36px; padding: 0 var(--spacing-3); border-radius: var(--border-radius-rounded); background: var(--colors-background-bg-brand); color: var(--colors-text-text-white); font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-semibold);">멤버 (active)</div>
+            <div style="display: flex; align-items: center; gap: var(--spacing-2_5); height: 36px; padding: 0 var(--spacing-3); border-radius: var(--border-radius-rounded); color: var(--colors-text-text-body); font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-medium);">설정</div>
+          </div>
+        </div>
+        <div class="ds-demo__code">background: var(--colors-background-bg-brand);    /* brand-700 (Light) / brand-600 (Dark) */
+color: var(--colors-text-text-white);              /* 항상 흰색 */</div>
+      </div>
+
+      <h3 class="ds-h3">패턴 B: 옅은 brand 배경 + brand 텍스트 <span class="ds-pill">라이트 추천</span></h3>
+      <p style="color: var(--colors-text-text-body); margin: 0 0 var(--spacing-3); font-size: var(--typography-font-size-text-sm);">
+        라이트 모드에선 부드러운 강조 (Notion 스타일). 다크 모드에선 자동으로 패턴 A로 전환.
+      </p>
+      <div class="ds-demo">
+        <div class="ds-demo__preview" style="background: var(--colors-background-bg-secondary);">
+          <div style="display: flex; flex-direction: column; gap: 4px; width: 220px;">
+            <div style="display: flex; align-items: center; gap: var(--spacing-2_5); height: 36px; padding: 0 var(--spacing-3); border-radius: var(--border-radius-rounded); color: var(--colors-text-text-body); font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-medium);">대시보드</div>
+            <div class="ds-nav-link ds-nav-link--active" style="height: 36px; font-size: var(--typography-font-size-text-sm);">멤버 (active)</div>
+            <div style="display: flex; align-items: center; gap: var(--spacing-2_5); height: 36px; padding: 0 var(--spacing-3); border-radius: var(--border-radius-rounded); color: var(--colors-text-text-body); font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-medium);">설정</div>
+          </div>
+        </div>
+        <div class="ds-demo__code">/* 라이트 */
+.nav--active {
+  background: var(--colors-background-bg-brand-softer);
+  color: var(--colors-text-text-fg-brand);
+}
+/* 다크 — 패턴 A로 전환 */
+[data-theme="dark"] .nav--active {
+  background: var(--colors-background-bg-brand);
+  color: var(--colors-text-text-white);
+}</div>
+        <div class="ds-demo__caption">↑ 이 사이트의 사이드바 active 메뉴가 정확히 이 패턴 — 위에서 동작 확인 가능</div>
+      </div>
+
+      <h3 class="ds-h3">패턴 C: 좌측 indicator + 미니멀 배경 <span class="ds-pill">미니멀</span></h3>
+      <p style="color: var(--colors-text-text-body); margin: 0 0 var(--spacing-3); font-size: var(--typography-font-size-text-sm);">VSCode, Notion 사이드바 패턴. 색조 동조 문제 자체가 없음.</p>
+      <div class="ds-demo">
+        <div class="ds-demo__preview" style="background: var(--colors-background-bg-secondary);">
+          <div style="display: flex; flex-direction: column; gap: 4px; width: 220px;">
+            <div style="display: flex; align-items: center; gap: var(--spacing-2_5); height: 36px; padding: 0 var(--spacing-3); border-radius: var(--border-radius-rounded); color: var(--colors-text-text-body); font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-medium);">대시보드</div>
+            <div style="position: relative; display: flex; align-items: center; gap: var(--spacing-2_5); height: 36px; padding: 0 var(--spacing-3); border-radius: var(--border-radius-rounded); background: var(--colors-background-bg-tertiary); color: var(--colors-text-text-heading); font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-semibold);">
+              <span style="position: absolute; left: 0; top: 25%; bottom: 25%; width: 3px; background: var(--colors-background-bg-brand); border-radius: 0 2px 2px 0;"></span>
+              멤버 (active)
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--spacing-2_5); height: 36px; padding: 0 var(--spacing-3); border-radius: var(--border-radius-rounded); color: var(--colors-text-text-body); font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-medium);">설정</div>
+          </div>
+        </div>
+        <div class="ds-demo__code">.nav--active {
+  background: var(--colors-background-bg-tertiary);
+  color: var(--colors-text-text-heading);
+  position: relative;
+}
+.nav--active::before {
+  content: ''; position: absolute; left: 0; top: 25%; bottom: 25%;
+  width: 3px;
+  background: var(--colors-background-bg-brand);
+  border-radius: 0 2px 2px 0;
+}</div>
+      </div>
+
+      <h3 class="ds-h3">컴포넌트별 권장 패턴</h3>
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th>컴포넌트</th>
+            <th>권장 패턴</th>
+            <th>이유</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="token-name">Sidebar LNB</td>
+            <td>A 또는 C</td>
+            <td>가장 자주 보는 메뉴 — 명확한 표시 필요</td>
+          </tr>
+          <tr>
+            <td class="token-name">Top Navbar</td>
+            <td>A 또는 B</td>
+            <td>현재 페이지 컨텍스트 명시</td>
+          </tr>
+          <tr>
+            <td class="token-name">Tabs</td>
+            <td>B</td>
+            <td>같은 컨텍스트 내 전환 — 부드러운 강조</td>
+          </tr>
+          <tr>
+            <td class="token-name">Toggle (선택된 옵션)</td>
+            <td>A</td>
+            <td>현재 선택 상태가 명확해야 함</td>
+          </tr>
+          <tr>
+            <td class="token-name">Pagination (현재 페이지)</td>
+            <td>A</td>
+            <td>위치 인식 명확</td>
+          </tr>
+          <tr>
+            <td class="token-name">Dropdown (선택된 항목)</td>
+            <td>B</td>
+            <td>리스트 내 선택 — 부드러움</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="ds-callout">
+        <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 13v.5"/></svg>
+        <div>
+          <strong>핵심 룰</strong> — 다크모드에서 active 상태를 디자인할 때, 배경과 텍스트가 같은 hue 계열이라면 둘 중 하나는 흰색이거나 회색이어야 합니다. 자세한 내용은 <code>05-interaction-patterns.md §1.3</code> 참조.
+        </div>
+      </div>
+    </section>
+
+    <!-- 추가 컴포넌트 안내 -->
+    <section class="ds-section">
+      <div class="ds-callout">
+        <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 13v.5"/></svg>
+        <div>
+          <strong>나머지 37개 카테고리</strong>는 Figma 라이브러리에서 직접 확인하세요.
+          Accordion, Banner, Bottom navigation, Breadcrumbs, Carousel, Datepicker, Drawer, File upload, Floating label inputs, Forms, Gallery, Icon shape, Jumbotron, KBD, List, Megamenu, Mobile menu, OTP Inputs, Pagination, Popovers, Progress Bars, Range slider, Rating, Rich text editor, Skeleton, Speed Dial, Spinners, Stepper, Tables, Tag input, Textarea, Timelines, Timepicker, Toggle, Tooltips, Checkbox & radio, Autocomplete input.
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+(function() {
+  const root = document.documentElement;
+  const buttons = document.querySelectorAll('[data-theme-set]');
+  function setTheme(theme) {
+    root.setAttribute('data-theme', theme);
+    buttons.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === theme)));
+    try { localStorage.setItem('bos4-theme', theme); } catch(e) {}
+  }
+  try {
+    const saved = localStorage.getItem('bos4-theme');
+    if (saved) setTheme(saved);
+  } catch(e) {}
+  buttons.forEach(b => b.addEventListener('click', () => setTheme(b.dataset.themeSet)));
+})();
+</script>
+</body>
+</html>

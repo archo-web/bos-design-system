@@ -1,0 +1,1296 @@
+<!doctype html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>레이아웃 패턴 — BOS 4.0</title>
+<link rel="preconnect" href="https://fastly.jsdelivr.net" />
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css" />
+<style>
+/* ==========================================================
+   bos4-design-tokens.css — BOS 4.0 Design System
+   Source: Figma file `jmK75D3yVgpYh0wHAlsAwy`
+   ==========================================================
+   토큰 구조 (3-tier):
+   1. Primitives — 원시 값 (white, gray/900, brand/500, spacing/4, ...)
+   2. Themes (Light) — 시멘틱 매핑 (text-heading → gray/900)
+   3. Themes (Dark)  — 같은 시멘틱이 다른 원시 값을 참조 (text-heading → white)
+   
+   사용 규칙:
+   - 컴포넌트는 항상 시멘틱 토큰 사용 (var(--colors-text-text-heading))
+   - 원시 토큰은 새 시멘틱 토큰을 정의할 때만 사용
+   ========================================================== */
+
+/* ==========================================================
+   PRIMITIVES — 원시 값 (Light/Dark 동일)
+   ========================================================== */
+:root {
+  /* Base */
+  --white: #ffffff;
+  --black: #000000;
+
+  /* Spacing — 4px base, Tailwind 호환 */
+  --spacing-0:    0px;
+  --spacing-px:   1px;
+  --spacing-0_5:  2px;   /* 0.5 */
+  --spacing-1:    4px;
+  --spacing-1_5:  6px;
+  --spacing-2:    8px;
+  --spacing-2_5:  10px;
+  --spacing-3:    12px;
+  --spacing-3_5:  14px;
+  --spacing-4:    16px;
+  --spacing-4_5:  18px;
+  --spacing-5:    20px;
+  --spacing-6:    24px;
+  --spacing-7:    28px;
+  --spacing-8:    32px;
+  --spacing-9:    36px;
+  --spacing-10:   40px;
+  --spacing-11:   44px;
+  --spacing-12:   48px;
+  --spacing-14:   56px;
+  --spacing-16:   64px;
+  --spacing-20:   80px;
+  --spacing-24:   96px;
+  --spacing-28:   112px;
+  --spacing-32:   128px;
+  --spacing-36:   144px;
+  --spacing-40:   160px;
+  --spacing-48:   192px;
+  --spacing-56:   224px;
+  --spacing-64:   256px;
+  --spacing-72:   288px;
+  --spacing-80:   320px;
+  --spacing-96:   384px;
+
+  /* Container widths */
+  --container-xs:   380px;
+  --container-sm:   640px;
+  --container-md:   768px;
+  --container-lg:   1024px;
+  --container-xl:   1280px;
+  --container-2xl:  1440px;
+
+  /* ----------------------------------------------------------
+     Color — Brand (BOS 4.0 메인, 기존 Bos PB와 동일)
+     ---------------------------------------------------------- */
+  --colors-brand-050: #e9eafb;
+  --colors-brand-100: #c7cbf5;
+  --colors-brand-200: #a1aaef;
+  --colors-brand-300: #7988e9;
+  --colors-brand-400: #5a6ce4;
+  --colors-brand-500: #3851dd;  /* main brand */
+  --colors-brand-600: #3248d2;
+  --colors-brand-700: #283dc5;
+  --colors-brand-800: #3b3d9e;
+  --colors-brand-900: #011ba7;
+  --colors-brand-950: #28207d;
+
+  /* ----------------------------------------------------------
+     Color — Gray (Tailwind gray)
+     ---------------------------------------------------------- */
+  --colors-gray-050: #f9fafb;
+  --colors-gray-100: #f3f4f6;
+  --colors-gray-200: #e5e7eb;
+  --colors-gray-300: #d1d5dc;
+  --colors-gray-400: #99a1af;
+  --colors-gray-500: #6a7282;
+  --colors-gray-600: #4a5565;
+  --colors-gray-700: #333e4f;
+  --colors-gray-800: #1e2939;
+  --colors-gray-900: #101828;
+  --colors-gray-950: #030712;
+
+  /* ----------------------------------------------------------
+     Color — Slate / Zinc / Neutral / Stone (보조 그레이 계열)
+     ---------------------------------------------------------- */
+  --colors-slate-050: #f8fafc;
+  --colors-slate-100: #f1f5f9;
+  --colors-slate-500: #62748e;
+  --colors-slate-700: #314158;
+  --colors-slate-900: #131c34;
+
+  /* ----------------------------------------------------------
+     Color — Status Palettes
+     ---------------------------------------------------------- */
+  /* Red / Rose (Danger) */
+  --colors-rose-050: #fef0f2;
+  --colors-rose-100: #fee2e8;
+  --colors-rose-200: #fecdd6;
+  --colors-rose-500: #f43f5e;
+  --colors-rose-600: #e11d48;
+  --colors-rose-700: #c70036;
+  --colors-rose-800: #a50036;
+  --colors-rose-900: #881337;
+  --colors-rose-950: #4c0519;
+
+  /* Orange (Warning) */
+  --colors-orange-050: #fff8f1;
+  --colors-orange-100: #feecdc;
+  --colors-orange-200: #fcd9bd;
+  --colors-orange-300: #fdba8c;
+  --colors-orange-400: #ff8a4c;
+  --colors-orange-500: #ff5a1f;
+  --colors-orange-600: #d03801;
+  --colors-orange-700: #b43403;
+  --colors-orange-800: #8a2c0d;
+  --colors-orange-900: #771d1d;
+
+  /* Green / Emerald (Success) */
+  --colors-emerald-050: #ecfdf5;
+  --colors-emerald-100: #d0fae5;
+  --colors-emerald-200: #a7f3d0;
+  --colors-emerald-300: #6ee7b7;
+  --colors-emerald-500: #10b981;
+  --colors-emerald-600: #059669;
+  --colors-emerald-700: #047857;
+  --colors-emerald-800: #065f46;
+  --colors-emerald-900: #064e3b;
+
+  /* Yellow */
+  --colors-yellow-050: #fefce8;
+  --colors-yellow-300: #ffdf20;
+  --colors-yellow-400: #fdc700;
+  --colors-yellow-500: #f0b100;
+
+  /* Sky / Cyan / Teal / Indigo / Purple / Pink — 데이터 시각화용 */
+  --colors-sky-500:    #0ea5e9;
+  --colors-cyan-500:   #06b6d4;
+  --colors-teal-500:   #14b8a6;
+  --colors-teal-600:   #0d9488;
+  --colors-indigo-500: #6366f1;
+  --colors-indigo-600: #4f46e5;
+  --colors-purple-500: #a855f7;
+  --colors-purple-600: #9333ea;
+  --colors-pink-500:   #ec4899;
+  --colors-pink-600:   #db2777;
+
+  /* ----------------------------------------------------------
+     Border Radius
+     ---------------------------------------------------------- */
+  --border-radius-rounded-0:    0px;
+  --border-radius-rounded-xxs:  2px;
+  --border-radius-rounded-xs:   4px;
+  --border-radius-rounded-sm:   6px;
+  --border-radius-rounded:      8px;
+  --border-radius-rounded-md:   10px;
+  --border-radius-rounded-base: 12px;  /* DEFAULT for buttons, inputs */
+  --border-radius-rounded-lg:   16px;
+  --border-radius-rounded-xl:   20px;
+  --border-radius-rounded-2xl:  24px;
+  --border-radius-rounded-full: 9999px;
+
+  /* ----------------------------------------------------------
+     Border Width
+     ---------------------------------------------------------- */
+  --border-width-border:    1px;
+  --border-width-border-md: 2px;
+  --border-width-border-lg: 4px;
+
+  /* ----------------------------------------------------------
+     Shadow
+     ---------------------------------------------------------- */
+  --shadow-xs: 0 1px 0.5px 0.05px rgba(29, 41, 61, 0.02);
+  --shadow-sm: 0 1px 2px 0 rgba(29, 41, 61, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(29, 41, 61, 0.10), 0 2px 4px -2px rgba(29, 41, 61, 0.10);
+  --shadow-lg: 0 10px 15px -3px rgba(29, 41, 61, 0.10), 0 4px 6px -4px rgba(29, 41, 61, 0.10);
+  --shadow-xl: 0 20px 25px -5px rgba(29, 41, 61, 0.10), 0 8px 10px -6px rgba(29, 41, 61, 0.10);
+
+  /* ----------------------------------------------------------
+     Typography
+     ---------------------------------------------------------- */
+  --typography-font-family-base: "Wanted Sans Variable", "Wanted Sans", "Inter", system-ui, -apple-system, sans-serif;
+
+  /* Font sizes */
+  --typography-font-size-text-xxs: 8px;
+  --typography-font-size-text-xs:  12px;
+  --typography-font-size-text-sm:  14px;
+  --typography-font-size-text-base:16px;
+  --typography-font-size-text-lg:  18px;
+  --typography-font-size-text-xl:  20px;
+  --typography-font-size-text-2xl: 24px;
+  --typography-font-size-text-3xl: 30px;
+  --typography-font-size-text-4xl: 36px;
+  --typography-font-size-text-5xl: 48px;
+  --typography-font-size-text-6xl: 60px;
+
+  /* Line heights (px) */
+  --typography-line-height-leading-none: 1;
+  --typography-line-height-leading-3:    12px;
+  --typography-line-height-leading-4:    16px;
+  --typography-line-height-leading-5:    20px;
+  --typography-line-height-leading-6:    24px;
+  --typography-line-height-leading-7:    28px;
+  --typography-line-height-leading-8:    32px;
+  --typography-line-height-leading-9:    36px;
+  --typography-line-height-leading-10:   40px;
+
+  /* Font weights */
+  --typography-font-weight-font-normal:   400;
+  --typography-font-weight-font-medium:   500;
+  --typography-font-weight-font-semibold: 600;
+  --typography-font-weight-font-bold:     700;
+}
+
+
+/* ==========================================================
+   THEMES — LIGHT MODE (default)
+   시멘틱 토큰: 컴포넌트가 사용하는 의미 기반 변수
+   ========================================================== */
+:root,
+[data-theme="light"] {
+  /* ----- Background ----- */
+  --colors-background-bg-white:           var(--white);
+  --colors-background-bg-primary:         var(--white);
+  --colors-background-bg-primary-soft:    var(--white);
+  --colors-background-bg-primary-medium:  var(--white);
+  --colors-background-bg-primary-strong:  var(--white);
+
+  --colors-background-bg-secondary:        var(--colors-gray-050);
+  --colors-background-bg-secondary-soft:   var(--colors-gray-050);
+  --colors-background-bg-secondary-medium: var(--colors-gray-050);
+  --colors-background-bg-secondary-strong: var(--colors-gray-050);
+
+  --colors-background-bg-tertiary:         var(--colors-gray-100);
+  --colors-background-bg-tertiary-soft:    var(--colors-gray-100);
+  --colors-background-bg-tertiary-medium:  var(--colors-gray-100);
+
+  --colors-background-bg-quaternary:        var(--colors-gray-200);
+  --colors-background-bg-quaternary-medium: var(--colors-gray-200);
+
+  --colors-background-bg-gray:     var(--colors-gray-300);
+  --colors-background-bg-dark:     var(--colors-gray-800);
+  --colors-background-bg-dark-strong: var(--colors-gray-900);
+  --colors-background-bg-disabled: var(--colors-gray-100);
+
+  /* Brand backgrounds */
+  --colors-background-bg-brand-softer: var(--colors-brand-050);
+  --colors-background-bg-brand-soft:   var(--colors-brand-100);
+  --colors-background-bg-brand-medium: var(--colors-brand-200);
+  --colors-background-bg-brand:        var(--colors-brand-700);  /* main */
+  --colors-background-bg-brand-strong: var(--colors-brand-800);
+
+  /* Status backgrounds */
+  --colors-background-bg-success-soft:   var(--colors-emerald-050);
+  --colors-background-bg-success-medium: var(--colors-emerald-100);
+  --colors-background-bg-success:        var(--colors-emerald-700);
+  --colors-background-bg-success-strong: var(--colors-emerald-800);
+
+  --colors-background-bg-danger-soft:    var(--colors-rose-050);
+  --colors-background-bg-danger-medium:  var(--colors-rose-100);
+  --colors-background-bg-danger:         var(--colors-rose-700);
+  --colors-background-bg-danger-strong:  var(--colors-rose-800);
+
+  --colors-background-bg-warning-soft:   var(--colors-orange-050);
+  --colors-background-bg-warning-medium: var(--colors-orange-100);
+  --colors-background-bg-warning:        var(--colors-orange-500);
+  --colors-background-bg-warning-strong: var(--colors-orange-700);
+
+  /* ----- Text ----- */
+  --colors-text-text-white:   var(--white);
+  --colors-text-text-black:   var(--colors-gray-900);
+  --colors-text-text-heading: var(--colors-gray-900);
+  --colors-text-text-body:    var(--colors-gray-600);
+  --colors-text-text-body-subtle: var(--colors-gray-500);
+
+  --colors-text-text-fg-brand-subtle: var(--colors-brand-200);
+  --colors-text-text-fg-brand:        var(--colors-brand-700);
+  --colors-text-text-fg-brand-strong: var(--colors-brand-900);
+
+  --colors-text-text-fg-success:        var(--colors-emerald-700);
+  --colors-text-text-fg-success-strong: var(--colors-emerald-900);
+  --colors-text-text-fg-danger:         var(--colors-rose-700);
+  --colors-text-text-fg-danger-strong:  var(--colors-rose-900);
+  --colors-text-text-fg-warning-subtle: var(--colors-orange-600);
+  --colors-text-text-fg-warning:        var(--colors-orange-900);
+
+  --colors-text-text-fg-info:     var(--colors-brand-900);
+  --colors-text-text-fg-disabled: var(--colors-gray-400);
+
+  /* ----- Border ----- */
+  --colors-border-border-buffer:        var(--white);
+  --colors-border-border-buffer-medium: var(--white);
+  --colors-border-border-muted:         var(--colors-gray-050);
+  --colors-border-border-light-subtle:  var(--colors-gray-100);
+  --colors-border-border-light:         var(--colors-gray-100);
+  --colors-border-border-light-medium:  var(--colors-gray-100);
+  --colors-border-border-base-subtle:   var(--colors-gray-200);
+  --colors-border-border-base:          var(--colors-gray-200);
+  --colors-border-border-base-medium:   var(--colors-gray-200);
+  --colors-border-border-base-strong:   var(--colors-gray-200);
+  --colors-border-border-dark:          var(--colors-gray-800);
+  --colors-border-border-dark-subtle:   var(--colors-gray-800);
+
+  --colors-border-border-brand-subtle:  var(--colors-brand-200);
+  --colors-border-border-brand-light:   var(--colors-brand-600);
+  --colors-border-border-brand:         var(--colors-brand-700);
+
+  --colors-border-border-success-subtle: var(--colors-emerald-200);
+  --colors-border-border-success:        var(--colors-emerald-700);
+  --colors-border-border-danger-subtle:  var(--colors-rose-200);
+  --colors-border-border-danger:         var(--colors-rose-700);
+  --colors-border-border-warning-subtle: var(--colors-orange-200);
+  --colors-border-border-warning:        var(--colors-orange-600);
+}
+
+
+/* ==========================================================
+   THEMES — DARK MODE
+   Light와 동일한 시멘틱 키, 다른 원시 참조
+   ========================================================== */
+[data-theme="dark"] {
+  /* ----- Background ----- */
+  --colors-background-bg-white:           var(--white);
+  --colors-background-bg-primary:         var(--colors-gray-950);
+  --colors-background-bg-primary-soft:    var(--colors-gray-900);
+  --colors-background-bg-primary-medium:  var(--colors-gray-800);
+  --colors-background-bg-primary-strong:  var(--colors-gray-700);
+
+  --colors-background-bg-secondary:        var(--colors-gray-950);
+  --colors-background-bg-secondary-soft:   var(--colors-gray-900);
+  --colors-background-bg-secondary-medium: var(--colors-gray-800);
+  --colors-background-bg-secondary-strong: var(--colors-gray-700);
+
+  --colors-background-bg-tertiary:         var(--colors-gray-800);
+  --colors-background-bg-tertiary-soft:    var(--colors-gray-900);
+  --colors-background-bg-tertiary-medium:  var(--colors-gray-700);
+
+  --colors-background-bg-quaternary:        var(--colors-gray-700);
+  --colors-background-bg-quaternary-medium: var(--colors-gray-600);
+
+  --colors-background-bg-gray:     var(--colors-gray-600);
+  --colors-background-bg-dark:     var(--colors-gray-800);
+  --colors-background-bg-dark-strong: var(--colors-gray-700);
+  --colors-background-bg-disabled: var(--colors-gray-800);
+
+  /* Brand backgrounds */
+  --colors-background-bg-brand-softer: var(--colors-brand-950);
+  --colors-background-bg-brand-soft:   var(--colors-brand-900);
+  --colors-background-bg-brand-medium: var(--colors-brand-900);
+  --colors-background-bg-brand:        var(--colors-brand-600);
+  --colors-background-bg-brand-strong: var(--colors-brand-700);
+
+  /* Status backgrounds */
+  --colors-background-bg-success-soft:   var(--colors-emerald-900);
+  --colors-background-bg-success-medium: var(--colors-emerald-900);
+  --colors-background-bg-success:        var(--colors-emerald-600);
+  --colors-background-bg-success-strong: var(--colors-emerald-700);
+
+  --colors-background-bg-danger-soft:    var(--colors-rose-950);
+  --colors-background-bg-danger-medium:  var(--colors-rose-900);
+  --colors-background-bg-danger:         var(--colors-rose-700);
+  --colors-background-bg-danger-strong:  var(--colors-rose-800);
+
+  --colors-background-bg-warning-soft:   var(--colors-orange-900);
+  --colors-background-bg-warning-medium: var(--colors-orange-900);
+  --colors-background-bg-warning:        var(--colors-orange-600);
+  --colors-background-bg-warning-strong: var(--colors-orange-700);
+
+  /* ----- Text ----- */
+  --colors-text-text-white:   var(--white);
+  --colors-text-text-black:   var(--colors-gray-900);
+  --colors-text-text-heading: var(--white);
+  --colors-text-text-body:    var(--colors-gray-400);
+  --colors-text-text-body-subtle: var(--colors-gray-400);
+
+  --colors-text-text-fg-brand-subtle: var(--colors-brand-200);
+  --colors-text-text-fg-brand:        var(--colors-brand-500);
+  --colors-text-text-fg-brand-strong: var(--colors-brand-100);
+
+  --colors-text-text-fg-success:        var(--colors-emerald-600);
+  --colors-text-text-fg-success-strong: var(--colors-emerald-300);
+  --colors-text-text-fg-danger:         var(--colors-rose-500);
+  --colors-text-text-fg-danger-strong:  var(--colors-rose-300);
+  --colors-text-text-fg-warning-subtle: var(--colors-orange-500);
+  --colors-text-text-fg-warning:        var(--colors-orange-300);
+
+  --colors-text-text-fg-info:     var(--colors-brand-300);
+  --colors-text-text-fg-disabled: var(--colors-gray-600);
+
+  /* ----- Border ----- */
+  --colors-border-border-buffer:        var(--colors-gray-950);
+  --colors-border-border-buffer-medium: var(--colors-gray-900);
+  --colors-border-border-muted:         var(--colors-gray-900);
+  --colors-border-border-light-subtle:  var(--colors-gray-900);
+  --colors-border-border-light:         var(--colors-gray-800);
+  --colors-border-border-light-medium:  var(--colors-gray-700);
+  --colors-border-border-base-subtle:   var(--colors-gray-900);
+  --colors-border-border-base:          var(--colors-gray-800);
+  --colors-border-border-base-medium:   var(--colors-gray-700);
+  --colors-border-border-base-strong:   var(--colors-gray-600);
+  --colors-border-border-dark:          var(--colors-gray-600);
+  --colors-border-border-dark-subtle:   var(--colors-gray-700);
+
+  --colors-border-border-brand-subtle:  var(--colors-brand-900);
+  --colors-border-border-brand-light:   var(--colors-brand-600);
+  --colors-border-border-brand:         var(--colors-brand-500);
+
+  --colors-border-border-success-subtle: var(--colors-emerald-900);
+  --colors-border-border-success:        var(--colors-emerald-600);
+  --colors-border-border-danger-subtle:  var(--colors-rose-900);
+  --colors-border-border-danger:         var(--colors-rose-600);
+  --colors-border-border-warning-subtle: var(--colors-orange-900);
+  --colors-border-border-warning:        var(--colors-orange-500);
+}
+
+
+/* ==========================================================
+   사용 예시 (참고용 — 실제 컴포넌트는 별도 CSS)
+   ========================================================== */
+/*
+.example-button-primary {
+  background: var(--colors-background-bg-brand);
+  color: var(--colors-text-text-white);
+  padding: var(--spacing-2_5) var(--spacing-4);
+  border-radius: var(--border-radius-rounded-base);
+  font-size: var(--typography-font-size-text-sm);
+  font-weight: var(--typography-font-weight-font-medium);
+  font-family: var(--typography-font-family-base);
+}
+
+.example-card {
+  background: var(--colors-background-bg-primary);
+  border: var(--border-width-border) solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-base);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-sm);
+}
+
+.example-text-body {
+  color: var(--colors-text-text-body);
+  font-size: var(--typography-font-size-text-sm);
+  line-height: var(--typography-line-height-leading-5);
+}
+*/
+
+/* ==========================================================
+   사이트 셸 스타일 (shared.css)
+   ========================================================== */
+
+/* ==========================================================
+   shared.css — BOS 4.0 Design System 사이트 공통
+   사이트 자체도 BOS 4.0 토큰으로 만듦 (eat your own dog food)
+   ==========================================================
+   import 순서:
+   1. Wanted Sans (Google Fonts → CDN)
+   2. bos4-design-tokens.css (단일 진실 공급원)
+   3. shared.css (이 파일 — 사이트 셸 스타일)
+   ========================================================== */
+
+
+/* Reset & base */
+*,*::before,*::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--typography-font-family-base);
+  font-size: var(--typography-font-size-text-sm);
+  line-height: var(--typography-line-height-leading-5);
+  color: var(--colors-text-text-body);
+  background: var(--colors-background-bg-secondary);
+  -webkit-font-smoothing: antialiased;
+  transition: background var(--d-base, 200ms) ease-out, color var(--d-base, 200ms) ease-out;
+}
+button { font-family: inherit; cursor: pointer; border: 0; background: transparent; color: inherit; }
+input { font-family: inherit; }
+ul, ol { list-style: none; padding: 0; margin: 0; }
+svg { display: block; }
+a { color: inherit; text-decoration: none; }
+code { font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace; font-size: 0.92em; }
+
+/* ==========================================================
+   사이트 셸 — Sidebar + Main
+   ========================================================== */
+.ds-app {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+}
+
+.ds-sidebar {
+  background: var(--colors-background-bg-primary);
+  border-right: 1px solid var(--colors-border-border-base);
+  padding: var(--spacing-5);
+  display: flex; flex-direction: column;
+  gap: var(--spacing-5);
+  height: 100vh;
+  position: sticky; top: 0;
+  overflow-y: auto;
+}
+
+.ds-sidebar__brand {
+  display: flex; align-items: center; gap: var(--spacing-3);
+  padding: var(--spacing-1) var(--spacing-2);
+  text-decoration: none;
+}
+.ds-sidebar__logo {
+  width: 32px; height: 32px;
+  border-radius: var(--border-radius-rounded);
+  background: var(--colors-background-bg-brand);
+  color: var(--colors-text-text-white);
+  display: grid; place-items: center;
+  font-weight: var(--typography-font-weight-font-bold);
+  font-size: 16px;
+}
+.ds-sidebar__name {
+  font-size: var(--typography-font-size-text-base);
+  font-weight: var(--typography-font-weight-font-semibold);
+  color: var(--colors-text-text-heading);
+  letter-spacing: -0.01em;
+}
+.ds-sidebar__name-sub {
+  font-size: var(--typography-font-size-text-xs);
+  color: var(--colors-text-text-body-subtle);
+}
+
+.ds-nav { display: flex; flex-direction: column; gap: var(--spacing-1); }
+.ds-nav-group + .ds-nav-group {
+  margin-top: var(--spacing-3);
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--colors-border-border-light);
+}
+.ds-nav-label {
+  padding: var(--spacing-2) var(--spacing-2);
+  font-size: var(--typography-font-size-text-xs);
+  font-weight: var(--typography-font-weight-font-semibold);
+  color: var(--colors-text-text-disabled);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.ds-nav-link {
+  display: flex; align-items: center; gap: var(--spacing-2_5);
+  height: 32px;
+  padding: 0 var(--spacing-2_5);
+  border-radius: var(--border-radius-rounded);
+  font-size: var(--typography-font-size-text-sm);
+  color: var(--colors-text-text-body);
+  font-weight: var(--typography-font-weight-font-medium);
+  transition: background 150ms ease-out, color 150ms ease-out;
+}
+.ds-nav-link:hover {
+  background: var(--colors-background-bg-tertiary);
+  color: var(--colors-text-text-heading);
+}
+.ds-nav-link--active {
+  background: var(--colors-background-bg-brand-softer);
+  color: var(--colors-text-text-fg-brand);
+  font-weight: var(--typography-font-weight-font-semibold);
+}
+[data-theme="dark"] .ds-nav-link--active {
+  background: var(--colors-background-bg-brand);  /* 진한 brand 배경 — 명확한 active 표시 */
+  color: var(--colors-text-text-white);            /* 흰색 텍스트 — 최고 대비, 표준 패턴 */
+}
+.ds-nav-link__count {
+  margin-left: auto;
+  font-size: var(--typography-font-size-text-xs);
+  color: var(--colors-text-text-body-subtle);
+}
+
+.ds-sidebar__footer { margin-top: auto; }
+
+/* Theme toggle */
+.theme-toggle {
+  display: flex; gap: var(--spacing-1);
+  padding: var(--spacing-1);
+  background: var(--colors-background-bg-secondary);
+  border-radius: var(--border-radius-rounded);
+}
+.theme-toggle button {
+  flex: 1;
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--spacing-1_5);
+  height: 28px;
+  border-radius: var(--border-radius-rounded-sm);
+  font-size: var(--typography-font-size-text-xs);
+  font-weight: var(--typography-font-weight-font-medium);
+  color: var(--colors-text-text-body);
+  transition: all 150ms ease-out;
+}
+.theme-toggle button:hover { color: var(--colors-text-text-heading); }
+.theme-toggle button[aria-pressed="true"] {
+  background: var(--colors-background-bg-primary);
+  color: var(--colors-text-text-heading);
+  box-shadow: var(--shadow-xs);
+}
+.theme-toggle svg { width: 14px; height: 14px; }
+
+/* Main */
+.ds-main {
+  padding: var(--spacing-10) var(--spacing-12);
+  max-width: 1200px;
+}
+
+/* ==========================================================
+   페이지 헤더 (모든 사이트 페이지 공통)
+   ========================================================== */
+.ds-page-header {
+  margin-bottom: var(--spacing-10);
+}
+.ds-eyebrow {
+  font-size: var(--typography-font-size-text-xs);
+  font-weight: var(--typography-font-weight-font-semibold);
+  color: var(--colors-text-text-fg-brand);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--spacing-2);
+}
+.ds-h1 {
+  font-size: var(--typography-font-size-text-4xl);
+  font-weight: var(--typography-font-weight-font-bold);
+  color: var(--colors-text-text-heading);
+  margin: 0;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+.ds-lead {
+  font-size: var(--typography-font-size-text-lg);
+  color: var(--colors-text-text-body);
+  margin: var(--spacing-3) 0 0;
+  max-width: 640px;
+  line-height: var(--typography-line-height-leading-7);
+}
+
+/* ==========================================================
+   섹션
+   ========================================================== */
+.ds-section { margin-bottom: var(--spacing-12); }
+.ds-section + .ds-section { padding-top: var(--spacing-8); }
+.ds-h2 {
+  font-size: var(--typography-font-size-text-2xl);
+  font-weight: var(--typography-font-weight-font-bold);
+  color: var(--colors-text-text-heading);
+  margin: 0 0 var(--spacing-2);
+  letter-spacing: -0.015em;
+}
+.ds-h3 {
+  font-size: var(--typography-font-size-text-lg);
+  font-weight: var(--typography-font-weight-font-semibold);
+  color: var(--colors-text-text-heading);
+  margin: 0 0 var(--spacing-2);
+  letter-spacing: -0.01em;
+}
+.ds-section-desc {
+  font-size: var(--typography-font-size-text-sm);
+  color: var(--colors-text-text-body);
+  margin: 0 0 var(--spacing-6);
+  max-width: 640px;
+  line-height: var(--typography-line-height-leading-6);
+}
+.ds-prose p { margin: 0 0 var(--spacing-3); line-height: var(--typography-line-height-leading-6); }
+.ds-prose strong { color: var(--colors-text-text-heading); font-weight: var(--typography-font-weight-font-semibold); }
+
+/* ==========================================================
+   Demo block (라이브 컴포넌트 + 코드)
+   ========================================================== */
+.ds-demo {
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-lg);
+  background: var(--colors-background-bg-primary);
+  margin-bottom: var(--spacing-6);
+  overflow: hidden;
+}
+.ds-demo__preview {
+  padding: var(--spacing-8);
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent 0,
+      transparent 10px,
+      var(--colors-background-bg-secondary) 10px,
+      var(--colors-background-bg-secondary) 11px
+    ),
+    var(--colors-background-bg-primary);
+  display: flex; align-items: center; justify-content: center;
+  flex-wrap: wrap; gap: var(--spacing-4);
+  min-height: 120px;
+}
+.ds-demo__preview--vertical { flex-direction: column; align-items: stretch; }
+.ds-demo__preview--clean {
+  background: var(--colors-background-bg-primary);
+  display: block;
+  padding: var(--spacing-6);
+}
+.ds-demo__caption {
+  padding: var(--spacing-3) var(--spacing-5);
+  font-size: var(--typography-font-size-text-xs);
+  color: var(--colors-text-text-body-subtle);
+  background: var(--colors-background-bg-secondary);
+  border-top: 1px solid var(--colors-border-border-base);
+}
+.ds-demo__code {
+  border-top: 1px solid var(--colors-border-border-base);
+  background: var(--colors-background-bg-secondary);
+  padding: var(--spacing-4) var(--spacing-5);
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace;
+  font-size: 12px;
+  color: var(--colors-text-text-body);
+  overflow-x: auto;
+  white-space: pre;
+  line-height: 1.6;
+}
+
+/* Token color swatch grid */
+.ds-swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-6);
+}
+.ds-swatch {
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded);
+  overflow: hidden;
+  background: var(--colors-background-bg-primary);
+}
+.ds-swatch__color {
+  height: 64px;
+  display: block;
+}
+.ds-swatch__info {
+  padding: var(--spacing-2_5) var(--spacing-3);
+}
+.ds-swatch__name {
+  font-size: var(--typography-font-size-text-xs);
+  font-weight: var(--typography-font-weight-font-semibold);
+  color: var(--colors-text-text-heading);
+  font-family: ui-monospace, monospace;
+  word-break: break-all;
+}
+.ds-swatch__hex {
+  font-size: 11px;
+  color: var(--colors-text-text-body-subtle);
+  font-family: ui-monospace, monospace;
+  margin-top: 2px;
+}
+
+/* Token table */
+.ds-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--spacing-6);
+  background: var(--colors-background-bg-primary);
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-lg);
+  overflow: hidden;
+}
+.ds-table th, .ds-table td {
+  padding: var(--spacing-3) var(--spacing-4);
+  text-align: left;
+  font-size: var(--typography-font-size-text-sm);
+  border-bottom: 1px solid var(--colors-border-border-light);
+}
+.ds-table tr:last-child td { border-bottom: 0; }
+.ds-table th {
+  background: var(--colors-background-bg-secondary);
+  font-size: var(--typography-font-size-text-xs);
+  font-weight: var(--typography-font-weight-font-semibold);
+  color: var(--colors-text-text-body);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.ds-table td { color: var(--colors-text-text-body); }
+.ds-table td.token-name {
+  font-family: ui-monospace, monospace;
+  color: var(--colors-text-text-heading);
+  font-size: 12px;
+  font-weight: var(--typography-font-weight-font-medium);
+}
+.ds-table td.token-value {
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--colors-text-text-fg-brand);
+}
+
+/* Spacing visualization */
+.spacing-row { display: flex; align-items: center; gap: var(--spacing-4); margin-bottom: var(--spacing-2); }
+.spacing-bar { background: var(--colors-background-bg-brand); height: 16px; border-radius: 4px; flex: none; }
+.spacing-info { display: flex; gap: var(--spacing-3); font-family: ui-monospace, monospace; font-size: 12px; color: var(--colors-text-text-body); }
+.spacing-info code { color: var(--colors-text-text-heading); font-weight: var(--typography-font-weight-font-semibold); }
+
+/* Type sample */
+.type-sample {
+  display: flex; align-items: baseline; gap: var(--spacing-4);
+  padding: var(--spacing-4) 0;
+  border-bottom: 1px solid var(--colors-border-border-light);
+}
+.type-sample:last-child { border-bottom: 0; }
+.type-sample__meta {
+  flex: none; min-width: 220px;
+  font-family: ui-monospace, monospace;
+  font-size: var(--typography-font-size-text-xs);
+  color: var(--colors-text-text-body-subtle);
+}
+.type-sample__meta-name { color: var(--colors-text-text-heading); font-weight: var(--typography-font-weight-font-semibold); display: block; }
+.type-sample__example { color: var(--colors-text-text-heading); flex: 1; }
+
+/* Card grid */
+.ds-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-6);
+}
+.ds-card {
+  display: block;
+  padding: var(--spacing-5);
+  background: var(--colors-background-bg-primary);
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-lg);
+  transition: all 150ms ease-out;
+  text-decoration: none;
+}
+.ds-card:hover {
+  border-color: var(--colors-border-border-base-strong, var(--colors-border-border-base));
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.ds-card__icon {
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border-radius: var(--border-radius-rounded);
+  background: var(--colors-background-bg-brand-softer);
+  color: var(--colors-text-text-fg-brand);
+  margin-bottom: var(--spacing-3);
+}
+.ds-card__icon svg { width: 20px; height: 20px; }
+.ds-card__title {
+  font-size: var(--typography-font-size-text-base);
+  font-weight: var(--typography-font-weight-font-semibold);
+  color: var(--colors-text-text-heading);
+  margin: 0 0 var(--spacing-1);
+}
+.ds-card__desc {
+  font-size: var(--typography-font-size-text-sm);
+  color: var(--colors-text-text-body);
+  line-height: var(--typography-line-height-leading-5);
+  margin: 0;
+}
+
+/* Variant table — for component variants */
+.variant-row { display: flex; align-items: center; gap: var(--spacing-4); padding: var(--spacing-4); border-bottom: 1px solid var(--colors-border-border-light); }
+.variant-row:last-child { border-bottom: 0; }
+.variant-row__label {
+  flex: none; width: 120px;
+  font-size: var(--typography-font-size-text-sm);
+  font-weight: var(--typography-font-weight-font-medium);
+  color: var(--colors-text-text-body);
+  font-family: ui-monospace, monospace;
+}
+.variant-row__samples {
+  display: flex; gap: var(--spacing-3); flex-wrap: wrap; flex: 1; align-items: center;
+}
+
+/* Badge / pill (for category labels in this site) */
+.ds-pill {
+  display: inline-flex; align-items: center;
+  height: 22px; padding: 0 var(--spacing-2);
+  border-radius: var(--border-radius-rounded-full);
+  font-size: 11px;
+  font-weight: var(--typography-font-weight-font-medium);
+  background: var(--colors-background-bg-secondary);
+  color: var(--colors-text-text-body-subtle);
+}
+.ds-pill--brand {
+  background: var(--colors-background-bg-brand-softer);
+  color: var(--colors-text-text-fg-brand);
+}
+.ds-pill--success {
+  background: var(--colors-background-bg-success-soft);
+  color: var(--colors-text-text-fg-success);
+}
+.ds-pill--warning {
+  background: var(--colors-background-bg-warning-soft);
+  color: var(--colors-text-text-fg-warning);
+}
+[data-theme="dark"] .ds-pill--brand {
+  background: var(--colors-background-bg-brand-soft);
+  color: var(--colors-text-text-fg-brand-strong);
+}
+
+/* Note callout */
+.ds-callout {
+  display: flex; gap: var(--spacing-3);
+  padding: var(--spacing-4) var(--spacing-5);
+  background: var(--colors-background-bg-brand-softer);
+  border-left: 3px solid var(--colors-border-border-brand);
+  border-radius: var(--border-radius-rounded);
+  margin-bottom: var(--spacing-5);
+  color: var(--colors-text-text-body);
+}
+[data-theme="dark"] .ds-callout {
+  background: var(--colors-background-bg-brand-soft);
+  border-left-color: var(--colors-border-border-brand);
+}
+.ds-callout__icon {
+  width: 20px; height: 20px; flex: none;
+  color: var(--colors-text-text-fg-brand);
+  margin-top: 1px;
+}
+.ds-callout strong { color: var(--colors-text-text-heading); }
+
+/* ==========================================================
+   Search bar (사이트 상단)
+   ========================================================== */
+.ds-search {
+  position: relative;
+  margin-bottom: var(--spacing-3);
+}
+.ds-search__icon {
+  position: absolute; left: var(--spacing-3); top: 50%; transform: translateY(-50%);
+  width: 14px; height: 14px;
+  color: var(--colors-text-text-body-subtle);
+}
+.ds-search__input {
+  width: 100%; height: 36px;
+  padding: 0 var(--spacing-3) 0 var(--spacing-9);
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded);
+  background: var(--colors-background-bg-secondary);
+  color: var(--colors-text-text-heading);
+  font-size: var(--typography-font-size-text-sm);
+  font-family: var(--typography-font-family-base);
+  outline: none;
+}
+.ds-search__input:focus {
+  border-color: var(--colors-border-border-brand);
+  box-shadow: 0 0 0 2px var(--colors-border-border-brand-subtle);
+  background: var(--colors-background-bg-primary);
+}
+.ds-search__input::placeholder { color: var(--colors-text-text-body-subtle); }
+
+/* ==========================================================
+   반응형 (간단)
+   ========================================================== */
+@media (max-width: 1024px) {
+  .ds-app { grid-template-columns: 1fr; }
+  .ds-sidebar { position: static; height: auto; }
+  .ds-main { padding: var(--spacing-6); }
+}
+
+</style>
+
+<style>
+/* 패턴 시각화용 mini layout */
+.pattern-vis {
+  background: var(--colors-background-bg-secondary);
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-lg);
+  padding: var(--spacing-4);
+  display: grid;
+  gap: var(--spacing-2);
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--colors-text-text-body-subtle);
+}
+.pv-block {
+  background: var(--colors-background-bg-primary);
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-sm);
+  padding: var(--spacing-3) var(--spacing-4);
+  display: flex; align-items: center;
+  text-align: left;
+}
+.pv-block--brand { background: var(--colors-background-bg-brand-softer); color: var(--colors-text-text-fg-brand); border-color: var(--colors-border-border-brand-subtle); }
+.pv-block--accent { background: var(--colors-background-bg-tertiary); }
+.pv-block--tall { min-height: 100px; }
+.pv-block--very-tall { min-height: 160px; }
+
+/* List pattern */
+.pv-list { grid-template-rows: auto auto 1fr auto; }
+/* Detail pattern */
+.pv-detail { grid-template-columns: 2fr 1fr; grid-template-rows: auto 1fr; gap: var(--spacing-2); }
+.pv-detail__header { grid-column: 1 / -1; }
+/* Form pattern */
+.pv-form { grid-template-rows: auto repeat(4, auto); }
+/* Dashboard pattern */
+.pv-dashboard { grid-template-columns: repeat(4, 1fr); grid-template-rows: auto auto auto; gap: var(--spacing-2); }
+.pv-dashboard__header { grid-column: 1 / -1; }
+.pv-dashboard__chart { grid-column: 1 / 4; }
+.pv-dashboard__side { grid-column: 4 / 5; }
+.pv-dashboard__bottom { grid-column: 1 / -1; }
+/* Auth pattern */
+.pv-auth { place-items: center; padding: var(--spacing-8); min-height: 280px; }
+.pv-auth__card { background: var(--colors-background-bg-primary); border: 1px solid var(--colors-border-border-base); border-radius: var(--border-radius-rounded-base); padding: var(--spacing-5); width: 240px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: var(--spacing-2); text-align: center; color: var(--colors-text-text-body); }
+</style>
+
+</head>
+<body>
+<div class="ds-app">
+
+  <aside class="ds-sidebar">
+    <a href="index.html" class="ds-sidebar__brand">
+      <span class="ds-sidebar__logo">B</span>
+      <div>
+        <div class="ds-sidebar__name">BOS 4.0</div>
+        <div class="ds-sidebar__name-sub">Design System</div>
+      </div>
+    </a>
+    <div class="ds-search">
+      <svg class="ds-search__icon" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="4"/><path d="M9 9l3 3"/></svg>
+      <input class="ds-search__input" type="search" placeholder="검색" disabled />
+    </div>
+    <nav class="ds-nav">
+      <div class="ds-nav-group">
+        <div class="ds-nav-label">시작하기</div>
+        <a class="ds-nav-link" href="index.html">개요</a>
+      </div>
+      <div class="ds-nav-group">
+        <div class="ds-nav-label">Foundation</div>
+        <a class="ds-nav-link" href="tokens.html">디자인 토큰<span class="ds-nav-link__count">489</span></a>
+      </div>
+      <div class="ds-nav-group">
+        <div class="ds-nav-label">Components</div>
+        <a class="ds-nav-link" href="components.html">컴포넌트<span class="ds-nav-link__count">10</span></a>
+      </div>
+      <div class="ds-nav-group">
+        <div class="ds-nav-label">Patterns</div>
+        <a class="ds-nav-link ds-nav-link--active" href="patterns.html">레이아웃 패턴<span class="ds-nav-link__count">5</span></a>
+      </div>
+    </nav>
+    <div class="ds-sidebar__footer">
+      <div class="theme-toggle" role="group" aria-label="테마 전환">
+        <button data-theme-set="light" aria-pressed="true">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="7" cy="7" r="2.5"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.8 2.8l1 1M10.2 10.2l1 1M2.8 11.2l1-1M10.2 3.8l1-1"/></svg>
+          라이트
+        </button>
+        <button data-theme-set="dark" aria-pressed="false">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 8.5A5 5 0 015.5 2.5a5 5 0 106 6z"/></svg>
+          다크
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="ds-main">
+
+    <header class="ds-page-header">
+      <div class="ds-eyebrow">Patterns</div>
+      <h1 class="ds-h1">레이아웃 패턴</h1>
+      <p class="ds-lead">
+        업무용/마케팅 화면의 95%를 5개 패턴으로 커버합니다.
+        새 페이지를 만들 때, 처음부터 그리지 말고 여기 정의된 패턴 중 하나를 선택해서 시작하세요.
+      </p>
+    </header>
+
+    <!-- Pattern 1: List -->
+    <section class="ds-section" id="list">
+      <h2 class="ds-h2">1. List Page</h2>
+      <p class="ds-section-desc">가장 자주 쓰는 패턴. 항목들의 목록을 보여주고, 검색/필터/정렬/추가가 가능한 화면. (멤버 목록, 프로젝트 목록, 주문 목록 등)</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview ds-demo__preview--clean">
+          <div class="pattern-vis pv-list">
+            <div class="pv-block">
+              <span style="color: var(--colors-text-text-heading); font-weight: 600;">Header</span>
+              <span style="margin-left: auto; color: var(--colors-text-text-body-subtle);">Title + Primary Action</span>
+            </div>
+            <div class="pv-block pv-block--accent">
+              <span>Toolbar</span>
+              <span style="margin-left: auto;">Search · Filter · Sort · View Toggle</span>
+            </div>
+            <div class="pv-block pv-block--very-tall">
+              <span>Content (Table or Card Grid)</span>
+            </div>
+            <div class="pv-block">
+              <span>Footer</span>
+              <span style="margin-left: auto;">Pagination · per-page</span>
+            </div>
+          </div>
+        </div>
+        <div class="ds-demo__caption">패턴 구조 — Header / Toolbar / Content / Footer</div>
+      </div>
+
+      <h3 class="ds-h3">사용된 컴포넌트</h3>
+      <div style="display: flex; gap: var(--spacing-2); flex-wrap: wrap; margin-bottom: var(--spacing-5);">
+        <span class="ds-pill ds-pill--brand">Tables</span>
+        <span class="ds-pill ds-pill--brand">Input field (검색)</span>
+        <span class="ds-pill ds-pill--brand">Dropdown menu (필터/정렬)</span>
+        <span class="ds-pill ds-pill--brand">Button group (뷰 전환)</span>
+        <span class="ds-pill ds-pill--brand">Pagination</span>
+        <span class="ds-pill ds-pill--brand">Button (Primary CTA)</span>
+      </div>
+
+      <div class="ds-callout">
+        <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 13v.5"/></svg>
+        <div><strong>실제 예시</strong> — 멤버 관리 페이지 v4 (5가지 상태 + 다크 모드 토글 포함). <code>member-management-v4.html</code> 참조.</div>
+      </div>
+    </section>
+
+    <!-- Pattern 2: Detail -->
+    <section class="ds-section" id="detail">
+      <h2 class="ds-h2">2. Detail Page</h2>
+      <p class="ds-section-desc">하나의 항목을 깊이 보여주는 화면. 정보 + 관련 액션 + 하위 데이터. (멤버 프로필, 주문 상세, 문서 보기 등)</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview ds-demo__preview--clean">
+          <div class="pattern-vis pv-detail">
+            <div class="pv-block pv-detail__header">
+              <span style="color: var(--colors-text-text-heading); font-weight: 600;">Header</span>
+              <span style="margin-left: auto; color: var(--colors-text-text-body-subtle);">Breadcrumbs · Title · Edit/Delete · Status</span>
+            </div>
+            <div class="pv-block pv-block--very-tall">
+              <span>Main Content (정보 섹션들)</span>
+            </div>
+            <div class="pv-block pv-block--very-tall pv-block--accent">
+              <span>Sidebar 320px</span>
+            </div>
+          </div>
+        </div>
+        <div class="ds-demo__caption">데스크톱: Main + Sidebar 좌우. 모바일: 세로 스택</div>
+      </div>
+
+      <h3 class="ds-h3">사용된 컴포넌트</h3>
+      <div style="display: flex; gap: var(--spacing-2); flex-wrap: wrap; margin-bottom: var(--spacing-5);">
+        <span class="ds-pill ds-pill--brand">Breadcrumbs</span>
+        <span class="ds-pill ds-pill--brand">Nav Tabs (선택)</span>
+        <span class="ds-pill ds-pill--brand">Card</span>
+        <span class="ds-pill ds-pill--brand">Badge (상태)</span>
+        <span class="ds-pill ds-pill--brand">Button (Edit/Delete/More)</span>
+      </div>
+    </section>
+
+    <!-- Pattern 3: Form -->
+    <section class="ds-section" id="form">
+      <h2 class="ds-h2">3. Form Page</h2>
+      <p class="ds-section-desc">데이터를 입력/수정. 5개 필드 이하면 Modal Form, 6개 이상이면 Page Form.</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview ds-demo__preview--clean">
+          <div class="pattern-vis pv-form">
+            <div class="pv-block">
+              <span style="color: var(--colors-text-text-heading); font-weight: 600;">Title</span>
+            </div>
+            <div class="pv-block pv-block--tall">
+              <span>Section 1 — 기본 정보 (Label + Input × N)</span>
+            </div>
+            <div class="pv-block pv-block--tall">
+              <span>Section 2 — 추가 정보</span>
+            </div>
+            <div class="pv-block pv-block--tall">
+              <span>Section 3 — 옵션</span>
+            </div>
+            <div class="pv-block">
+              <span style="margin-left: auto;">취소 · Primary CTA</span>
+            </div>
+          </div>
+        </div>
+        <div class="ds-demo__caption">필드 사이 20px, 섹션 사이 32px. 폼 최대 폭 640px (가독성)</div>
+      </div>
+
+      <h3 class="ds-h3">사용된 컴포넌트</h3>
+      <div style="display: flex; gap: var(--spacing-2); flex-wrap: wrap; margin-bottom: var(--spacing-5);">
+        <span class="ds-pill ds-pill--brand">Forms (Input/Select/Search/Number/...)</span>
+        <span class="ds-pill ds-pill--brand">Label</span>
+        <span class="ds-pill ds-pill--brand">Helper</span>
+        <span class="ds-pill ds-pill--brand">Checkbox & radio</span>
+        <span class="ds-pill ds-pill--brand">Toggle</span>
+        <span class="ds-pill ds-pill--brand">Modals (간단한 폼)</span>
+      </div>
+    </section>
+
+    <!-- Pattern 4: Dashboard -->
+    <section class="ds-section" id="dashboard">
+      <h2 class="ds-h2">4. Dashboard</h2>
+      <p class="ds-section-desc">여러 데이터를 한눈에. KPI 카드 4열 + 차트 + 요약 + 최근 활동.</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview ds-demo__preview--clean">
+          <div class="pattern-vis pv-dashboard">
+            <div class="pv-block pv-dashboard__header">
+              <span style="color: var(--colors-text-text-heading); font-weight: 600;">Title · Date Range · Export</span>
+            </div>
+            <div class="pv-block">KPI 1</div>
+            <div class="pv-block">KPI 2</div>
+            <div class="pv-block">KPI 3</div>
+            <div class="pv-block">KPI 4</div>
+            <div class="pv-block pv-block--very-tall pv-dashboard__chart">Chart Card</div>
+            <div class="pv-block pv-block--very-tall pv-dashboard__side pv-block--accent">Top 5</div>
+            <div class="pv-block pv-block--tall pv-dashboard__bottom">Recent Activity / Detailed Table</div>
+          </div>
+        </div>
+        <div class="ds-demo__caption">KPI 4개가 적정 (6개가 한계, 8개 이상은 분할). 그리드 비율 3:1 또는 2:1</div>
+      </div>
+
+      <h3 class="ds-h3">사용된 컴포넌트</h3>
+      <div style="display: flex; gap: var(--spacing-2); flex-wrap: wrap; margin-bottom: var(--spacing-5);">
+        <span class="ds-pill ds-pill--brand">Card (Default)</span>
+        <span class="ds-pill ds-pill--brand">Badge (변화량)</span>
+        <span class="ds-pill ds-pill--brand">Tables (Activity)</span>
+        <span class="ds-pill ds-pill--brand">Datepicker (Date Range)</span>
+      </div>
+    </section>
+
+    <!-- Pattern 5: Auth -->
+    <section class="ds-section" id="auth">
+      <h2 class="ds-h2">5. Auth Page</h2>
+      <p class="ds-section-desc">로그인, 회원가입, OTP 인증, 비밀번호 재설정. 화면 중앙 정렬, 카드 폭 384px, Navbar/Sidebar 없음.</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview ds-demo__preview--clean">
+          <div class="pattern-vis pv-auth">
+            <div class="pv-auth__card">
+              <div style="margin: 0 auto; width: 32px; height: 32px; background: var(--colors-background-bg-brand); border-radius: 6px; display: grid; place-items: center; color: var(--colors-text-text-white); font-weight: 700; font-family: var(--typography-font-family-base);">B</div>
+              <div style="font-size: 14px; font-weight: 600; color: var(--colors-text-text-heading); font-family: var(--typography-font-family-base);">로그인</div>
+              <div style="height: 28px; background: var(--colors-background-bg-secondary); border: 1px solid var(--colors-border-border-base); border-radius: 6px;"></div>
+              <div style="height: 28px; background: var(--colors-background-bg-secondary); border: 1px solid var(--colors-border-border-base); border-radius: 6px;"></div>
+              <div style="height: 28px; background: var(--colors-background-bg-brand); border-radius: 6px;"></div>
+              <div style="font-size: 11px;">또는</div>
+              <div style="height: 28px; background: var(--colors-background-bg-primary); border: 1px solid var(--colors-border-border-base); border-radius: 6px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-demo__caption">미니멀 — 로고 + 카드 (제목/입력/CTA/소셜) + 푸터 링크</div>
+      </div>
+
+      <h3 class="ds-h3">사용된 컴포넌트</h3>
+      <div style="display: flex; gap: var(--spacing-2); flex-wrap: wrap; margin-bottom: var(--spacing-5);">
+        <span class="ds-pill ds-pill--brand">Card (Login form)</span>
+        <span class="ds-pill ds-pill--brand">Forms (Input)</span>
+        <span class="ds-pill ds-pill--brand">Checkbox</span>
+        <span class="ds-pill ds-pill--brand">Button (Primary CTA + OAuth)</span>
+        <span class="ds-pill ds-pill--brand">Alert (에러)</span>
+      </div>
+
+      <div class="ds-callout">
+        <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 13v.5"/></svg>
+        <div><strong>실제 예시</strong> — 로그인 페이지 (4가지 상태: 기본/입력됨/에러/로딩 + OAuth Google/GitHub). <code>login.html</code> 참조.</div>
+      </div>
+    </section>
+
+    <!-- 의사결정 트리 -->
+    <section class="ds-section">
+      <h2 class="ds-h2">패턴 선택 의사결정</h2>
+      <p class="ds-section-desc">새 화면을 만들기 전, 다음 질문에 답해서 패턴을 결정하세요.</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__code">이 화면의 주된 목적은?
+├─ 여러 항목 중 선택/탐색      → List Page (1)
+├─ 한 항목 자세히 보기         → Detail Page (2)
+├─ 데이터 입력/수정             → Form (3)
+│   ├─ 5개 필드 이하 + 단순     → Modal Form
+│   └─ 6개 이상 또는 섹션 분리  → Page Form
+├─ 여러 지표 한눈에 보기       → Dashboard (4)
+└─ 로그인/가입/인증            → Auth Page (5)</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+(function() {
+  const root = document.documentElement;
+  const buttons = document.querySelectorAll('[data-theme-set]');
+  function setTheme(theme) {
+    root.setAttribute('data-theme', theme);
+    buttons.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === theme)));
+    try { localStorage.setItem('bos4-theme', theme); } catch(e) {}
+  }
+  try {
+    const saved = localStorage.getItem('bos4-theme');
+    if (saved) setTheme(saved);
+  } catch(e) {}
+  buttons.forEach(b => b.addEventListener('click', () => setTheme(b.dataset.themeSet)));
+})();
+</script>
+</body>
+</html>

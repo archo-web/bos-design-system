@@ -1,0 +1,456 @@
+/* ==========================================================
+   bos4-design-tokens.css — BOS 4.0 Design System
+   Source: Figma file `jmK75D3yVgpYh0wHAlsAwy`
+   ==========================================================
+   토큰 구조 (3-tier):
+   1. Primitives — 원시 값 (white, gray/900, brand/500, spacing/4, ...)
+   2. Themes (Light) — 시멘틱 매핑 (text-heading → gray/900)
+   3. Themes (Dark)  — 같은 시멘틱이 다른 원시 값을 참조 (text-heading → white)
+   
+   사용 규칙:
+   - 컴포넌트는 항상 시멘틱 토큰 사용 (var(--colors-text-text-heading))
+   - 원시 토큰은 새 시멘틱 토큰을 정의할 때만 사용
+   ========================================================== */
+
+/* ==========================================================
+   PRIMITIVES — 원시 값 (Light/Dark 동일)
+   ========================================================== */
+:root {
+  /* Base */
+  --white: #ffffff;
+  --black: #000000;
+
+  /* Spacing — 4px base, Tailwind 호환 */
+  --spacing-0:    0px;
+  --spacing-px:   1px;
+  --spacing-0_5:  2px;   /* 0.5 */
+  --spacing-1:    4px;
+  --spacing-1_5:  6px;
+  --spacing-2:    8px;
+  --spacing-2_5:  10px;
+  --spacing-3:    12px;
+  --spacing-3_5:  14px;
+  --spacing-4:    16px;
+  --spacing-4_5:  18px;
+  --spacing-5:    20px;
+  --spacing-6:    24px;
+  --spacing-7:    28px;
+  --spacing-8:    32px;
+  --spacing-9:    36px;
+  --spacing-10:   40px;
+  --spacing-11:   44px;
+  --spacing-12:   48px;
+  --spacing-14:   56px;
+  --spacing-16:   64px;
+  --spacing-20:   80px;
+  --spacing-24:   96px;
+  --spacing-28:   112px;
+  --spacing-32:   128px;
+  --spacing-36:   144px;
+  --spacing-40:   160px;
+  --spacing-48:   192px;
+  --spacing-56:   224px;
+  --spacing-64:   256px;
+  --spacing-72:   288px;
+  --spacing-80:   320px;
+  --spacing-96:   384px;
+
+  /* Container widths */
+  --container-xs:   380px;
+  --container-sm:   640px;
+  --container-md:   768px;
+  --container-lg:   1024px;
+  --container-xl:   1280px;
+  --container-2xl:  1440px;
+
+  /* ----------------------------------------------------------
+     Color — Brand (BOS 4.0 메인, 기존 Bos PB와 동일)
+     ---------------------------------------------------------- */
+  --colors-brand-050: #e9eafb;
+  --colors-brand-100: #c7cbf5;
+  --colors-brand-200: #a1aaef;
+  --colors-brand-300: #7988e9;
+  --colors-brand-400: #5a6ce4;
+  --colors-brand-500: #3851dd;  /* main brand */
+  --colors-brand-600: #3248d2;
+  --colors-brand-700: #283dc5;
+  --colors-brand-800: #3b3d9e;
+  --colors-brand-900: #011ba7;
+  --colors-brand-950: #28207d;
+
+  /* ----------------------------------------------------------
+     Color — Gray (Tailwind gray)
+     ---------------------------------------------------------- */
+  --colors-gray-050: #f9fafb;
+  --colors-gray-100: #f3f4f6;
+  --colors-gray-200: #e5e7eb;
+  --colors-gray-300: #d1d5dc;
+  --colors-gray-400: #99a1af;
+  --colors-gray-500: #6a7282;
+  --colors-gray-600: #4a5565;
+  --colors-gray-700: #333e4f;
+  --colors-gray-800: #1e2939;
+  --colors-gray-900: #101828;
+  --colors-gray-950: #030712;
+
+  /* ----------------------------------------------------------
+     Color — Slate / Zinc / Neutral / Stone (보조 그레이 계열)
+     ---------------------------------------------------------- */
+  --colors-slate-050: #f8fafc;
+  --colors-slate-100: #f1f5f9;
+  --colors-slate-500: #62748e;
+  --colors-slate-700: #314158;
+  --colors-slate-900: #131c34;
+
+  /* ----------------------------------------------------------
+     Color — Status Palettes
+     ---------------------------------------------------------- */
+  /* Red / Rose (Danger) */
+  --colors-rose-050: #fef0f2;
+  --colors-rose-100: #fee2e8;
+  --colors-rose-200: #fecdd6;
+  --colors-rose-500: #f43f5e;
+  --colors-rose-600: #e11d48;
+  --colors-rose-700: #c70036;
+  --colors-rose-800: #a50036;
+  --colors-rose-900: #881337;
+  --colors-rose-950: #4c0519;
+
+  /* Orange (Warning) */
+  --colors-orange-050: #fff8f1;
+  --colors-orange-100: #feecdc;
+  --colors-orange-200: #fcd9bd;
+  --colors-orange-300: #fdba8c;
+  --colors-orange-400: #ff8a4c;
+  --colors-orange-500: #ff5a1f;
+  --colors-orange-600: #d03801;
+  --colors-orange-700: #b43403;
+  --colors-orange-800: #8a2c0d;
+  --colors-orange-900: #771d1d;
+
+  /* Green / Emerald (Success) */
+  --colors-emerald-050: #ecfdf5;
+  --colors-emerald-100: #d0fae5;
+  --colors-emerald-200: #a7f3d0;
+  --colors-emerald-300: #6ee7b7;
+  --colors-emerald-500: #10b981;
+  --colors-emerald-600: #059669;
+  --colors-emerald-700: #047857;
+  --colors-emerald-800: #065f46;
+  --colors-emerald-900: #064e3b;
+
+  /* Yellow */
+  --colors-yellow-050: #fefce8;
+  --colors-yellow-300: #ffdf20;
+  --colors-yellow-400: #fdc700;
+  --colors-yellow-500: #f0b100;
+
+  /* Sky / Cyan / Teal / Indigo / Purple / Pink — 데이터 시각화용 */
+  --colors-sky-500:    #0ea5e9;
+  --colors-cyan-500:   #06b6d4;
+  --colors-teal-500:   #14b8a6;
+  --colors-teal-600:   #0d9488;
+  --colors-indigo-500: #6366f1;
+  --colors-indigo-600: #4f46e5;
+  --colors-purple-500: #a855f7;
+  --colors-purple-600: #9333ea;
+  --colors-pink-500:   #ec4899;
+  --colors-pink-600:   #db2777;
+
+  /* ----------------------------------------------------------
+     Border Radius
+     ---------------------------------------------------------- */
+  --border-radius-rounded-0:    0px;
+  --border-radius-rounded-xxs:  2px;
+  --border-radius-rounded-xs:   4px;
+  --border-radius-rounded-sm:   6px;
+  --border-radius-rounded:      8px;
+  --border-radius-rounded-md:   10px;
+  --border-radius-rounded-base: 12px;  /* DEFAULT for buttons, inputs */
+  --border-radius-rounded-lg:   16px;
+  --border-radius-rounded-xl:   20px;
+  --border-radius-rounded-2xl:  24px;
+  --border-radius-rounded-full: 9999px;
+
+  /* ----------------------------------------------------------
+     Border Width
+     ---------------------------------------------------------- */
+  --border-width-border:    1px;
+  --border-width-border-md: 2px;
+  --border-width-border-lg: 4px;
+
+  /* ----------------------------------------------------------
+     Shadow
+     ---------------------------------------------------------- */
+  --shadow-xs: 0 1px 0.5px 0.05px rgba(29, 41, 61, 0.02);
+  --shadow-sm: 0 1px 2px 0 rgba(29, 41, 61, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(29, 41, 61, 0.10), 0 2px 4px -2px rgba(29, 41, 61, 0.10);
+  --shadow-lg: 0 10px 15px -3px rgba(29, 41, 61, 0.10), 0 4px 6px -4px rgba(29, 41, 61, 0.10);
+  --shadow-xl: 0 20px 25px -5px rgba(29, 41, 61, 0.10), 0 8px 10px -6px rgba(29, 41, 61, 0.10);
+
+  /* ----------------------------------------------------------
+     Typography
+     ---------------------------------------------------------- */
+  --typography-font-family-base: "Wanted Sans Variable", "Wanted Sans", "Inter", system-ui, -apple-system, sans-serif;
+
+  /* Font sizes */
+  --typography-font-size-text-xxs: 8px;
+  --typography-font-size-text-xs:  12px;
+  --typography-font-size-text-sm:  14px;
+  --typography-font-size-text-base:16px;
+  --typography-font-size-text-lg:  18px;
+  --typography-font-size-text-xl:  20px;
+  --typography-font-size-text-2xl: 24px;
+  --typography-font-size-text-3xl: 30px;
+  --typography-font-size-text-4xl: 36px;
+  --typography-font-size-text-5xl: 48px;
+  --typography-font-size-text-6xl: 60px;
+
+  /* Line heights (px) */
+  --typography-line-height-leading-none: 1;
+  --typography-line-height-leading-3:    12px;
+  --typography-line-height-leading-4:    16px;
+  --typography-line-height-leading-5:    20px;
+  --typography-line-height-leading-6:    24px;
+  --typography-line-height-leading-7:    28px;
+  --typography-line-height-leading-8:    32px;
+  --typography-line-height-leading-9:    36px;
+  --typography-line-height-leading-10:   40px;
+
+  /* Font weights */
+  --typography-font-weight-font-normal:   400;
+  --typography-font-weight-font-medium:   500;
+  --typography-font-weight-font-semibold: 600;
+  --typography-font-weight-font-bold:     700;
+}
+
+
+/* ==========================================================
+   THEMES — LIGHT MODE (default)
+   시멘틱 토큰: 컴포넌트가 사용하는 의미 기반 변수
+   ========================================================== */
+:root,
+[data-theme="light"] {
+  /* ----- Background ----- */
+  --colors-background-bg-white:           var(--white);
+  --colors-background-bg-primary:         var(--white);
+  --colors-background-bg-primary-soft:    var(--white);
+  --colors-background-bg-primary-medium:  var(--white);
+  --colors-background-bg-primary-strong:  var(--white);
+
+  --colors-background-bg-secondary:        var(--colors-gray-050);
+  --colors-background-bg-secondary-soft:   var(--colors-gray-050);
+  --colors-background-bg-secondary-medium: var(--colors-gray-050);
+  --colors-background-bg-secondary-strong: var(--colors-gray-050);
+
+  --colors-background-bg-tertiary:         var(--colors-gray-100);
+  --colors-background-bg-tertiary-soft:    var(--colors-gray-100);
+  --colors-background-bg-tertiary-medium:  var(--colors-gray-100);
+
+  --colors-background-bg-quaternary:        var(--colors-gray-200);
+  --colors-background-bg-quaternary-medium: var(--colors-gray-200);
+
+  --colors-background-bg-gray:     var(--colors-gray-300);
+  --colors-background-bg-dark:     var(--colors-gray-800);
+  --colors-background-bg-dark-strong: var(--colors-gray-900);
+  --colors-background-bg-disabled: var(--colors-gray-100);
+
+  /* Brand backgrounds */
+  --colors-background-bg-brand-softer: var(--colors-brand-050);
+  --colors-background-bg-brand-soft:   var(--colors-brand-100);
+  --colors-background-bg-brand-medium: var(--colors-brand-200);
+  --colors-background-bg-brand:        var(--colors-brand-700);  /* main */
+  --colors-background-bg-brand-strong: var(--colors-brand-800);
+
+  /* Status backgrounds */
+  --colors-background-bg-success-soft:   var(--colors-emerald-050);
+  --colors-background-bg-success-medium: var(--colors-emerald-100);
+  --colors-background-bg-success:        var(--colors-emerald-700);
+  --colors-background-bg-success-strong: var(--colors-emerald-800);
+
+  --colors-background-bg-danger-soft:    var(--colors-rose-050);
+  --colors-background-bg-danger-medium:  var(--colors-rose-100);
+  --colors-background-bg-danger:         var(--colors-rose-700);
+  --colors-background-bg-danger-strong:  var(--colors-rose-800);
+
+  --colors-background-bg-warning-soft:   var(--colors-orange-050);
+  --colors-background-bg-warning-medium: var(--colors-orange-100);
+  --colors-background-bg-warning:        var(--colors-orange-500);
+  --colors-background-bg-warning-strong: var(--colors-orange-700);
+
+  /* ----- Text ----- */
+  --colors-text-text-white:   var(--white);
+  --colors-text-text-black:   var(--colors-gray-900);
+  --colors-text-text-heading: var(--colors-gray-900);
+  --colors-text-text-body:    var(--colors-gray-600);
+  --colors-text-text-body-subtle: var(--colors-gray-500);
+
+  --colors-text-text-fg-brand-subtle: var(--colors-brand-200);
+  --colors-text-text-fg-brand:        var(--colors-brand-700);
+  --colors-text-text-fg-brand-strong: var(--colors-brand-900);
+
+  --colors-text-text-fg-success:        var(--colors-emerald-700);
+  --colors-text-text-fg-success-strong: var(--colors-emerald-900);
+  --colors-text-text-fg-danger:         var(--colors-rose-700);
+  --colors-text-text-fg-danger-strong:  var(--colors-rose-900);
+  --colors-text-text-fg-warning-subtle: var(--colors-orange-600);
+  --colors-text-text-fg-warning:        var(--colors-orange-900);
+
+  --colors-text-text-fg-info:     var(--colors-brand-900);
+  --colors-text-text-fg-disabled: var(--colors-gray-400);
+
+  /* ----- Border ----- */
+  --colors-border-border-buffer:        var(--white);
+  --colors-border-border-buffer-medium: var(--white);
+  --colors-border-border-muted:         var(--colors-gray-050);
+  --colors-border-border-light-subtle:  var(--colors-gray-100);
+  --colors-border-border-light:         var(--colors-gray-100);
+  --colors-border-border-light-medium:  var(--colors-gray-100);
+  --colors-border-border-base-subtle:   var(--colors-gray-200);
+  --colors-border-border-base:          var(--colors-gray-200);
+  --colors-border-border-base-medium:   var(--colors-gray-200);
+  --colors-border-border-base-strong:   var(--colors-gray-200);
+  --colors-border-border-dark:          var(--colors-gray-800);
+  --colors-border-border-dark-subtle:   var(--colors-gray-800);
+
+  --colors-border-border-brand-subtle:  var(--colors-brand-200);
+  --colors-border-border-brand-light:   var(--colors-brand-600);
+  --colors-border-border-brand:         var(--colors-brand-700);
+
+  --colors-border-border-success-subtle: var(--colors-emerald-200);
+  --colors-border-border-success:        var(--colors-emerald-700);
+  --colors-border-border-danger-subtle:  var(--colors-rose-200);
+  --colors-border-border-danger:         var(--colors-rose-700);
+  --colors-border-border-warning-subtle: var(--colors-orange-200);
+  --colors-border-border-warning:        var(--colors-orange-600);
+}
+
+
+/* ==========================================================
+   THEMES — DARK MODE
+   Light와 동일한 시멘틱 키, 다른 원시 참조
+   ========================================================== */
+[data-theme="dark"] {
+  /* ----- Background ----- */
+  --colors-background-bg-white:           var(--white);
+  --colors-background-bg-primary:         var(--colors-gray-950);
+  --colors-background-bg-primary-soft:    var(--colors-gray-900);
+  --colors-background-bg-primary-medium:  var(--colors-gray-800);
+  --colors-background-bg-primary-strong:  var(--colors-gray-700);
+
+  --colors-background-bg-secondary:        var(--colors-gray-950);
+  --colors-background-bg-secondary-soft:   var(--colors-gray-900);
+  --colors-background-bg-secondary-medium: var(--colors-gray-800);
+  --colors-background-bg-secondary-strong: var(--colors-gray-700);
+
+  --colors-background-bg-tertiary:         var(--colors-gray-800);
+  --colors-background-bg-tertiary-soft:    var(--colors-gray-900);
+  --colors-background-bg-tertiary-medium:  var(--colors-gray-700);
+
+  --colors-background-bg-quaternary:        var(--colors-gray-700);
+  --colors-background-bg-quaternary-medium: var(--colors-gray-600);
+
+  --colors-background-bg-gray:     var(--colors-gray-600);
+  --colors-background-bg-dark:     var(--colors-gray-800);
+  --colors-background-bg-dark-strong: var(--colors-gray-700);
+  --colors-background-bg-disabled: var(--colors-gray-800);
+
+  /* Brand backgrounds */
+  --colors-background-bg-brand-softer: var(--colors-brand-950);
+  --colors-background-bg-brand-soft:   var(--colors-brand-900);
+  --colors-background-bg-brand-medium: var(--colors-brand-900);
+  --colors-background-bg-brand:        var(--colors-brand-600);
+  --colors-background-bg-brand-strong: var(--colors-brand-700);
+
+  /* Status backgrounds */
+  --colors-background-bg-success-soft:   var(--colors-emerald-900);
+  --colors-background-bg-success-medium: var(--colors-emerald-900);
+  --colors-background-bg-success:        var(--colors-emerald-600);
+  --colors-background-bg-success-strong: var(--colors-emerald-700);
+
+  --colors-background-bg-danger-soft:    var(--colors-rose-950);
+  --colors-background-bg-danger-medium:  var(--colors-rose-900);
+  --colors-background-bg-danger:         var(--colors-rose-700);
+  --colors-background-bg-danger-strong:  var(--colors-rose-800);
+
+  --colors-background-bg-warning-soft:   var(--colors-orange-900);
+  --colors-background-bg-warning-medium: var(--colors-orange-900);
+  --colors-background-bg-warning:        var(--colors-orange-600);
+  --colors-background-bg-warning-strong: var(--colors-orange-700);
+
+  /* ----- Text ----- */
+  --colors-text-text-white:   var(--white);
+  --colors-text-text-black:   var(--colors-gray-900);
+  --colors-text-text-heading: var(--white);
+  --colors-text-text-body:    var(--colors-gray-400);
+  --colors-text-text-body-subtle: var(--colors-gray-400);
+
+  --colors-text-text-fg-brand-subtle: var(--colors-brand-200);
+  --colors-text-text-fg-brand:        var(--colors-brand-500);
+  --colors-text-text-fg-brand-strong: var(--colors-brand-100);
+
+  --colors-text-text-fg-success:        var(--colors-emerald-600);
+  --colors-text-text-fg-success-strong: var(--colors-emerald-300);
+  --colors-text-text-fg-danger:         var(--colors-rose-500);
+  --colors-text-text-fg-danger-strong:  var(--colors-rose-300);
+  --colors-text-text-fg-warning-subtle: var(--colors-orange-500);
+  --colors-text-text-fg-warning:        var(--colors-orange-300);
+
+  --colors-text-text-fg-info:     var(--colors-brand-300);
+  --colors-text-text-fg-disabled: var(--colors-gray-600);
+
+  /* ----- Border ----- */
+  --colors-border-border-buffer:        var(--colors-gray-950);
+  --colors-border-border-buffer-medium: var(--colors-gray-900);
+  --colors-border-border-muted:         var(--colors-gray-900);
+  --colors-border-border-light-subtle:  var(--colors-gray-900);
+  --colors-border-border-light:         var(--colors-gray-800);
+  --colors-border-border-light-medium:  var(--colors-gray-700);
+  --colors-border-border-base-subtle:   var(--colors-gray-900);
+  --colors-border-border-base:          var(--colors-gray-800);
+  --colors-border-border-base-medium:   var(--colors-gray-700);
+  --colors-border-border-base-strong:   var(--colors-gray-600);
+  --colors-border-border-dark:          var(--colors-gray-600);
+  --colors-border-border-dark-subtle:   var(--colors-gray-700);
+
+  --colors-border-border-brand-subtle:  var(--colors-brand-900);
+  --colors-border-border-brand-light:   var(--colors-brand-600);
+  --colors-border-border-brand:         var(--colors-brand-500);
+
+  --colors-border-border-success-subtle: var(--colors-emerald-900);
+  --colors-border-border-success:        var(--colors-emerald-600);
+  --colors-border-border-danger-subtle:  var(--colors-rose-900);
+  --colors-border-border-danger:         var(--colors-rose-600);
+  --colors-border-border-warning-subtle: var(--colors-orange-900);
+  --colors-border-border-warning:        var(--colors-orange-500);
+}
+
+
+/* ==========================================================
+   사용 예시 (참고용 — 실제 컴포넌트는 별도 CSS)
+   ========================================================== */
+/*
+.example-button-primary {
+  background: var(--colors-background-bg-brand);
+  color: var(--colors-text-text-white);
+  padding: var(--spacing-2_5) var(--spacing-4);
+  border-radius: var(--border-radius-rounded-base);
+  font-size: var(--typography-font-size-text-sm);
+  font-weight: var(--typography-font-weight-font-medium);
+  font-family: var(--typography-font-family-base);
+}
+
+.example-card {
+  background: var(--colors-background-bg-primary);
+  border: var(--border-width-border) solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-base);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-sm);
+}
+
+.example-text-body {
+  color: var(--colors-text-text-body);
+  font-size: var(--typography-font-size-text-sm);
+  line-height: var(--typography-line-height-leading-5);
+}
+*/
