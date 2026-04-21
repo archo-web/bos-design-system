@@ -68,7 +68,7 @@ BOS 4.0은 광범위한 시스템입니다. 외울 수 없으니 **카테고리 
 
 ### Foundation
 - **Spacing** — 4px base 스케일
-- **Icons** — 2698개 아이콘
+- **Icons** — 2698개 아이콘 (코드에서는 **Lucide** 라이브러리 사용, 아래 §11 참조)
 - **Shadows & Borders** — 그림자, 테두리
 - **Patterns** — 배경 패턴 (20개)
 
@@ -316,6 +316,144 @@ Color × Size × State × Outline × Icon-only
 
 ---
 
+### 11. Icons — 코드에서의 아이콘 사용 규칙
+
+BOS 4.0의 Figma에는 2,698개의 아이콘이 등록되어 있지만, **코드에서는 이 모든 아이콘을 SVG로 번들링하지 않습니다.** 대신 **Lucide 아이콘 라이브러리**를 외부 의존성으로 사용합니다.
+
+**왜 Lucide인가**
+- Flowbite 공식 아이콘 세트가 Lucide 기반이라 BOS 4.0 Figma 라이브러리의 시각 언어와 일치
+- 오픈소스(ISC), 1,400+개 아이콘, 활발한 유지보수
+- tree-shaking 지원으로 번들 크기 부담 없음
+- Figma 아이콘 이름과 Lucide 아이콘 이름이 대부분 동일 (`users`, `settings`, `chevron-down` 등)
+
+#### 11.1 사용 방법
+
+**React/Vue/Svelte 프로젝트** (권장)
+```bash
+npm install lucide-react   # React
+npm install lucide-vue-next # Vue
+npm install lucide-svelte   # Svelte
+```
+```jsx
+import { Users, LayoutDashboard, Settings } from 'lucide-react';
+
+<Users size={18} strokeWidth={1.8} aria-hidden="true" />
+```
+
+**일반 HTML/정적 페이지**
+```html
+<!-- CDN 1회 로드 -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<!-- 사용 -->
+<i data-lucide="users"></i>
+
+<script>lucide.createIcons();</script>
+```
+
+**아이콘 카탈로그 검색**: https://lucide.dev/icons/
+
+#### 11.2 크기 & 스타일 규칙
+
+| 상황 | 크기 | stroke-width |
+|---|---|---|
+| 네비게이션 링크 (Nav link) | `18px` | `1.8` |
+| 버튼 내부 (일반) | `16px` | `1.8` |
+| 버튼 내부 (sm) | `14px` | `1.8` |
+| Input field add-on | `16px` | `1.8` |
+| Icon shape (빈 상태/에러) | `28px` | `1.6` |
+| 대형 히어로/일러스트 보조 | `32px+` | `1.5` |
+
+> **stroke-width**: Flowbite 표준은 `1.8`. `Icon shape` 컴포넌트 내부는 `interaction-patterns.md §9.2` 기준 `1.6` 사용.
+
+#### 11.3 색상 규칙
+
+아이콘 색상은 **항상 시멘틱 토큰** 사용. `currentColor`가 기본이므로 부모 텍스트 색상 상속 활용.
+
+```jsx
+// ✅ Good — 부모 color 상속 (기본)
+<button className="nav-link">  {/* color: var(--text-body) */}
+  <Users />                    {/* 자동으로 text-body 색상 */}
+  회원 관리
+</button>
+
+// ✅ Good — 명시적 시멘틱 토큰
+<Users style={{ color: 'var(--colors-text-text-fg-brand)' }} />
+
+// ❌ Bad — 원시 색상 직접 지정
+<Users color="#3851dd" />
+```
+
+#### 11.4 접근성 규칙 (`07-accessibility.md §6.2`와 연결)
+
+**라벨과 함께 있는 아이콘** → `aria-hidden="true"` (스크린 리더가 중복 읽기 방지)
+```jsx
+<button>
+  <Users aria-hidden="true" />
+  회원 관리
+</button>
+```
+
+**아이콘 단독 사용** → 부모에 `aria-label`
+```jsx
+<button aria-label="검색">
+  <Search aria-hidden="true" />
+</button>
+```
+
+**장식용 아이콘** → `aria-hidden="true"`
+```jsx
+<h2>
+  <Star aria-hidden="true" /> 추천 항목
+</h2>
+```
+
+#### 11.5 Figma에만 있는 커스텀 아이콘이 필요할 때
+
+Lucide에 없는 도메인 특화 아이콘(예: 브랜드 로고, 서비스 고유 심볼)이 필요하면:
+
+1. **먼저 Lucide에서 유사 아이콘 검색** — 90%는 대체 가능
+2. **Figma Icons 페이지에서 export** — `figma.use_figma`로 SVG 추출
+3. **프로젝트에 `src/icons/`로 저장** — 재사용 가능한 React 컴포넌트로 래핑
+4. **stroke-width `1.8`, 24x24 viewBox 규격 통일**
+
+```jsx
+// src/icons/CustomBrand.tsx — Figma에서 추출한 커스텀 아이콘
+export const CustomBrand = ({ size = 18, ...props }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"
+    strokeLinejoin="round" aria-hidden="true" {...props}>
+    {/* Figma에서 추출한 path */}
+  </svg>
+);
+```
+
+#### 11.6 자주 쓰는 아이콘 매핑 (네비/액션 기준)
+
+| 용도 | Lucide 이름 |
+|---|---|
+| 대시보드 | `layout-dashboard` |
+| 회원/사용자 | `users` (복수), `user` (단수) |
+| 프로젝트 | `folder-kanban`, `briefcase` |
+| 리포트/분석 | `bar-chart-3`, `line-chart` |
+| 설정 | `settings`, `cog` |
+| 검색 | `search` |
+| 추가 | `plus` |
+| 수정 | `pencil` |
+| 삭제 | `trash-2` |
+| 더보기 (⋯) | `more-vertical`, `more-horizontal` |
+| 알림 | `bell` |
+| 테마 전환 | `moon`, `sun` |
+| 닫기 | `x` |
+| 이전/다음 | `chevron-left`, `chevron-right` |
+| 펼치기 | `chevron-down` |
+| 에러 | `alert-circle`, `x-circle` |
+| 성공 | `check`, `check-circle` |
+| 경고 | `alert-triangle` |
+| 다시 시도 | `refresh-cw` |
+
+---
+
 ## 🔍 컴포넌트가 위 10개 외에 필요할 때
 
 다음 순서로 진행:
@@ -391,3 +529,4 @@ BOS 4.0은 47개 카테고리, 수천 개 variant가 있어서 거의 모든 케
 
 - `2026-04-20` — 초기 버전 (구 Bos)
 - `2026-04-20 (BOS 4.0)` — BOS 4.0 47개 카테고리 인덱스화 + 핵심 10개 깊이 가이드. 컴포넌트 철학을 "목적별"에서 "속성 조합형"으로 전환.
+- `2026-04-21 (Icons 섹션 추가)` — §11 Icons 전용 가이드 신설. Lucide 라이브러리 사용을 표준으로 정의. 크기/stroke/색상/접근성 규칙, Figma 커스텀 아이콘 추출 플로우, 자주 쓰는 아이콘 매핑 표 포함.
