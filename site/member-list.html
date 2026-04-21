@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<title>회원 관리 · BOS 4.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Lucide Icons (BOS 4.0 아이콘 표준 — 03-component-usage.md §11) -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+<style>
+/* ==========================================================
+   BOS 4.0 Design Tokens (inline 발췌 — 이 화면에 쓰는 것만)
+   원본: bos4-design-tokens.css
+   ========================================================== */
+:root {
+  --spacing-1: 4px;  --spacing-2: 8px;  --spacing-3: 12px;
+  --spacing-4: 16px; --spacing-5: 20px; --spacing-6: 24px;
+  --spacing-8: 32px; --spacing-10: 40px; --spacing-12: 48px;
+  --spacing-16: 64px;
+
+  --container-2xl: 1440px;
+  --radius-sm: 6px;  --radius-base: 8px; --radius-lg: 12px;
+
+  --colors-brand-050: #e9eafb; --colors-brand-100: #c7cbf5;
+  --colors-brand-500: #3851dd; --colors-brand-600: #3248d2;
+  --colors-brand-700: #283dc5; --colors-brand-800: #3b3d9e;
+  --colors-brand-900: #011ba7; --colors-brand-950: #28207d;
+
+  --colors-gray-050: #f9fafb; --colors-gray-100: #f3f4f6;
+  --colors-gray-200: #e5e7eb; --colors-gray-300: #d1d5db;
+  --colors-gray-400: #9ca3af; --colors-gray-500: #6b7280;
+  --colors-gray-600: #4b5563; --colors-gray-700: #374151;
+  --colors-gray-800: #1f2937; --colors-gray-900: #111827;
+  --colors-gray-950: #030712;
+
+  --colors-emerald-050: #ecfdf5; --colors-emerald-400: #34d399;
+  --colors-emerald-500: #10b981; --colors-emerald-700: #047857;
+  --colors-emerald-900: #064e3b;
+
+  --colors-rose-050: #fff1f2;   --colors-rose-500: #f43f5e;
+  --colors-rose-700: #be123c;   --colors-rose-900: #881337;
+  --colors-rose-950: #4c0519;
+
+  --colors-orange-050: #fff7ed; --colors-orange-500: #f97316;
+  --colors-orange-700: #c2410c; --colors-orange-900: #7c2d12;
+
+  --white: #ffffff;
+}
+
+[data-theme="light"] {
+  --bg-primary:     var(--white);
+  --bg-secondary:   var(--colors-gray-050);
+  --bg-brand:       var(--colors-brand-700);
+  --bg-brand-soft:  var(--colors-brand-050);
+  --bg-success-soft:var(--colors-emerald-050);
+  --bg-danger-soft: var(--colors-rose-050);
+  --bg-warning-soft:var(--colors-orange-050);
+
+  --text-heading:    var(--colors-gray-900);
+  --text-body:       var(--colors-gray-600);
+  --text-body-subtle:var(--colors-gray-500);
+  --text-disabled:   var(--colors-gray-400);
+  --text-fg-brand:   var(--colors-brand-700);
+  --text-fg-success: var(--colors-emerald-700);
+  --text-fg-danger:  var(--colors-rose-700);
+  --text-fg-warning: var(--colors-orange-900);
+
+  --border-base: var(--colors-gray-200);
+  --border-brand:var(--colors-brand-500);
+
+  --shadow-lg:  0 10px 15px -3px rgba(0,0,0,.08);
+}
+
+[data-theme="dark"] {
+  --bg-primary:     var(--colors-gray-950);
+  --bg-secondary:   var(--colors-gray-900);
+  --bg-brand:       var(--colors-brand-600);
+  --bg-brand-soft:  var(--colors-brand-900);
+  --bg-success-soft:var(--colors-emerald-900);
+  --bg-danger-soft: var(--colors-rose-950);
+  --bg-warning-soft:var(--colors-orange-900);
+
+  --text-heading:    var(--white);
+  --text-body:       var(--colors-gray-400);
+  --text-body-subtle:var(--colors-gray-500);
+  --text-disabled:   var(--colors-gray-600);
+  --text-fg-brand:   var(--colors-brand-500);
+  --text-fg-success: var(--colors-emerald-400);
+  --text-fg-danger:  var(--colors-rose-500);
+  --text-fg-warning: var(--colors-orange-500);
+
+  --border-base: var(--colors-gray-800);
+  --border-brand:var(--colors-brand-500);
+
+  --shadow-lg:  0 10px 15px -3px rgba(0,0,0,.5);
+}
+
+/* ==========================================================
+   Base
+   ========================================================== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%;
+  font-family: 'Wanted Sans', 'Pretendard', -apple-system, 'Inter', sans-serif;
+  font-size: 14px; line-height: 1.5;
+  background: var(--bg-secondary);
+  color: var(--text-body);
+  -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+a { color: inherit; text-decoration: none; }
+input { font: inherit; }
+
+button:focus-visible, a:focus-visible, input:focus-visible, [role="button"]:focus-visible {
+  outline: 2px solid var(--border-brand);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ==========================================================
+   Lucide 아이콘 기본 스타일 (03-component-usage.md §11.2)
+   Lucide는 <i data-lucide>를 <svg>로 교체하므로 svg에 직접 스타일 적용
+   ========================================================== */
+svg.lucide {
+  width: 18px; height: 18px;   /* 네비 기본 */
+  stroke-width: 1.8;            /* Flowbite 표준 */
+  flex: none;
+}
+/* 버튼 내부는 16px */
+.btn svg.lucide { width: 16px; height: 16px; }
+.btn-sm svg.lucide { width: 14px; height: 14px; }
+/* 검색/select 내부 add-on 아이콘 */
+.search-field svg.lucide { width: 16px; height: 16px; color: var(--text-body-subtle); }
+.select svg.lucide { width: 14px; height: 14px; color: var(--text-body-subtle); }
+/* 페이지네이션 */
+.page-btn svg.lucide { width: 14px; height: 14px; }
+/* Icon shape — 28px + stroke 1.6 (05-interaction-patterns §9.2) */
+.icon-shape svg.lucide { width: 28px; height: 28px; stroke-width: 1.6; }
+
+/* ==========================================================
+   Layout — Navbar + Sidebar + Main
+   ========================================================== */
+.app { display: grid; grid-template-columns: 240px 1fr; grid-template-rows: 64px 1fr; min-height: 100vh; }
+.navbar {
+  grid-column: 1 / -1;
+  height: 64px;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-base);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--spacing-8);
+  position: sticky; top: 0; z-index: 10;
+}
+.navbar-brand { display: flex; align-items: center; gap: var(--spacing-3); font-weight: 700; color: var(--text-heading); font-size: 16px; }
+.navbar-brand-logo { width: 28px; height: 28px; background: var(--bg-brand); border-radius: var(--radius-sm); display: grid; place-items: center; color: var(--white); font-size: 13px; }
+.navbar-actions { display: flex; align-items: center; gap: var(--spacing-2); }
+
+.sidebar {
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-base);
+  padding: var(--spacing-4) var(--spacing-3);
+  display: flex; flex-direction: column; gap: var(--spacing-1);
+}
+.sidebar-group-label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--text-body-subtle);
+  padding: var(--spacing-3) var(--spacing-3) var(--spacing-1);
+}
+.nav-link {
+  display: flex; align-items: center; gap: var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-base);
+  color: var(--text-body); font-weight: 500;
+  transition: background .12s ease, color .12s ease;
+  position: relative;
+}
+.nav-link:hover { background: var(--bg-primary); color: var(--text-heading); }
+.nav-link.active {
+  background: var(--bg-primary);
+  color: var(--text-fg-brand);
+  font-weight: 600;
+}
+.nav-link.active::before {
+  content: ""; position: absolute; left: 0; top: 6px; bottom: 6px;
+  width: 3px; background: var(--border-brand); border-radius: 0 2px 2px 0;
+}
+
+.main {
+  padding: var(--spacing-8);
+  max-width: var(--container-2xl);
+  width: 100%;
+  overflow: auto;
+}
+
+/* ==========================================================
+   Buttons
+   ========================================================== */
+.btn {
+  display: inline-flex; align-items: center; gap: var(--spacing-2);
+  padding: 0 var(--spacing-4);
+  height: 40px;
+  border-radius: var(--radius-base);
+  font-weight: 500; font-size: 14px;
+  transition: background .12s ease, color .12s ease, border-color .12s ease;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.btn-brand { background: var(--bg-brand); color: var(--white); }
+.btn-brand:hover:not(:disabled) { background: var(--colors-brand-800); }
+
+.btn-secondary {
+  background: var(--bg-primary);
+  color: var(--text-heading);
+  border-color: var(--border-base);
+}
+.btn-secondary:hover:not(:disabled) { background: var(--bg-secondary); }
+
+.btn-ghost { background: transparent; color: var(--text-body); }
+.btn-ghost:hover:not(:disabled) { background: var(--bg-secondary); color: var(--text-heading); }
+
+.btn-sm { height: 32px; padding: 0 var(--spacing-3); font-size: 13px; }
+.btn-icon { width: 32px; height: 32px; padding: 0; justify-content: center; }
+
+/* ==========================================================
+   Page Header
+   ========================================================== */
+.page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--spacing-4); margin-bottom: var(--spacing-6); }
+.page-title { font-size: 30px; font-weight: 700; color: var(--text-heading); line-height: 1.2; }
+.page-desc { font-size: 14px; color: var(--text-body); margin-top: var(--spacing-1); }
+
+/* ==========================================================
+   Toolbar
+   ========================================================== */
+.toolbar {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: var(--spacing-3);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-base);
+  padding: var(--spacing-3) var(--spacing-4);
+  margin-bottom: var(--spacing-4);
+}
+.toolbar-left { display: flex; gap: var(--spacing-2); align-items: center; flex: 1; }
+.toolbar-right { display: flex; gap: var(--spacing-2); align-items: center; }
+
+.search-field {
+  display: flex; align-items: center;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-base);
+  padding: 0 var(--spacing-3);
+  height: 40px;
+  width: 320px;
+  transition: border-color .12s ease, box-shadow .12s ease;
+}
+.search-field:focus-within {
+  border-color: var(--border-brand);
+  box-shadow: 0 0 0 3px rgb(56 81 221 / .15);
+}
+.search-field input {
+  border: none; outline: none; background: none;
+  color: var(--text-heading);
+  padding: 0 var(--spacing-2);
+  flex: 1; font-size: 14px;
+}
+.search-field input::placeholder { color: var(--text-disabled); }
+
+.select {
+  display: inline-flex; align-items: center; gap: var(--spacing-2);
+  height: 40px; padding: 0 var(--spacing-3);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-base);
+  color: var(--text-heading); font-weight: 500;
+  transition: border-color .12s ease;
+}
+.select:hover { border-color: var(--colors-gray-300); }
+[data-theme="dark"] .select:hover { border-color: var(--colors-gray-700); }
+
+/* ==========================================================
+   Table
+   ========================================================== */
+.table-wrap {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-base);
+  overflow: hidden;
+}
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: var(--spacing-3) var(--spacing-4); font-size: 14px; }
+thead tr { background: var(--bg-secondary); border-bottom: 1px solid var(--border-base); }
+th {
+  font-size: 12px; font-weight: 600; color: var(--text-body);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+tbody tr { border-bottom: 1px solid var(--border-base); transition: background .12s ease; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--bg-secondary); }
+tbody tr:hover .row-actions,
+tbody tr:focus-within .row-actions { opacity: 1; }
+td { color: var(--text-heading); }
+.cell-meta { color: var(--text-body); font-size: 13px; }
+
+.user-cell { display: flex; align-items: center; gap: var(--spacing-3); }
+.avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--bg-brand-soft); color: var(--text-fg-brand);
+  display: grid; place-items: center; font-weight: 600; font-size: 13px;
+  flex: none;
+}
+.user-name { font-weight: 500; color: var(--text-heading); }
+.user-email { font-size: 12px; color: var(--text-body); }
+
+.row-actions { display: flex; gap: var(--spacing-1); justify-content: flex-end; opacity: 0; transition: opacity .12s ease; }
+
+/* ==========================================================
+   Badge
+   ========================================================== */
+.badge {
+  display: inline-flex; align-items: center; gap: var(--spacing-2);
+  height: 22px; padding: 0 var(--spacing-2);
+  border-radius: 999px;
+  font-size: 12px; font-weight: 500;
+}
+.badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; }
+.badge-success { background: var(--bg-success-soft); color: var(--text-fg-success); }
+.badge-success::before { background: currentColor; }
+.badge-warning { background: var(--bg-warning-soft); color: var(--text-fg-warning); }
+.badge-warning::before { background: currentColor; }
+.badge-gray    { background: var(--bg-secondary); color: var(--text-body); border: 1px solid var(--border-base); }
+.badge-gray::before { background: var(--text-body-subtle); }
+
+/* ==========================================================
+   Pagination Footer
+   ========================================================== */
+.table-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: var(--spacing-4);
+  border-top: 1px solid var(--border-base);
+  font-size: 13px; color: var(--text-body);
+}
+.pagination { display: flex; gap: var(--spacing-1); }
+.page-btn {
+  width: 32px; height: 32px; display: grid; place-items: center;
+  border-radius: var(--radius-sm);
+  color: var(--text-body); font-weight: 500;
+  transition: background .12s ease, color .12s ease;
+}
+.page-btn:hover { background: var(--bg-secondary); color: var(--text-heading); }
+.page-btn.active { background: var(--bg-brand); color: var(--white); }
+.page-btn.active:hover { background: var(--colors-brand-800); }
+.page-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ==========================================================
+   State panels (Empty / Error)
+   ========================================================== */
+.state-panel {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-base);
+  padding: var(--spacing-16) var(--spacing-6);
+  text-align: center;
+}
+.icon-shape {
+  width: 64px; height: 64px; border-radius: var(--radius-lg);
+  display: grid; place-items: center;
+  margin: 0 auto var(--spacing-3);
+}
+.icon-shape-empty { background: var(--bg-secondary); color: var(--text-disabled); }
+.icon-shape-danger { background: var(--bg-danger-soft); color: var(--text-fg-danger); }
+
+.state-title { font-size: 16px; font-weight: 600; color: var(--text-heading); margin-bottom: var(--spacing-1); }
+.state-desc  { font-size: 14px; color: var(--text-body); max-width: 360px; margin: 0 auto var(--spacing-3); }
+
+/* Skeleton */
+.skeleton-row { display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-3) var(--spacing-4); border-bottom: 1px solid var(--border-base); }
+.skeleton-row:last-child { border-bottom: none; }
+.sk { background: var(--bg-secondary); border-radius: var(--radius-sm); height: 14px; position: relative; overflow: hidden; }
+.sk::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,.04), transparent);
+  animation: shimmer 1.4s infinite;
+}
+[data-theme="dark"] .sk::after { background: linear-gradient(90deg, transparent, rgba(255,255,255,.04), transparent); }
+@keyframes shimmer { 0%{ transform: translateX(-100%);} 100%{ transform: translateX(100%);} }
+.sk-circle { width: 36px; height: 36px; border-radius: 50%; flex: none; }
+.sk-name { width: 120px; height: 14px; }
+.sk-sub  { width: 180px; height: 12px; margin-top: 6px; }
+
+/* State toggle */
+.state-toggle {
+  position: fixed; bottom: var(--spacing-4); left: 50%; transform: translateX(-50%);
+  background: var(--bg-primary); border: 1px solid var(--border-base);
+  border-radius: 999px; padding: var(--spacing-1);
+  display: flex; gap: 2px;
+  box-shadow: var(--shadow-lg);
+  z-index: 20;
+}
+.state-toggle button {
+  padding: var(--spacing-2) var(--spacing-4); border-radius: 999px;
+  font-size: 12px; font-weight: 500; color: var(--text-body);
+  transition: background .12s, color .12s;
+}
+.state-toggle button.active { background: var(--bg-brand); color: var(--white); }
+
+.hidden { display: none !important; }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .app { grid-template-columns: 60px 1fr; }
+  .sidebar .nav-link span:not(.sr-only) { display: none; }
+  .sidebar-group-label { display: none; }
+  .search-field { width: 240px; }
+}
+@media (max-width: 768px) {
+  .main { padding: var(--spacing-4); }
+  .toolbar { flex-direction: column; align-items: stretch; }
+  .search-field { width: 100%; }
+  th:nth-child(3), td:nth-child(3),
+  th:nth-child(4), td:nth-child(4) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-brand-logo">B</div>
+      <span>BOS 4.0 Admin</span>
+    </div>
+    <div class="navbar-actions">
+      <button class="btn btn-ghost btn-icon" aria-label="알림">
+        <i data-lucide="bell" aria-hidden="true"></i>
+      </button>
+      <button class="btn btn-ghost btn-icon" aria-label="테마 변경" onclick="toggleTheme()">
+        <i id="theme-icon" data-lucide="moon" aria-hidden="true"></i>
+      </button>
+      <div class="avatar" aria-label="홍지민">홍</div>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" aria-label="메인 네비게이션">
+    <div class="sidebar-group-label">워크스페이스</div>
+    <a href="#" class="nav-link">
+      <i data-lucide="layout-dashboard" aria-hidden="true"></i>
+      <span>대시보드</span>
+    </a>
+    <a href="#" class="nav-link active" aria-current="page">
+      <i data-lucide="users" aria-hidden="true"></i>
+      <span>회원 관리</span>
+    </a>
+    <a href="#" class="nav-link">
+      <i data-lucide="folder-kanban" aria-hidden="true"></i>
+      <span>프로젝트</span>
+    </a>
+    <a href="#" class="nav-link">
+      <i data-lucide="bar-chart-3" aria-hidden="true"></i>
+      <span>리포트</span>
+    </a>
+
+    <div class="sidebar-group-label">설정</div>
+    <a href="#" class="nav-link">
+      <i data-lucide="settings" aria-hidden="true"></i>
+      <span>환경 설정</span>
+    </a>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">회원 관리</h1>
+        <p class="page-desc">전체 회원을 조회하고 권한과 상태를 관리합니다.</p>
+      </div>
+      <button class="btn btn-brand">
+        <i data-lucide="plus" aria-hidden="true"></i>
+        회원 초대
+      </button>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="search-field">
+          <i data-lucide="search" aria-hidden="true"></i>
+          <input type="search" placeholder="이름 또는 이메일 검색" aria-label="회원 검색">
+        </div>
+        <button class="select" type="button" aria-haspopup="listbox">
+          상태: 전체
+          <i data-lucide="chevron-down" aria-hidden="true"></i>
+        </button>
+        <button class="select" type="button" aria-haspopup="listbox">
+          권한: 전체
+          <i data-lucide="chevron-down" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="toolbar-right">
+        <button class="select" type="button" aria-haspopup="listbox">
+          최신순
+          <i data-lucide="chevron-down" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- STATE: Data -->
+    <div id="state-data" class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">회원</th>
+            <th scope="col">권한</th>
+            <th scope="col">가입일</th>
+            <th scope="col">상태</th>
+            <th scope="col" style="text-align: right;">액션</th>
+          </tr>
+        </thead>
+        <tbody id="members-tbody"></tbody>
+      </table>
+
+      <div class="table-footer">
+        <span>전체 <strong style="color: var(--text-heading);">20</strong>명 · 1-10 표시</span>
+        <div class="pagination" role="navigation" aria-label="페이지네이션">
+          <button class="page-btn" disabled aria-label="이전 페이지">
+            <i data-lucide="chevron-left" aria-hidden="true"></i>
+          </button>
+          <button class="page-btn active" aria-current="page">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn" aria-label="다음 페이지">
+            <i data-lucide="chevron-right" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATE: Loading -->
+    <div id="state-loading" class="table-wrap hidden">
+      <div style="background: var(--bg-secondary); padding: var(--spacing-3) var(--spacing-4); border-bottom: 1px solid var(--border-base); display: flex; gap: var(--spacing-4);">
+        <div class="sk" style="width: 80px; height: 12px;"></div>
+        <div class="sk" style="width: 60px; height: 12px;"></div>
+        <div class="sk" style="width: 80px; height: 12px;"></div>
+        <div class="sk" style="width: 50px; height: 12px;"></div>
+      </div>
+      <div id="skeleton-body"></div>
+    </div>
+
+    <!-- STATE: Empty -->
+    <div id="state-empty" class="state-panel hidden">
+      <div class="icon-shape icon-shape-empty">
+        <i data-lucide="user-plus" aria-hidden="true"></i>
+      </div>
+      <h3 class="state-title">아직 회원이 없어요</h3>
+      <p class="state-desc">팀원을 초대해 워크스페이스를 함께 꾸려보세요. 이메일로 간단히 초대할 수 있어요.</p>
+      <button class="btn btn-brand">
+        <i data-lucide="plus" aria-hidden="true"></i>
+        회원 초대
+      </button>
+    </div>
+
+    <!-- STATE: Error -->
+    <div id="state-error" class="state-panel hidden">
+      <div class="icon-shape icon-shape-danger">
+        <i data-lucide="alert-circle" aria-hidden="true"></i>
+      </div>
+      <h3 class="state-title">목록을 불러올 수 없어요</h3>
+      <p class="state-desc">잠시 후 다시 시도해주세요. 문제가 계속되면 관리자에게 문의해주세요.</p>
+      <button class="btn btn-secondary">
+        <i data-lucide="refresh-cw" aria-hidden="true"></i>
+        다시 시도
+      </button>
+      <div style="font-family: ui-monospace, SFMono-Regular, monospace; font-size: 12px; color: var(--text-disabled); margin-top: var(--spacing-3);">ERR_FETCH_TIMEOUT · 504</div>
+    </div>
+  </main>
+</div>
+
+<!-- State toggle -->
+<div class="state-toggle" role="radiogroup" aria-label="상태 전환 (데모)">
+  <button class="active" onclick="setState('data', event)">데이터</button>
+  <button onclick="setState('loading', event)">로딩</button>
+  <button onclick="setState('empty', event)">빈</button>
+  <button onclick="setState('error', event)">에러</button>
+</div>
+
+<script>
+const members = [
+  { name: '김민준', email: 'minjun.kim@archo.io',    role: '관리자',  joined: '2024-03-12', status: 'active' },
+  { name: '이서연', email: 'seoyeon.lee@archo.io',   role: '편집자',  joined: '2024-05-03', status: 'active' },
+  { name: '박지훈', email: 'jihoon.park@archo.io',   role: '편집자',  joined: '2024-07-18', status: 'pending' },
+  { name: '최하늘', email: 'haneul.choi@archo.io',   role: '뷰어',    joined: '2024-08-22', status: 'active' },
+  { name: '정유진', email: 'yujin.jeong@archo.io',   role: '관리자',  joined: '2024-09-01', status: 'inactive' },
+  { name: '강도윤', email: 'doyun.kang@archo.io',    role: '편집자',  joined: '2024-10-15', status: 'active' },
+  { name: '조예린', email: 'yerin.cho@archo.io',     role: '뷰어',    joined: '2024-11-02', status: 'pending' },
+  { name: '윤서준', email: 'seojun.yoon@archo.io',   role: '편집자',  joined: '2024-12-20', status: 'active' },
+  { name: '임채원', email: 'chaewon.lim@archo.io',   role: '뷰어',    joined: '2025-01-07', status: 'active' },
+  { name: '한지원', email: 'jiwon.han@archo.io',     role: '관리자',  joined: '2025-02-14', status: 'active' },
+];
+
+const statusMap = {
+  active:   { label: '활성',   cls: 'badge-success' },
+  pending:  { label: '대기중', cls: 'badge-warning' },
+  inactive: { label: '비활성', cls: 'badge-gray' },
+};
+
+function renderMembers() {
+  const tbody = document.getElementById('members-tbody');
+  tbody.innerHTML = members.map(m => `
+    <tr tabindex="0">
+      <td>
+        <div class="user-cell">
+          <div class="avatar" aria-hidden="true">${m.name.slice(0,1)}</div>
+          <div>
+            <div class="user-name">${m.name}</div>
+            <div class="user-email">${m.email}</div>
+          </div>
+        </div>
+      </td>
+      <td class="cell-meta">${m.role}</td>
+      <td class="cell-meta">${m.joined}</td>
+      <td><span class="badge ${statusMap[m.status].cls}">${statusMap[m.status].label}</span></td>
+      <td>
+        <div class="row-actions">
+          <button class="btn btn-ghost btn-icon btn-sm" aria-label="${m.name} 수정">
+            <i data-lucide="pencil" aria-hidden="true"></i>
+          </button>
+          <button class="btn btn-ghost btn-icon btn-sm" aria-label="${m.name} 더보기">
+            <i data-lucide="more-vertical" aria-hidden="true"></i>
+          </button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderSkeleton() {
+  const body = document.getElementById('skeleton-body');
+  body.innerHTML = Array.from({ length: 6 }).map(() => `
+    <div class="skeleton-row">
+      <div class="sk sk-circle"></div>
+      <div style="flex: 1;">
+        <div class="sk sk-name"></div>
+        <div class="sk sk-sub"></div>
+      </div>
+      <div class="sk" style="width: 60px; height: 12px;"></div>
+      <div class="sk" style="width: 80px; height: 12px;"></div>
+      <div class="sk" style="width: 50px; height: 22px; border-radius: 999px;"></div>
+    </div>
+  `).join('');
+}
+
+function setState(state, evt) {
+  ['data', 'loading', 'empty', 'error'].forEach(s => {
+    document.getElementById('state-' + s).classList.toggle('hidden', s !== state);
+  });
+  document.querySelectorAll('.state-toggle button').forEach(b => b.classList.remove('active'));
+  if (evt && evt.target) evt.target.classList.add('active');
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const next = html.dataset.theme === 'dark' ? 'light' : 'dark';
+  html.dataset.theme = next;
+  const icon = document.getElementById('theme-icon');
+  /* Lucide는 <i data-lucide>를 <svg>로 이미 교체했으므로, 교체된 svg를 다시 <i>로 돌리고 이름만 바꿔서 재호출 */
+  const fresh = document.createElement('i');
+  fresh.id = 'theme-icon';
+  fresh.setAttribute('data-lucide', next === 'dark' ? 'sun' : 'moon');
+  fresh.setAttribute('aria-hidden', 'true');
+  icon.replaceWith(fresh);
+  lucide.createIcons();
+}
+
+renderMembers();
+renderSkeleton();
+
+/* Lucide가 페이지 전체의 data-lucide 속성을 스캔해서 <svg class="lucide lucide-{name}"> 로 교체 */
+lucide.createIcons();
+
+/* 동적으로 렌더된 tbody 안의 아이콘까지 한 번 더 교체 (renderMembers 이후) */
+lucide.createIcons({
+  attrs: { 'stroke-width': 1.8 }
+});
+</script>
+
+</body>
+</html>
