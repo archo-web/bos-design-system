@@ -179,3 +179,4 @@ const themes = (await figma.variables.getLocalVariableCollectionsAsync())
   - 컴포넌트 철학 변경: 목적별 → 속성 조합형
 - `2026-04-20 (동기화 워크플로우 보강)` — Figma-코드 4단계 동기화 룰 명시 (Figma → CSS → HTML inline → Publish). 정기 검증 방법 추가
 - `2026-04-20 (접근성 가이드 추가)` — `07-accessibility.md` 신설. WCAG 2.1 AA 기준 실무 가이드. 시멘틱 토큰 대비비 검증, 키보드/ARIA/폼 접근성, 한국어 특수사항, 개발자 체크리스트 포함. 문서 라우팅·의사결정 순서·금지 사항에도 접근성 반영
+- `2026-04-21 (Figma 토큰 전수 동기화)` — Figma Tailwind v4 팔레트 기준으로 코드 토큰 전면 업데이트. Primitive 23개 hex 수정 (emerald/rose/indigo/pink/purple/teal/cyan/sky), 4개 추가 (emerald-400, emerald-950, cyan-600, lime-500/600), 시멘틱 토큰 9개 추가·수정 (text-fg-yellow/purple/cyan/indigo/pink/lime, border-purple/orange, text-fg-success Dark). 6개 파일 모두 동기화 (tokens.css + shared.css + 4 HTML). Figma와 100% 일치 확인
