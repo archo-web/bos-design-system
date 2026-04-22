@@ -47,6 +47,8 @@ vibe coding 작업 유형에 따라 아래 문서를 **반드시 먼저** 참조
 | 상태/인터랙션 정의 | `interaction-patterns.md` | hover/loading/empty/error 등 정의 시 |
 | 한국어 문구 작성 | `ux-writing.md` | 라벨, 메시지, 안내 문구 작성 시 |
 | 웹 접근성 준수 | `accessibility.md` | 모든 구현 작업 (WCAG AA 기준) |
+| 외부 의존성 추가 | `08-dependency-guardrails.md` | npm 패키지/CDN 도입 시 |
+| 아이콘 로드 (HTML 화면) | `icon-loader-boilerplate.md` | 새 HTML 화면 생성 시 (CDN/Self-host/하이브리드) |
 | 디자인 토큰 (색상/간격/폰트) | `bos4-design-tokens.css` | 모든 스타일링 작업 |
 
 ---
@@ -137,8 +139,60 @@ const themes = (await figma.variables.getLocalVariableCollectionsAsync())
    ↓
 8. accessibility.md 체크리스트 점검 (WCAG AA, 키보드, ARIA, 대비비)
    ↓
-9. 코드 생성
+9. 아이콘 로더 보일러플레이트 자동 삽입 (HTML 화면의 경우)
+   icon-loader-boilerplate.md 기준 — 환경별 자동 선택 (아래 섹션 참조)
+   ↓
+10. 코드 생성
 ```
+
+---
+
+## 🎨 아이콘 로더 — 환경별 자동 선택
+
+새 HTML 화면을 생성할 때 Claude는 **항상** 아이콘 로딩 보일러플레이트를 자동으로 포함합니다. 사용자가 매번 "Lucide 써줘"라고 지시하지 않아도 됩니다.
+
+### 환경 자동 판별 규칙
+
+```
+사용자 요청에 [환경] 명시 여부 확인
+   ↓
+┌──────────────────┬─────────────────────────────────────┐
+│ [환경] 외부망    │ → CDN 보일러플레이트                │
+│                  │   (icon-loader-boilerplate.md §1)   │
+├──────────────────┼─────────────────────────────────────┤
+│ [환경] 폐쇄망    │ → Self-host 보일러플레이트          │
+│                  │   (icon-loader-boilerplate.md §2)   │
+├──────────────────┼─────────────────────────────────────┤
+│ 명시 없음        │ → 하이브리드 보일러플레이트 (기본)  │
+│                  │   (icon-loader-boilerplate.md §3)   │
+└──────────────────┴─────────────────────────────────────┘
+```
+
+> **기본값이 하이브리드인 이유**: 같은 코드가 외부망/폐쇄망 모두에서 동작하므로 가장 안전. 외부망에선 CDN으로 빠르게, CDN 차단 시 자동으로 self-host(`/assets/vendor/lucide-0.460.0.min.js`)로 폴백.
+
+### Self-host 표준 경로
+
+폐쇄망/하이브리드 모드에서 사용하는 사내 경로:
+
+```
+/assets/vendor/lucide-0.460.0.min.js
+```
+
+> 이 경로는 사내 정적 서버에 배포되어 있다고 가정합니다. 새 환경에 적용 시 `08-dependency-guardrails.md` 참조하여 셋업하세요.
+
+### 사용자가 환경을 명시하는 방법
+
+```
+[패턴] List Page
+[목적] 주문 목록
+[환경] 폐쇄망          ← 이 한 줄로 self-host 보일러플레이트 자동 적용
+```
+
+명시된 환경에 따라 Claude는 해당 보일러플레이트의 `<script>` 로드 방식과 호출 코드를 자동으로 코드에 삽입합니다.
+
+### 아이콘 마크업/크기/색상 규칙
+
+아이콘 마크업 자체와 크기/stroke-width 규칙은 `03-component-usage.md §11`을 따릅니다. 이 섹션은 "어떻게 로드할지"만 다룹니다.
 
 ---
 
@@ -153,6 +207,8 @@ const themes = (await figma.variables.getLocalVariableCollectionsAsync())
 - ❌ 다크 모드 무시 — 모든 컴포넌트는 Light/Dark 모두 동작해야 함
 - ❌ 접근성 무시 — `<button>` 대신 `<div onClick>` 금지, 아이콘 버튼에 `aria-label` 누락 금지, `<label>` 없는 폼 필드 금지 (상세: `accessibility.md`)
 - ❌ `outline: none` — focus ring 제거 금지 (키보드 사용자 차단). `:focus-visible` 사용
+- ❌ 아이콘 라이브러리 `@latest` 버전 사용 — 정확한 버전 핀 (`@0.460.0`) 사용 (상세: `08-dependency-guardrails.md`)
+- ❌ HTML 화면에 아이콘 보일러플레이트 누락 — 모든 새 HTML은 `icon-loader-boilerplate.md`의 보일러플레이트 자동 포함
 
 ---
 
@@ -180,3 +236,4 @@ const themes = (await figma.variables.getLocalVariableCollectionsAsync())
 - `2026-04-20 (동기화 워크플로우 보강)` — Figma-코드 4단계 동기화 룰 명시 (Figma → CSS → HTML inline → Publish). 정기 검증 방법 추가
 - `2026-04-20 (접근성 가이드 추가)` — `07-accessibility.md` 신설. WCAG 2.1 AA 기준 실무 가이드. 시멘틱 토큰 대비비 검증, 키보드/ARIA/폼 접근성, 한국어 특수사항, 개발자 체크리스트 포함. 문서 라우팅·의사결정 순서·금지 사항에도 접근성 반영
 - `2026-04-21 (Figma 토큰 전수 동기화)` — Figma Tailwind v4 팔레트 기준으로 코드 토큰 전면 업데이트. Primitive 23개 hex 수정 (emerald/rose/indigo/pink/purple/teal/cyan/sky), 4개 추가 (emerald-400, emerald-950, cyan-600, lime-500/600), 시멘틱 토큰 9개 추가·수정 (text-fg-yellow/purple/cyan/indigo/pink/lime, border-purple/orange, text-fg-success Dark). 6개 파일 모두 동기화 (tokens.css + shared.css + 4 HTML). Figma와 100% 일치 확인
+- `2026-04-22 (아이콘 로더 자동화)` — `icon-loader-boilerplate.md` 신설 및 `00-CLAUDE.md`에 환경 자동 선택 규칙 추가. 새 HTML 화면 생성 시 환경(외부망/폐쇄망/하이브리드)에 따라 Lucide 보일러플레이트 자동 삽입. 기본값 하이브리드 (CDN 시도 → self-host 폴백). Self-host 표준 경로: `/assets/vendor/lucide-0.460.0.min.js`. 문서 라우팅, 의사결정 순서, 금지 사항에도 반영.
