@@ -192,7 +192,7 @@ const themes = (await figma.variables.getLocalVariableCollectionsAsync())
 
 ### 아이콘 마크업/크기/색상 규칙
 
-아이콘 마크업 자체와 크기/stroke-width 규칙은 `03-component-usage.md §11`을 따릅니다. 이 섹션은 "어떻게 로드할지"만 다룹니다.
+아이콘 마크업 자체와 크기/stroke-width 규칙은 `03-component-usage.md §19`을 따릅니다. 이 섹션은 "어떻게 로드할지"만 다룹니다.
 
 ---
 
@@ -217,7 +217,7 @@ const themes = (await figma.variables.getLocalVariableCollectionsAsync())
 **컴포넌트가 47개 카테고리, 변형이 수백 개**인 광범위한 시스템입니다. Claude는 다음을 유의합니다:
 
 1. **모든 컴포넌트를 외우려 하지 않음** — `figma.search_design_system`을 적극적으로 사용
-2. **자주 쓰이는 핵심 10개 컴포넌트는 `component-usage.md`에 인덱스화** — 나머지는 필요할 때 검색
+2. **자주 쓰이는 핵심 18개 컴포넌트는 `component-usage.md`에 인덱스화** — 나머지는 필요할 때 검색
 3. **variant 매트릭스가 클수록 신중하게 선택** — Button은 500개 variant가 있으니 "Color/Size/State"를 명확히 정해야 함
 4. **다크모드 색조 동조 함정** — 같은 hue 계열 배경+텍스트는 다크모드에서 묻혀 보입니다. Active/Selected 상태는 흰 텍스트 또는 좌측 indicator 사용. 상세: `05-interaction-patterns.md §1.3`
 5. **접근성은 구현 단계에서 체크** — 디자인만 이쁘게 만들고 끝이 아님. 모든 인터랙티브 요소는 키보드 접근 가능해야 하고, 폼 필드는 label 연결, 아이콘 버튼은 aria-label 필수. 상세: `07-accessibility.md`
