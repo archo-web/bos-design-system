@@ -192,7 +192,7 @@ const themes = (await figma.variables.getLocalVariableCollectionsAsync())
 
 ### 아이콘 마크업/크기/색상 규칙
 
-아이콘 마크업 자체와 크기/stroke-width 규칙은 `03-component-usage.md §19`을 따릅니다. 이 섹션은 "어떻게 로드할지"만 다룹니다.
+
 
 ---
 
