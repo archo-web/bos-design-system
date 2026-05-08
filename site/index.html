@@ -676,8 +676,11 @@ code { font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace; font-si
 /* ==========================================================
    섹션
    ========================================================== */
-.ds-section { margin-bottom: var(--spacing-12); }
-.ds-section + .ds-section { padding-top: var(--spacing-8); }
+.ds-section { margin-bottom: var(--spacing-16); }
+.ds-section + .ds-section {
+  padding-top: var(--spacing-12);
+  border-top: 1px solid var(--colors-border-border-base);
+}
 .ds-h2 {
   font-size: var(--typography-font-size-text-2xl);
   font-weight: var(--typography-font-weight-font-bold);
@@ -937,8 +940,12 @@ code { font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace; font-si
   background: var(--colors-background-bg-brand-softer);
   border-left: 3px solid var(--colors-border-border-brand);
   border-radius: var(--border-radius-rounded);
-  margin-bottom: var(--spacing-5);
+  margin: var(--spacing-4) 0 var(--spacing-5);
   color: var(--colors-text-text-body);
+}
+/* 콜아웃 연속 시 사이 간격 보장 */
+.ds-callout + .ds-callout {
+  margin-top: var(--spacing-3);
 }
 [data-theme="dark"] .ds-callout {
   background: var(--colors-background-bg-brand-soft);
@@ -1026,12 +1033,12 @@ code { font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace; font-si
 
       <div class="ds-nav-group">
         <div class="ds-nav-label">Components</div>
-        <a class="ds-nav-link" href="components.html">컴포넌트<span class="ds-nav-link__count">10</span></a>
+        <a class="ds-nav-link" href="components.html">컴포넌트<span class="ds-nav-link__count">18</span></a>
       </div>
 
       <div class="ds-nav-group">
         <div class="ds-nav-label">Patterns</div>
-        <a class="ds-nav-link" href="patterns.html">레이아웃 패턴<span class="ds-nav-link__count">5</span></a>
+        <a class="ds-nav-link" href="patterns.html">레이아웃 패턴<span class="ds-nav-link__count">12</span></a>
       </div>
     </nav>
 
@@ -1096,7 +1103,7 @@ code { font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace; font-si
             </svg>
           </div>
           <h3 class="ds-card__title">컴포넌트</h3>
-          <p class="ds-card__desc">Button, Input, Modal 등 핵심 10개 컴포넌트의 라이브 데모와 코드 예시</p>
+          <p class="ds-card__desc">Button, Input, Modal 등 핵심 18개 컴포넌트의 라이브 데모와 코드 예시</p>
         </a>
 
         <a class="ds-card" href="patterns.html">

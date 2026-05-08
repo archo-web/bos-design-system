@@ -676,8 +676,11 @@ code { font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace; font-si
 /* ==========================================================
    섹션
    ========================================================== */
-.ds-section { margin-bottom: var(--spacing-12); }
-.ds-section + .ds-section { padding-top: var(--spacing-8); }
+.ds-section { margin-bottom: var(--spacing-16); }
+.ds-section + .ds-section {
+  padding-top: var(--spacing-12);
+  border-top: 1px solid var(--colors-border-border-base);
+}
 .ds-h2 {
   font-size: var(--typography-font-size-text-2xl);
   font-weight: var(--typography-font-weight-font-bold);
@@ -937,8 +940,12 @@ code { font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace; font-si
   background: var(--colors-background-bg-brand-softer);
   border-left: 3px solid var(--colors-border-border-brand);
   border-radius: var(--border-radius-rounded);
-  margin-bottom: var(--spacing-5);
+  margin: var(--spacing-4) 0 var(--spacing-5);
   color: var(--colors-text-text-body);
+}
+/* 콜아웃 연속 시 사이 간격 보장 */
+.ds-callout + .ds-callout {
+  margin-top: var(--spacing-3);
 }
 [data-theme="dark"] .ds-callout {
   background: var(--colors-background-bg-brand-soft);
@@ -1248,6 +1255,293 @@ code { font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace; font-si
 .sidebar-item--active { background: var(--colors-background-bg-brand-softer); color: var(--colors-text-text-fg-brand); font-weight: var(--typography-font-weight-font-semibold); }
 [data-theme="dark"] .sidebar-item--active { background: var(--colors-background-bg-brand-soft); color: var(--colors-text-text-fg-brand-strong); }
 .sidebar-item svg { width: 16px; height: 16px; }
+
+/* ----- Tooltip demo (§11) ----- */
+.tooltip-demo { position: relative; display: inline-block; }
+.tooltip-demo__bubble {
+  /* 항상 보이게 — 데모 목적 */
+  position: absolute;
+  padding: var(--spacing-1_5) var(--spacing-2_5);
+  background: var(--colors-background-bg-dark);
+  color: var(--colors-text-text-white);
+  font-size: var(--typography-font-size-text-xs);
+  font-weight: var(--typography-font-weight-font-medium);
+  border-radius: var(--border-radius-rounded-sm);
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: var(--shadow-sm);
+}
+.tooltip-demo__bubble--top {
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+.tooltip-demo__bubble--bottom {
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+.tooltip-demo__bubble--left {
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+.tooltip-demo__bubble--right {
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* ----- Nav Tabs demo (§12) ----- */
+.tabs-demo { display: flex; gap: var(--spacing-1); align-items: center; flex-wrap: wrap; }
+
+/* Default tabs */
+.tabs-demo--default { gap: var(--spacing-2); }
+.tabs-demo__item {
+  padding: var(--spacing-2) var(--spacing-3);
+  font-size: var(--typography-font-size-text-sm);
+  font-weight: var(--typography-font-weight-font-medium);
+  color: var(--colors-text-text-body);
+  background: transparent;
+  border: none;
+  border-radius: var(--border-radius-rounded-sm);
+  cursor: pointer;
+}
+.tabs-demo__item:hover { background: var(--colors-background-bg-tertiary); color: var(--colors-text-text-heading); }
+.tabs-demo__item--active {
+  background: var(--colors-background-bg-brand-softer);
+  color: var(--colors-text-text-fg-brand);
+}
+[data-theme="dark"] .tabs-demo__item--active {
+  background: var(--colors-background-bg-brand-soft);
+  color: var(--colors-text-text-fg-brand-strong);
+}
+
+/* Pills */
+.tabs-demo--pills { gap: var(--spacing-2); }
+.tabs-demo__pill {
+  padding: var(--spacing-2) var(--spacing-3_5);
+  font-size: var(--typography-font-size-text-sm);
+  font-weight: var(--typography-font-weight-font-medium);
+  color: var(--colors-text-text-body);
+  background: var(--colors-background-bg-secondary);
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-base);
+  cursor: pointer;
+}
+.tabs-demo__pill:hover { background: var(--colors-background-bg-tertiary); color: var(--colors-text-text-heading); }
+.tabs-demo__pill--active {
+  background: var(--colors-background-bg-brand);
+  color: var(--colors-text-text-white);
+  border-color: var(--colors-background-bg-brand);
+}
+
+/* Border bottom */
+.tabs-demo--border-bottom {
+  border-bottom: 1px solid var(--colors-border-border-base);
+  gap: 0;
+}
+.tabs-demo__bb {
+  padding: var(--spacing-3) var(--spacing-3);
+  font-size: var(--typography-font-size-text-sm);
+  font-weight: var(--typography-font-weight-font-medium);
+  color: var(--colors-text-text-body);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+}
+.tabs-demo__bb:hover { color: var(--colors-text-text-heading); }
+.tabs-demo__bb--active {
+  color: var(--colors-text-text-fg-brand);
+  border-bottom-color: var(--colors-text-text-fg-brand);
+}
+
+/* ----- Form Widgets demo (§13~§18) ----- */
+/* 공통 form row */
+.fw-row { display: flex; align-items: center; gap: var(--spacing-3); flex-wrap: wrap; }
+.fw-stack { display: flex; flex-direction: column; gap: var(--spacing-3); align-items: flex-start; }
+.fw-label { font-size: var(--typography-font-size-text-sm); color: var(--colors-text-text-body); font-weight: var(--typography-font-weight-font-medium); user-select: none; }
+.fw-helper { font-size: var(--typography-font-size-text-xs); color: var(--colors-text-text-body-subtle); margin-top: 2px; }
+
+/* === §13 Toggle === */
+.toggle-demo { position: relative; display: inline-flex; align-items: center; cursor: pointer; }
+.toggle-demo input { position: absolute; opacity: 0; width: 0; height: 0; }
+.toggle-demo__track {
+  position: relative; display: inline-block;
+  background: var(--colors-background-bg-tertiary);
+  border-radius: 999px;
+  transition: background 0.15s;
+}
+.toggle-demo__track::after {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  background: var(--white);
+  border-radius: 50%;
+  transition: transform 0.15s;
+  box-shadow: var(--shadow-sm);
+}
+/* base size */
+.toggle-demo--base .toggle-demo__track { width: 36px; height: 20px; }
+.toggle-demo--base .toggle-demo__track::after { width: 16px; height: 16px; }
+.toggle-demo--base input:checked ~ .toggle-demo__track::after { transform: translateX(16px); }
+/* lg size */
+.toggle-demo--lg .toggle-demo__track { width: 44px; height: 24px; }
+.toggle-demo--lg .toggle-demo__track::after { width: 20px; height: 20px; }
+.toggle-demo--lg input:checked ~ .toggle-demo__track::after { transform: translateX(20px); }
+/* checked */
+.toggle-demo input:checked ~ .toggle-demo__track { background: var(--colors-background-bg-brand); }
+/* focus */
+.toggle-demo input:focus-visible ~ .toggle-demo__track { outline: 2px solid var(--colors-border-border-brand); outline-offset: 2px; }
+/* disabled */
+.toggle-demo--disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* === §14 Checkbox & Radio === */
+.cr-demo { position: relative; display: inline-flex; align-items: center; gap: var(--spacing-2); cursor: pointer; }
+.cr-demo input { position: absolute; opacity: 0; width: 0; height: 0; }
+.cr-demo__box {
+  width: 18px; height: 18px;
+  background: var(--colors-background-bg-primary);
+  border: 1.5px solid var(--colors-border-border-dark);
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.cr-demo--checkbox .cr-demo__box { border-radius: var(--border-radius-rounded-sm); }
+.cr-demo--radio .cr-demo__box { border-radius: 50%; }
+/* checked */
+.cr-demo input:checked ~ .cr-demo__box {
+  background: var(--colors-background-bg-brand);
+  border-color: var(--colors-background-bg-brand);
+}
+.cr-demo--checkbox input:checked ~ .cr-demo__box::after {
+  content: ''; width: 10px; height: 6px;
+  border-left: 2px solid var(--white);
+  border-bottom: 2px solid var(--white);
+  transform: rotate(-45deg) translate(1px, -1px);
+}
+.cr-demo--radio input:checked ~ .cr-demo__box::after {
+  content: ''; width: 7px; height: 7px; background: var(--white); border-radius: 50%;
+}
+/* focus / disabled */
+.cr-demo input:focus-visible ~ .cr-demo__box { outline: 2px solid var(--colors-border-border-brand); outline-offset: 2px; }
+.cr-demo--disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* === §15 Floating label === */
+.float-demo {
+  position: relative;
+  display: inline-block;
+  width: 240px;
+}
+.float-demo__field {
+  width: 100%;
+  height: 56px;
+  padding: var(--spacing-5) var(--spacing-3) var(--spacing-2);
+  background: var(--colors-background-bg-primary);
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-base);
+  font-size: var(--typography-font-size-text-sm);
+  color: var(--colors-text-text-heading);
+  font-family: inherit;
+}
+.float-demo__field:focus { outline: 2px solid var(--colors-border-border-brand); outline-offset: -1px; border-color: var(--colors-border-border-brand); }
+.float-demo__label {
+  position: absolute;
+  left: var(--spacing-3);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--typography-font-size-text-sm);
+  color: var(--colors-text-text-body-subtle);
+  pointer-events: none;
+  background: transparent;
+  transition: top 0.15s, font-size 0.15s, color 0.15s;
+}
+.float-demo__field:focus + .float-demo__label,
+.float-demo--filled .float-demo__label {
+  top: var(--spacing-3);
+  transform: none;
+  font-size: var(--typography-font-size-text-xs);
+  color: var(--colors-text-text-fg-brand);
+}
+
+/* === §16 Range slider === */
+.range-demo { width: 280px; display: flex; flex-direction: column; gap: var(--spacing-2); }
+.range-demo__bar {
+  position: relative;
+  height: 6px;
+  background: var(--colors-background-bg-tertiary);
+  border-radius: 999px;
+}
+.range-demo__fill {
+  position: absolute; top: 0; left: 0; height: 100%;
+  background: var(--colors-background-bg-brand);
+  border-radius: 999px;
+}
+.range-demo__thumb {
+  position: absolute; top: 50%; transform: translate(-50%, -50%);
+  width: 18px; height: 18px;
+  background: var(--white);
+  border: 2px solid var(--colors-background-bg-brand);
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+}
+.range-demo__labels {
+  display: flex; justify-content: space-between;
+  font-size: var(--typography-font-size-text-xs);
+  color: var(--colors-text-text-body-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+/* === §17 Datepicker cell === */
+.dp-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 36px);
+  gap: 2px;
+  padding: var(--spacing-3);
+  background: var(--colors-background-bg-primary);
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-base);
+}
+.dp-grid__day {
+  width: 36px; height: 36px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: var(--typography-font-size-text-xs);
+  color: var(--colors-text-text-heading);
+  border-radius: var(--border-radius-rounded-sm);
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+.dp-grid__day:hover { background: var(--colors-background-bg-tertiary); }
+.dp-grid__day--disabled { color: var(--colors-text-text-fg-disabled); cursor: not-allowed; }
+.dp-grid__day--disabled:hover { background: transparent; }
+.dp-grid__day--active { background: var(--colors-background-bg-brand); color: var(--white); font-weight: var(--typography-font-weight-font-semibold); }
+.dp-grid__day--start { background: var(--colors-background-bg-brand); color: var(--white); border-radius: var(--border-radius-rounded-sm) 0 0 var(--border-radius-rounded-sm); }
+.dp-grid__day--end { background: var(--colors-background-bg-brand); color: var(--white); border-radius: 0 var(--border-radius-rounded-sm) var(--border-radius-rounded-sm) 0; }
+.dp-grid__day--between { background: var(--colors-background-bg-brand-softer); color: var(--colors-text-text-fg-brand); border-radius: 0; }
+.dp-grid__day--outlined { border: 1.5px solid var(--colors-border-border-brand); }
+.dp-grid__hdr {
+  font-size: 10px;
+  color: var(--colors-text-text-body-subtle);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: var(--typography-font-weight-font-semibold);
+}
+
+/* === §18 Timepicker === */
+.tp-input {
+  display: inline-flex; align-items: center; gap: var(--spacing-2);
+  padding: var(--spacing-2_5) var(--spacing-3);
+  width: 140px;
+  background: var(--colors-background-bg-primary);
+  border: 1px solid var(--colors-border-border-base);
+  border-radius: var(--border-radius-rounded-base);
+  font-size: var(--typography-font-size-text-sm);
+  color: var(--colors-text-text-heading);
+  font-variant-numeric: tabular-nums;
+}
+.tp-input__icon { color: var(--colors-text-text-body-subtle); display: inline-flex; }
+.tp-input--filled { color: var(--colors-text-text-heading); }
+.tp-input--placeholder { color: var(--colors-text-text-body-subtle); }
 </style>
 
 </head>
@@ -1277,11 +1571,11 @@ code { font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace; font-si
       </div>
       <div class="ds-nav-group">
         <div class="ds-nav-label">Components</div>
-        <a class="ds-nav-link ds-nav-link--active" href="components.html">컴포넌트<span class="ds-nav-link__count">10</span></a>
+        <a class="ds-nav-link ds-nav-link--active" href="components.html">컴포넌트<span class="ds-nav-link__count">18</span></a>
       </div>
       <div class="ds-nav-group">
         <div class="ds-nav-label">Patterns</div>
-        <a class="ds-nav-link" href="patterns.html">레이아웃 패턴<span class="ds-nav-link__count">5</span></a>
+        <a class="ds-nav-link" href="patterns.html">레이아웃 패턴<span class="ds-nav-link__count">12</span></a>
       </div>
     </nav>
     <div class="ds-sidebar__footer">
@@ -1304,10 +1598,114 @@ code { font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace; font-si
       <div class="ds-eyebrow">Components</div>
       <h1 class="ds-h1">컴포넌트</h1>
       <p class="ds-lead">
-        BOS 4.0의 핵심 10개 컴포넌트. 47개 카테고리 중 가장 자주 쓰이는 것들을 라이브로 확인하세요.
-        나머지 37개 카테고리는 Figma 라이브러리에서 직접 확인합니다.
+        BOS 4.0의 핵심 18개 컴포넌트. 47개 카테고리 중 가장 자주 쓰이는 것들을 라이브로 확인하세요.
+        나머지 29개 카테고리는 Figma 라이브러리에서 직접 확인합니다.
       </p>
     </header>
+
+    <!-- ===== What's New 배너 (2026-05-08) ===== -->
+    <section class="ds-section" id="whats-new" style="margin-bottom: var(--spacing-8);">
+      <div style="
+        padding: var(--spacing-5) var(--spacing-6);
+        background: linear-gradient(135deg, var(--colors-background-bg-brand-softer) 0%, var(--colors-background-bg-secondary) 100%);
+        border: 1px solid var(--colors-border-border-brand);
+        border-radius: var(--border-radius-rounded-lg);
+      ">
+        <div style="
+          display: flex; align-items: center; gap: var(--spacing-2);
+          margin-bottom: var(--spacing-3);
+          font-size: var(--typography-font-size-text-xs);
+          font-weight: var(--typography-font-weight-font-bold);
+          color: var(--colors-text-text-fg-brand);
+          letter-spacing: 0.04em;
+        ">
+          <span style="
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 2px var(--spacing-2);
+            background: var(--colors-background-bg-brand);
+            color: var(--colors-text-text-white);
+            border-radius: var(--border-radius-rounded-sm);
+            font-size: 10px;
+          ">2026-05-08</span>
+          FIGMA 동기화 업데이트
+        </div>
+        <h2 style="
+          margin: 0 0 var(--spacing-2);
+          font-size: var(--typography-font-size-text-lg);
+          font-weight: var(--typography-font-weight-font-bold);
+          color: var(--colors-text-text-heading);
+        ">핵심 컴포넌트 매트릭스를 Figma 공식 정의와 1:1 정합화했어요</h2>
+        <p style="
+          margin: 0 0 var(--spacing-4);
+          color: var(--colors-text-text-body);
+          font-size: var(--typography-font-size-text-sm);
+          line-height: 1.55;
+        ">
+          Figma 파일 <code>jmK75D3yVgpYh0wHAlsAwy</code>의 <code>componentPropertyDefinitions</code>를 직접 추출해서
+          기존 가이드와 1:1 대조한 결과를 반영했습니다. 핵심 컴포넌트가 <strong>10개에서 18개로</strong> 늘었습니다 (Tooltip / Nav Tabs / 폼 위젯 6종 추가).
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--spacing-3);">
+          <a href="#card" style="display: block; padding: var(--spacing-3); background: var(--colors-background-bg-primary); border: 1px solid var(--colors-border-border-base); border-radius: var(--border-radius-rounded-base); text-decoration: none;">
+            <div style="display: inline-block; padding: 1px var(--spacing-1_5); background: var(--colors-background-bg-danger-soft); color: var(--colors-text-text-fg-danger); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); margin-bottom: var(--spacing-1_5);">FIXED</div>
+            <div style="font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-semibold); color: var(--colors-text-text-heading); margin-bottom: 2px;">§6 Card 전면 교체 →</div>
+            <div style="font-size: var(--typography-font-size-text-xs); color: var(--colors-text-text-body-subtle);">CTA card 제거, With nav tabs 외 2종 추가, 18→16</div>
+          </a>
+          <a href="#tooltip" style="display: block; padding: var(--spacing-3); background: var(--colors-background-bg-primary); border: 1px solid var(--colors-border-border-base); border-radius: var(--border-radius-rounded-base); text-decoration: none;">
+            <div style="display: inline-block; padding: 1px var(--spacing-1_5); background: var(--colors-background-bg-success-soft); color: var(--colors-text-text-fg-success); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); margin-bottom: var(--spacing-1_5);">NEW</div>
+            <div style="font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-semibold); color: var(--colors-text-text-heading); margin-bottom: 2px;">§11 Tooltip 신설 →</div>
+            <div style="font-size: var(--typography-font-size-text-xs); color: var(--colors-text-text-body-subtle);">4 variants — Top/Bottom/Left/Right 라이브 데모</div>
+          </a>
+          <a href="#tabs" style="display: block; padding: var(--spacing-3); background: var(--colors-background-bg-primary); border: 1px solid var(--colors-border-border-base); border-radius: var(--border-radius-rounded-base); text-decoration: none;">
+            <div style="display: inline-block; padding: 1px var(--spacing-1_5); background: var(--colors-background-bg-success-soft); color: var(--colors-text-text-fg-success); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); margin-bottom: var(--spacing-1_5);">NEW</div>
+            <div style="font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-semibold); color: var(--colors-text-text-heading); margin-bottom: 2px;">§12 Nav Tabs 신설 →</div>
+            <div style="font-size: var(--typography-font-size-text-xs); color: var(--colors-text-text-body-subtle);">12 variants — Default/Pills/Border bottom 데모</div>
+          </a>
+          <a href="#modal" style="display: block; padding: var(--spacing-3); background: var(--colors-background-bg-primary); border: 1px solid var(--colors-border-border-base); border-radius: var(--border-radius-rounded-base); text-decoration: none;">
+            <div style="display: inline-block; padding: 1px var(--spacing-1_5); background: var(--colors-background-bg-warning-soft); color: var(--colors-text-text-fg-warning); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); margin-bottom: var(--spacing-1_5);">UPDATED</div>
+            <div style="font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-semibold); color: var(--colors-text-text-heading); margin-bottom: 2px;">§5 Modal 보강 →</div>
+            <div style="font-size: var(--typography-font-size-text-xs); color: var(--colors-text-text-body-subtle);">동반: Modal header (7) + Modal footer (4)</div>
+          </a>
+          <a href="#dropdown" style="display: block; padding: var(--spacing-3); background: var(--colors-background-bg-primary); border: 1px solid var(--colors-border-border-base); border-radius: var(--border-radius-rounded-base); text-decoration: none;">
+            <div style="display: inline-block; padding: 1px var(--spacing-1_5); background: var(--colors-background-bg-warning-soft); color: var(--colors-text-text-fg-warning); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); margin-bottom: var(--spacing-1_5);">UPDATED</div>
+            <div style="font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-semibold); color: var(--colors-text-text-heading); margin-bottom: 2px;">§8 Dropdown 보강 →</div>
+            <div style="font-size: var(--typography-font-size-text-xs); color: var(--colors-text-text-body-subtle);">조립 단위 list item (48) + header (5) + examples</div>
+          </a>
+
+          <!-- 폼 위젯 6종 (2026-05-08 추가) -->
+          <a href="#toggle" style="display: block; padding: var(--spacing-3); background: var(--colors-background-bg-primary); border: 1px solid var(--colors-border-border-base); border-radius: var(--border-radius-rounded-base); text-decoration: none;">
+            <div style="display: inline-block; padding: 1px var(--spacing-1_5); background: var(--colors-background-bg-success-soft); color: var(--colors-text-text-fg-success); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); margin-bottom: var(--spacing-1_5);">NEW</div>
+            <div style="font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-semibold); color: var(--colors-text-text-heading); margin-bottom: 2px;">§13 Toggle →</div>
+            <div style="font-size: var(--typography-font-size-text-xs); color: var(--colors-text-text-body-subtle);">Switches (12) + Inputs (8) + Group (3)</div>
+          </a>
+          <a href="#checkbox-radio" style="display: block; padding: var(--spacing-3); background: var(--colors-background-bg-primary); border: 1px solid var(--colors-border-border-base); border-radius: var(--border-radius-rounded-base); text-decoration: none;">
+            <div style="display: inline-block; padding: 1px var(--spacing-1_5); background: var(--colors-background-bg-success-soft); color: var(--colors-text-text-fg-success); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); margin-bottom: var(--spacing-1_5);">NEW</div>
+            <div style="font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-semibold); color: var(--colors-text-text-heading); margin-bottom: 2px;">§14 Checkbox &amp; Radio →</div>
+            <div style="font-size: var(--typography-font-size-text-xs); color: var(--colors-text-text-body-subtle);">Input (12) + Form (54) + Group (10)</div>
+          </a>
+          <a href="#floating-label" style="display: block; padding: var(--spacing-3); background: var(--colors-background-bg-primary); border: 1px solid var(--colors-border-border-base); border-radius: var(--border-radius-rounded-base); text-decoration: none;">
+            <div style="display: inline-block; padding: 1px var(--spacing-1_5); background: var(--colors-background-bg-success-soft); color: var(--colors-text-text-fg-success); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); margin-bottom: var(--spacing-1_5);">NEW</div>
+            <div style="font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-semibold); color: var(--colors-text-text-heading); margin-bottom: 2px;">§15 Floating label →</div>
+            <div style="font-size: var(--typography-font-size-text-xs); color: var(--colors-text-text-body-subtle);">84 variants (3 Type × 4 Size × 7 State)</div>
+          </a>
+          <a href="#range-slider" style="display: block; padding: var(--spacing-3); background: var(--colors-background-bg-primary); border: 1px solid var(--colors-border-border-base); border-radius: var(--border-radius-rounded-base); text-decoration: none;">
+            <div style="display: inline-block; padding: 1px var(--spacing-1_5); background: var(--colors-background-bg-success-soft); color: var(--colors-text-text-fg-success); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); margin-bottom: var(--spacing-1_5);">NEW</div>
+            <div style="font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-semibold); color: var(--colors-text-text-heading); margin-bottom: 2px;">§16 Range slider →</div>
+            <div style="font-size: var(--typography-font-size-text-xs); color: var(--colors-text-text-body-subtle);">Default + Range (4 ComponentSets 조립)</div>
+          </a>
+          <a href="#datepicker" style="display: block; padding: var(--spacing-3); background: var(--colors-background-bg-primary); border: 1px solid var(--colors-border-border-base); border-radius: var(--border-radius-rounded-base); text-decoration: none;">
+            <div style="display: inline-block; padding: 1px var(--spacing-1_5); background: var(--colors-background-bg-success-soft); color: var(--colors-text-text-fg-success); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); margin-bottom: var(--spacing-1_5);">NEW</div>
+            <div style="font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-semibold); color: var(--colors-text-text-heading); margin-bottom: 2px;">§17 Datepicker →</div>
+            <div style="font-size: var(--typography-font-size-text-xs); color: var(--colors-text-text-body-subtle);">Cell 8 state + Range 선택 라이브 데모</div>
+          </a>
+          <a href="#timepicker" style="display: block; padding: var(--spacing-3); background: var(--colors-background-bg-primary); border: 1px solid var(--colors-border-border-base); border-radius: var(--border-radius-rounded-base); text-decoration: none;">
+            <div style="display: inline-block; padding: 1px var(--spacing-1_5); background: var(--colors-background-bg-success-soft); color: var(--colors-text-text-fg-success); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); margin-bottom: var(--spacing-1_5);">NEW</div>
+            <div style="font-size: var(--typography-font-size-text-sm); font-weight: var(--typography-font-weight-font-semibold); color: var(--colors-text-text-heading); margin-bottom: 2px;">§18 Timepicker →</div>
+            <div style="font-size: var(--typography-font-size-text-xs); color: var(--colors-text-text-body-subtle);">Input 84 + Form 6 + Dropdown 4</div>
+          </a>
+        </div>
+      </div>
+    </section>
 
     <!-- ===== 1. Button ===== -->
     <section class="ds-section" id="button">
@@ -1513,13 +1911,13 @@ code { font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace; font-si
 
       <div class="ds-callout">
         <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 13v.5"/></svg>
-        <div><strong>9가지 변형</strong> — Icon & text / Icon shape & text / Avatar & button / With header / Icon shape & buttons / With progress bar / Warning / Error / With illustration. 사용 시점은 <code>component-usage.md §4</code> 참조.</div>
+        <div><strong>9가지 변형</strong> — Icon &amp; text / Icon shape &amp; text / Avatar &amp; button / With header / Icon shape &amp; buttons / With progress bar / Warning / Error / With illustration. 사용 시점은 <code>component-usage.md §4</code> 참조.</div>
       </div>
     </section>
 
     <!-- ===== 5. Modal ===== -->
     <section class="ds-section" id="modal">
-      <h2 class="ds-h2">5. Modal <span class="ds-pill ds-pill--brand">10 types</span></h2>
+      <h2 class="ds-h2">5. Modal <span class="ds-pill ds-pill--brand">10 types</span> <span style="display: inline-block; padding: 2px var(--spacing-2); background: var(--colors-background-bg-warning-soft); color: var(--colors-text-text-fg-warning); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); vertical-align: middle; letter-spacing: 0.04em;">UPDATED 2026-05-08</span></h2>
       <p class="ds-section-desc">중요한 결정/확인이 필요할 때. Esc로 닫기, Primary CTA는 우측 하단.</p>
 
       <div class="ds-demo">
@@ -1544,12 +1942,44 @@ code { font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace; font-si
         </div>
         <div class="ds-demo__caption">파괴적 액션 확인 (Type: Popup) — Primary는 "삭제"로 명시 (일반적인 "확인" 사용 금지)</div>
       </div>
+
+      <h3 class="ds-h3">동반 컴포넌트 — 조립용</h3>
+      <p style="color: var(--colors-text-text-body); margin: 0 0 var(--spacing-3); font-size: var(--typography-font-size-text-sm);">
+        Modal은 단일 컴포넌트로도 쓰지만, 더 정밀하게 조립할 때는 다음 두 ComponentSet을 함께 사용합니다.
+      </p>
+
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Variants</th>
+            <th>Type 옵션</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="token-name">Modal header</td>
+            <td>7</td>
+            <td><code>Default</code> · <code>Icon + Heading &amp; helper text</code> · <code>Breadcrumb</code> · <code>Avatar group</code> · <code>With Logo</code> · <code>Logo &amp; icons</code> · <code>Heading &amp; supporting text</code></td>
+          </tr>
+          <tr>
+            <td class="token-name">Modal footer</td>
+            <td>4</td>
+            <td><code>Buttons</code> (가장 흔함) · <code>Buttons &amp; links</code> · <code>3 buttons</code> · <code>Pagination</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="ds-callout">
+        <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 13v.5"/></svg>
+        <div><strong>조합 예시</strong> — Detail Page에서 항목 편집 모달 → <code>Modal header: Heading &amp; supporting text</code> + 본문 폼 + <code>Modal footer: Buttons</code> (취소 + 저장).</div>
+      </div>
     </section>
 
     <!-- ===== 6. Card ===== -->
     <section class="ds-section" id="card">
-      <h2 class="ds-h2">6. Card <span class="ds-pill ds-pill--brand">18 types</span></h2>
-      <p class="ds-section-desc">정보 단위. Type별로 18가지 (Default, With Image, Login form, Pricing, Testimonial, Crypto 등).</p>
+      <h2 class="ds-h2">6. Card <span class="ds-pill ds-pill--brand">16 variants</span> <span style="display: inline-block; padding: 2px var(--spacing-2); background: var(--colors-background-bg-danger-soft); color: var(--colors-text-text-fg-danger); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); vertical-align: middle; letter-spacing: 0.04em;">FIXED 2026-05-08</span></h2>
+      <p class="ds-section-desc">정보 단위. Type별로 14가지 (Default, With Image, Login form, Pricing, Testimonial, Crypto 등) × Mobile Version 옵션.</p>
 
       <div class="ds-demo">
         <div class="ds-demo__preview" style="background: var(--colors-background-bg-secondary);">
@@ -1577,6 +2007,37 @@ code { font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace; font-si
         </div>
         <div class="ds-demo__caption">왼쪽: Default. 오른쪽: User profile 변형</div>
       </div>
+
+      <h3 class="ds-h3">Type 14가지</h3>
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>사용처</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="token-name">Default</td><td>일반 정보 카드</td></tr>
+          <tr><td class="token-name">With Image</td><td>썸네일 있는 항목</td></tr>
+          <tr><td class="token-name">Split</td><td>좌우 분할 (이미지 + 콘텐츠)</td></tr>
+          <tr><td class="token-name">Centered with full image</td><td>풀이미지 중앙 정렬</td></tr>
+          <tr><td class="token-name">User profile</td><td>사용자 프로필</td></tr>
+          <tr><td class="token-name">Login form</td><td>로그인 카드</td></tr>
+          <tr><td class="token-name">E-commerce</td><td>상품 카드</td></tr>
+          <tr><td class="token-name">With full width tabs</td><td>카드 내부 탭(풀폭) — 대시보드 위젯에 적합</td></tr>
+          <tr><td class="token-name">With nav tabs</td><td>카드 내부 탭(인라인) — 좁은 영역의 다중 뷰</td></tr>
+          <tr><td class="token-name">Pricing card</td><td>요금제 카드</td></tr>
+          <tr><td class="token-name">Testimonial card</td><td>후기/리뷰 카드</td></tr>
+          <tr><td class="token-name">Cars with list</td><td>카드 + 리스트 결합</td></tr>
+          <tr><td class="token-name">Crypto</td><td>암호화폐 정보 카드</td></tr>
+          <tr><td class="token-name">Grid card</td><td>그리드 레이아웃용</td></tr>
+        </tbody>
+      </table>
+
+      <div class="ds-callout">
+        <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 13v.5"/></svg>
+        <div><strong>모바일 대응</strong> — <code>Mobile Version: True</code> 옵션 보유. 현재 모바일 전용 변형이 별도로 정의된 Type은 <code>Split</code> · <code>With nav tabs</code> · <code>Testimonial card</code> 3종.</div>
+      </div>
     </section>
 
     <!-- ===== 7. Badge ===== -->
@@ -1600,7 +2061,7 @@ code { font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace; font-si
 
     <!-- ===== 8. Dropdown ===== -->
     <section class="ds-section" id="dropdown">
-      <h2 class="ds-h2">8. Dropdown menu <span class="ds-pill ds-pill--brand">16 types</span></h2>
+      <h2 class="ds-h2">8. Dropdown menu <span class="ds-pill ds-pill--brand">16 types</span> <span style="display: inline-block; padding: 2px var(--spacing-2); background: var(--colors-background-bg-warning-soft); color: var(--colors-text-text-fg-warning); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); vertical-align: middle; letter-spacing: 0.04em;">UPDATED 2026-05-08</span></h2>
       <p class="ds-section-desc">사용자 메뉴, 옵션 선택, 필터 등. 16가지 type (User profile, with separator, Checkbox, ...).</p>
 
       <div class="ds-demo">
@@ -1626,6 +2087,44 @@ code { font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace; font-si
           </div>
         </div>
         <div class="ds-demo__caption">User profile 변형 — 프로필/설정/도움말 + 구분선 + 로그아웃 (Danger)</div>
+      </div>
+
+      <h3 class="ds-h3">조립 단위 컴포넌트</h3>
+      <p style="color: var(--colors-text-text-body); margin: 0 0 var(--spacing-3); font-size: var(--typography-font-size-text-sm);">
+        <code>Dropdown menu</code>는 컨테이너이고, 실제 항목은 <code>Dropdown list item</code>을 조립해서 사용합니다.
+        Vibe coding 시 가장 자주 조립하는 단위입니다.
+      </p>
+
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Variants</th>
+            <th>구성</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="token-name">Dropdown list item</td>
+            <td>48</td>
+            <td>Type 16종 × State 3종 (<code>Initial</code> / <code>Hover</code> / <code>Disabled</code>) — 메뉴 항목의 원자 단위</td>
+          </tr>
+          <tr>
+            <td class="token-name">Dropdown header</td>
+            <td>5</td>
+            <td><code>Text &amp; helper</code> · <code>With avatar</code> · <code>Form</code> · <code>Selector</code> · <code>Big avatar</code></td>
+          </tr>
+          <tr>
+            <td class="token-name">Dropdown (ready to use examples)</td>
+            <td>6</td>
+            <td>트리거 + 메뉴 완성형 — <code>Button</code> · <code>Ghost button</code> · <code>Icon only button</code> · <code>Avatar &amp; name</code> · <code>Link</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="ds-callout">
+        <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 13v.5"/></svg>
+        <div><strong>Dropdown list item Type 16종</strong> — <code>Default</code> · <code>Secondary text</code> · <code>Two icons</code> · <code>Left form</code> · <code>Right form</code> · <code>With avatar &amp; form</code> · <code>Only form</code> · <code>With badge</code> · <code>User select</code> · <code>Boxed</code> · <code>Icon shapes</code> · <code>With flag</code> · <code>Flag &amp; checkbox</code> · <code>Form &amp; dot</code> · <code>Form &amp; icons</code> · <code>Checkbox &amp; icon</code></div>
       </div>
     </section>
 
@@ -1725,6 +2224,497 @@ code { font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace; font-si
         <div>
           <strong style="color: var(--colors-text-text-fg-warning);">다크모드 구현 주의</strong> — Figma의 Active 스펙(`bg-brand-softer` + `text-fg-brand`)은 다크모드에서 같은 hue 동조로 가독성이 약합니다. 웹 구현 시 다크모드만 override하세요. 아래 "Selected / Active 상태" 섹션에서 라이브 비교 가능.
         </div>
+      </div>
+    </section>
+
+    <!-- ===== 11. Tooltip ===== -->
+    <section class="ds-section" id="tooltip">
+      <h2 class="ds-h2">11. Tooltip <span class="ds-pill ds-pill--brand">4 variants</span> <span style="display: inline-block; padding: 2px var(--spacing-2); background: var(--colors-background-bg-success-soft); color: var(--colors-text-text-fg-success); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); vertical-align: middle; letter-spacing: 0.04em;">NEW 2026-05-08</span></h2>
+      <p class="ds-section-desc">호버 시 추가 정보를 짧게 보여주는 비휘발성 안내. 클릭이 아닌 <strong>호버 전용</strong>이며, 모바일에서는 사용을 피합니다(touch에선 hover가 없음).</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview" style="padding: var(--spacing-12) var(--spacing-6); justify-content: center; gap: var(--spacing-12); flex-wrap: wrap;">
+          <div class="tooltip-demo">
+            <button class="btn btn--secondary btn--base" aria-describedby="tt-top">버튼</button>
+            <span class="tooltip-demo__bubble tooltip-demo__bubble--top" id="tt-top" role="tooltip">Top (기본)</span>
+          </div>
+          <div class="tooltip-demo">
+            <button class="btn btn--secondary btn--base" aria-describedby="tt-bottom">버튼</button>
+            <span class="tooltip-demo__bubble tooltip-demo__bubble--bottom" id="tt-bottom" role="tooltip">Bottom</span>
+          </div>
+          <div class="tooltip-demo">
+            <button class="btn btn--secondary btn--base" aria-describedby="tt-left">버튼</button>
+            <span class="tooltip-demo__bubble tooltip-demo__bubble--left" id="tt-left" role="tooltip">Left</span>
+          </div>
+          <div class="tooltip-demo">
+            <button class="btn btn--secondary btn--base" aria-describedby="tt-right">버튼</button>
+            <span class="tooltip-demo__bubble tooltip-demo__bubble--right" id="tt-right" role="tooltip">Right</span>
+          </div>
+        </div>
+        <div class="ds-demo__caption">4가지 Position — 페이지 상단 요소엔 <code>Bottom</code>, 사이드바 항목엔 <code>Right</code>, 일반은 <code>Top</code>(기본).</div>
+      </div>
+
+      <h3 class="ds-h3">Variant 매트릭스</h3>
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th>속성</th>
+            <th>값</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="token-name">Type</td><td><code>Default</code></td></tr>
+          <tr><td class="token-name">Position</td><td><code>Top</code> · <code>Bottom</code> · <code>Left</code> · <code>Right</code></td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ds-h3">Tooltip vs Popover</h3>
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th>Tooltip</th>
+            <th>Popover</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="token-name">트리거</td>
+            <td>Hover (또는 키보드 focus)</td>
+            <td>Click</td>
+          </tr>
+          <tr>
+            <td class="token-name">콘텐츠</td>
+            <td>짧은 텍스트 1~2줄</td>
+            <td>긴 콘텐츠, 인터랙션 가능</td>
+          </tr>
+          <tr>
+            <td class="token-name">모바일</td>
+            <td>사용 비추천</td>
+            <td>사용 가능</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="ds-callout">
+        <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 13v.5"/></svg>
+        <div><strong>필수 규칙</strong> — 텍스트만, 1줄 권장 (최대 2줄). 키보드 포커스 시에도 표시(<code>focus-visible</code>). <strong>아이콘 단독 버튼에는 반드시 Tooltip 또는 <code>aria-label</code></strong>을 제공합니다.</div>
+      </div>
+    </section>
+
+    <!-- ===== 12. Nav Tabs ===== -->
+    <section class="ds-section" id="tabs">
+      <h2 class="ds-h2">12. Nav Tabs <span class="ds-pill ds-pill--brand">12 variants</span> <span style="display: inline-block; padding: 2px var(--spacing-2); background: var(--colors-background-bg-success-soft); color: var(--colors-text-text-fg-success); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); vertical-align: middle; letter-spacing: 0.04em;">NEW 2026-05-08</span></h2>
+      <p class="ds-section-desc">페이지 내부에서 동등한 위계의 뷰들을 전환할 때 사용. 페이지 간 이동은 <code>Sidebar</code>/<code>Navbar</code>를 사용합니다.</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview ds-demo__preview--vertical" style="align-items: stretch;">
+          <div class="tabs-demo tabs-demo--default">
+            <button class="tabs-demo__item tabs-demo__item--active">전체</button>
+            <button class="tabs-demo__item">활성</button>
+            <button class="tabs-demo__item">대기</button>
+            <button class="tabs-demo__item">비활성</button>
+          </div>
+          <div class="tabs-demo tabs-demo--pills">
+            <button class="tabs-demo__pill tabs-demo__pill--active">대시보드</button>
+            <button class="tabs-demo__pill">분석</button>
+            <button class="tabs-demo__pill">리포트</button>
+          </div>
+          <div class="tabs-demo tabs-demo--border-bottom">
+            <button class="tabs-demo__bb tabs-demo__bb--active">개요</button>
+            <button class="tabs-demo__bb">멤버</button>
+            <button class="tabs-demo__bb">활동 로그</button>
+            <button class="tabs-demo__bb">설정</button>
+          </div>
+        </div>
+        <div class="ds-demo__caption">위부터: <code>Default</code> · <code>Pills</code> · <code>Border bottom</code></div>
+      </div>
+
+      <h3 class="ds-h3">Variant 매트릭스</h3>
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th>속성</th>
+            <th>값</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="token-name">Type</td>
+            <td><code>Default</code> · <code>Pills</code> · <code>Button</code> · <code>Button group</code> · <code>Border bottom</code> · <code>Vertical with list item</code> · <code>Vertical pills</code></td>
+          </tr>
+          <tr>
+            <td class="token-name">Mobile</td>
+            <td><code>False</code> · <code>True</code> (모바일 자동 변환)</td>
+          </tr>
+          <tr>
+            <td class="token-name">실 variant 수</td>
+            <td>12</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="ds-h3">선택 가이드</h3>
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th>상황</th>
+            <th>권장 Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>일반 페이지 내부 탭 (가장 흔함)</td><td><code>Default</code> 또는 <code>Border bottom</code></td></tr>
+          <tr><td>시각적 강조 필요</td><td><code>Pills</code></td></tr>
+          <tr><td>액션처럼 강한 클릭 유도</td><td><code>Button</code> 또는 <code>Button group</code></td></tr>
+          <tr><td>사이드바 안의 서브 메뉴</td><td><code>Vertical with list item</code></td></tr>
+          <tr><td>모바일 자동 전환</td><td>임의 Type + <code>Mobile: True</code></td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="ds-h3">조립 단위</h3>
+      <p style="color: var(--colors-text-text-body); margin: 0 0 var(--spacing-3); font-size: var(--typography-font-size-text-sm);">
+        <code>Nav item</code> (8 variants) — Type 4종(<code>Default</code>/<code>Pill</code>/<code>Border bottom</code>/<code>User select</code>) × State 2종(<code>Initial</code>/<code>Hover/Active</code>).
+      </p>
+
+      <div class="ds-callout">
+        <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 13v.5"/></svg>
+        <div><strong>Tabs vs Steps vs Accordion</strong> — 동등한 뷰 전환은 <code>Nav Tabs</code>, 순차적 진행은 <code>Stepper</code>, 접고 펼치기는 <code>Accordion</code>.</div>
+      </div>
+    </section>
+
+    <!-- ===== 13. Toggle ===== -->
+    <section class="ds-section" id="toggle">
+      <h2 class="ds-h2">13. Toggle <span class="ds-pill ds-pill--brand">12 + 8 + 3 variants</span> <span style="display: inline-block; padding: 2px var(--spacing-2); background: var(--colors-background-bg-success-soft); color: var(--colors-text-text-fg-success); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); vertical-align: middle; letter-spacing: 0.04em;">NEW 2026-05-08</span></h2>
+      <p class="ds-section-desc">즉시 반영되는 on/off 설정. 폼 제출 후 적용되는 옵션은 <code>Checkbox</code>를 사용합니다.</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview ds-demo__preview--vertical" style="align-items: stretch;">
+          <div class="fw-row">
+            <label class="toggle-demo toggle-demo--base">
+              <input type="checkbox" />
+              <span class="toggle-demo__track"></span>
+            </label>
+            <label class="toggle-demo toggle-demo--base">
+              <input type="checkbox" checked />
+              <span class="toggle-demo__track"></span>
+            </label>
+            <label class="toggle-demo toggle-demo--lg">
+              <input type="checkbox" />
+              <span class="toggle-demo__track"></span>
+            </label>
+            <label class="toggle-demo toggle-demo--lg">
+              <input type="checkbox" checked />
+              <span class="toggle-demo__track"></span>
+            </label>
+            <label class="toggle-demo toggle-demo--base toggle-demo--disabled">
+              <input type="checkbox" disabled />
+              <span class="toggle-demo__track"></span>
+            </label>
+            <label class="toggle-demo toggle-demo--base toggle-demo--disabled">
+              <input type="checkbox" checked disabled />
+              <span class="toggle-demo__track"></span>
+            </label>
+          </div>
+        </div>
+        <div class="ds-demo__caption">왼쪽부터 base off/on, lg off/on, disabled off/on. Status는 Initial / Focus / Disabled 3가지.</div>
+      </div>
+
+      <h3 class="ds-h3">Variant 매트릭스</h3>
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Variants</th>
+            <th>매트릭스</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="token-name">Toggle switches</td><td>12</td><td>Type 1 × Size 2 (<code>base</code>/<code>lg</code>) × Status 3 (<code>Initial</code>/<code>Focus</code>/<code>Disabled</code>) × Checked 2</td></tr>
+          <tr><td class="token-name">Toggle inputs</td><td>8</td><td>Type 8 — <code>Default</code> · <code>Left &amp; Right label</code> · <code>Left &amp; Right icons</code> · <code>Advanced</code> · <code>Simple card</code> · <code>Logo &amp; text</code> · <code>Advanced with icon</code> · <code>Only icons</code></td></tr>
+          <tr><td class="token-name">Toggle group</td><td>3</td><td>Type 3 — <code>Default</code> · <code>Integration</code> · <code>Settings</code></td></tr>
+          <tr><td class="token-name">Label (toggle) / Helper (toggle)</td><td>2 + 1</td><td>동반 컴포넌트</td></tr>
+        </tbody>
+      </table>
+
+      <div class="ds-callout">
+        <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 13v.5"/></svg>
+        <div><strong>Toggle vs Checkbox</strong> — 토글 변경 즉시 반영 (예: 알림 켜기/끄기) → <code>Toggle</code>. 폼 제출 후 적용 (예: 약관 동의) → <code>Checkbox</code>.</div>
+      </div>
+    </section>
+
+    <!-- ===== 14. Checkbox & Radio ===== -->
+    <section class="ds-section" id="checkbox-radio">
+      <h2 class="ds-h2">14. Checkbox &amp; Radio <span class="ds-pill ds-pill--brand">12 + 54 + 10 variants</span> <span style="display: inline-block; padding: 2px var(--spacing-2); background: var(--colors-background-bg-success-soft); color: var(--colors-text-text-fg-success); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); vertical-align: middle; letter-spacing: 0.04em;">NEW 2026-05-08</span></h2>
+      <p class="ds-section-desc">다중 선택은 Checkbox, 상호 배타적인 단일 선택은 Radio. 기본 컴포넌트 + form/group/label/helper 5종으로 구성.</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview ds-demo__preview--vertical" style="align-items: stretch;">
+          <div class="fw-row">
+            <label class="cr-demo cr-demo--checkbox">
+              <input type="checkbox" />
+              <span class="cr-demo__box"></span>
+              <span class="fw-label">미선택</span>
+            </label>
+            <label class="cr-demo cr-demo--checkbox">
+              <input type="checkbox" checked />
+              <span class="cr-demo__box"></span>
+              <span class="fw-label">선택됨</span>
+            </label>
+            <label class="cr-demo cr-demo--checkbox cr-demo--disabled">
+              <input type="checkbox" disabled />
+              <span class="cr-demo__box"></span>
+              <span class="fw-label">비활성</span>
+            </label>
+          </div>
+          <div class="fw-row">
+            <label class="cr-demo cr-demo--radio">
+              <input type="radio" name="rd-demo" />
+              <span class="cr-demo__box"></span>
+              <span class="fw-label">옵션 A</span>
+            </label>
+            <label class="cr-demo cr-demo--radio">
+              <input type="radio" name="rd-demo" checked />
+              <span class="cr-demo__box"></span>
+              <span class="fw-label">옵션 B (선택됨)</span>
+            </label>
+            <label class="cr-demo cr-demo--radio cr-demo--disabled">
+              <input type="radio" name="rd-demo" disabled />
+              <span class="cr-demo__box"></span>
+              <span class="fw-label">옵션 C (비활성)</span>
+            </label>
+          </div>
+        </div>
+        <div class="ds-demo__caption">위: Checkbox (다중 선택). 아래: Radio (단일 선택).</div>
+      </div>
+
+      <h3 class="ds-h3">Variant 매트릭스</h3>
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Variants</th>
+            <th>매트릭스</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="token-name">Checkbox input</td><td>12</td><td>Type 2 (<code>Checkbox input</code>/<code>Radio input</code>) × Size × Status 3 × Checked 2</td></tr>
+          <tr><td class="token-name">Checkbox/Radio form</td><td>54</td><td>풍부한 form 변형 — <code>With helper</code> · <code>Left checkbox card</code> · <code>With side icon &amp; text</code> · <code>Icon &amp; text</code> · <code>Box icon &amp; logo</code> 등</td></tr>
+          <tr><td class="token-name">Checkbox/Radio group</td><td>10</td><td>Type 10 — <code>Default</code> · <code>Cards</code> · <code>Card + Icon</code> · <code>Big cards grid</code> · <code>Small cards grid</code> · <code>Only icons</code> · <code>Advanced</code> · <code>With numbers</code> · <code>With avatar</code> · <code>With description</code></td></tr>
+          <tr><td class="token-name">Label / Helper (checkbox&amp;radio)</td><td>4 + 1</td><td>Label 4 (<code>Default</code>/<code>Required &amp; icon</code>/<code>With number</code>/<code>With avatar</code>)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="ds-callout" style="background: var(--colors-background-bg-warning-soft); border-left-color: var(--colors-border-border-warning); color: var(--colors-text-text-fg-warning);">
+        <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" style="color: var(--colors-text-text-fg-warning);"><circle cx="10" cy="10" r="8"/><path d="M10 6v4M10 13v.5"/></svg>
+        <div>
+          <strong style="color: var(--colors-text-text-fg-warning);">Figma 정합 이슈</strong> —
+          <code>Checkbox input</code>의 Size 옵션이 Figma에서 <code>["base", "Default"]</code>로 등록되어 있어 사실상 base 하나만 의미가 있습니다. 디자이너 측에 정리 요청 권고.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 15. Floating label inputs ===== -->
+    <section class="ds-section" id="floating-label">
+      <h2 class="ds-h2">15. Floating label inputs <span class="ds-pill ds-pill--brand">84 variants</span> <span style="display: inline-block; padding: 2px var(--spacing-2); background: var(--colors-background-bg-success-soft); color: var(--colors-text-text-fg-success); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); vertical-align: middle; letter-spacing: 0.04em;">NEW 2026-05-08</span></h2>
+      <p class="ds-section-desc">라벨이 필드 안에서 위로 떠오르는 입력. 공간 절약형 폼에 적합. <strong>모달이나 카드 안의 좁은 폼</strong>에서 특히 유용합니다.</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview ds-demo__preview--vertical" style="align-items: stretch;">
+          <div class="fw-row">
+            <div class="float-demo">
+              <input class="float-demo__field" type="text" id="fl-1" placeholder=" " />
+              <label class="float-demo__label" for="fl-1">이메일</label>
+            </div>
+            <div class="float-demo float-demo--filled">
+              <input class="float-demo__field" type="text" id="fl-2" value="hello@example.com" />
+              <label class="float-demo__label" for="fl-2">이메일</label>
+            </div>
+          </div>
+        </div>
+        <div class="ds-demo__caption">왼쪽: Initial (라벨 가운데). 오른쪽: Filled (라벨 위로). 84개 variant = 3 Type × 4 Size × 7 State.</div>
+      </div>
+
+      <h3 class="ds-h3">Variant 매트릭스 (3 × 4 × 7 = 84)</h3>
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th>속성</th>
+            <th>값</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="token-name">Type</td><td><code>Default</code> · <code>With background</code> · <code>Bordered</code></td></tr>
+          <tr><td class="token-name">Size</td><td><code>sm</code> · <code>base</code> · <code>lg</code> · <code>xl</code></td></tr>
+          <tr><td class="token-name">State</td><td><code>Initial</code> · <code>Focus</code> · <code>Filled</code> · <code>Disabled</code> · <code>Read only</code> · <code>Success</code> · <code>Danger</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="ds-callout">
+        <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 13v.5"/></svg>
+        <div><strong>Floating label vs Stacked label</strong> — 일반 폼은 <code>Input field</code> + 위에 <code>Label</code>(stacked 방식). 공간이 좁거나 시각적 임팩트가 필요할 때만 <code>Floating label</code> 사용. 두 방식을 한 화면에 섞지 말 것.</div>
+      </div>
+    </section>
+
+    <!-- ===== 16. Range slider ===== -->
+    <section class="ds-section" id="range-slider">
+      <h2 class="ds-h2">16. Range slider <span class="ds-pill ds-pill--brand">2 + 1 + 2 + 2 variants</span> <span style="display: inline-block; padding: 2px var(--spacing-2); background: var(--colors-background-bg-success-soft); color: var(--colors-text-text-fg-success); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); vertical-align: middle; letter-spacing: 0.04em;">NEW 2026-05-08</span></h2>
+      <p class="ds-section-desc">연속적인 숫자 값 입력. 가격, 평점, 볼륨 등. 4개의 ComponentSet으로 분리되어 있어 조립해서 사용합니다.</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview ds-demo__preview--vertical" style="align-items: stretch;">
+          <div class="range-demo">
+            <div class="fw-label">단일 값 (Default)</div>
+            <div class="range-demo__bar">
+              <div class="range-demo__fill" style="width: 40%;"></div>
+              <div class="range-demo__thumb" style="left: 40%;"></div>
+            </div>
+            <div class="range-demo__labels"><span>0%</span><span>100%</span></div>
+          </div>
+          <div class="range-demo">
+            <div class="fw-label">범위 (Range)</div>
+            <div class="range-demo__bar">
+              <div class="range-demo__fill" style="left: 25%; width: 50%;"></div>
+              <div class="range-demo__thumb" style="left: 25%;"></div>
+              <div class="range-demo__thumb" style="left: 75%;"></div>
+            </div>
+            <div class="range-demo__labels"><span>$25</span><span>$75</span></div>
+          </div>
+        </div>
+        <div class="ds-demo__caption">위: Default (단일 값). 아래: Range (양쪽 핸들로 범위 지정).</div>
+      </div>
+
+      <h3 class="ds-h3">Variant 매트릭스</h3>
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Variants</th>
+            <th>매트릭스</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="token-name">Range Slider examples</td><td>2</td><td>Type 2 — <code>Default</code> / <code>Range</code></td></tr>
+          <tr><td class="token-name">Range Slider bars</td><td>2</td><td>Type 2 — <code>Default</code> / <code>Range</code></td></tr>
+          <tr><td class="token-name">Range Slider thumb</td><td>2</td><td>State 2 — <code>Initial</code> / <code>Active</code></td></tr>
+          <tr><td class="token-name">Range Slider helper</td><td>1</td><td>min/max 표시 + tooltip 토글</td></tr>
+        </tbody>
+      </table>
+
+      <div class="ds-callout">
+        <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 13v.5"/></svg>
+        <div><strong>언제 Range slider인가</strong> — 범위 직관성이 중요할 때 (예: 가격 필터). 정확한 값 입력이 더 중요하면 <code>Number form</code>을 사용하고, 둘 다 필요하면 둘을 함께 표시 (<code>Number form: Range</code>).</div>
+      </div>
+    </section>
+
+    <!-- ===== 17. Datepicker ===== -->
+    <section class="ds-section" id="datepicker">
+      <h2 class="ds-h2">17. Datepicker <span class="ds-pill ds-pill--brand">8 + 1 + 5 + 2 variants</span> <span style="display: inline-block; padding: 2px var(--spacing-2); background: var(--colors-background-bg-success-soft); color: var(--colors-text-text-fg-success); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); vertical-align: middle; letter-spacing: 0.04em;">NEW 2026-05-08</span></h2>
+      <p class="ds-section-desc">날짜 선택. <code>Datepicker cell</code>이 8가지 상태를 모두 지원하므로 단일 날짜뿐 아니라 <strong>범위 선택</strong>도 가능합니다.</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview" style="background: var(--colors-background-bg-secondary); justify-content: center;">
+          <div class="dp-grid">
+            <div class="dp-grid__hdr">일</div>
+            <div class="dp-grid__hdr">월</div>
+            <div class="dp-grid__hdr">화</div>
+            <div class="dp-grid__hdr">수</div>
+            <div class="dp-grid__hdr">목</div>
+            <div class="dp-grid__hdr">금</div>
+            <div class="dp-grid__hdr">토</div>
+            <div class="dp-grid__day dp-grid__day--disabled">28</div>
+            <div class="dp-grid__day dp-grid__day--disabled">29</div>
+            <div class="dp-grid__day dp-grid__day--disabled">30</div>
+            <div class="dp-grid__day">1</div>
+            <div class="dp-grid__day">2</div>
+            <div class="dp-grid__day">3</div>
+            <div class="dp-grid__day">4</div>
+            <div class="dp-grid__day">5</div>
+            <div class="dp-grid__day">6</div>
+            <div class="dp-grid__day">7</div>
+            <div class="dp-grid__day dp-grid__day--outlined">8</div>
+            <div class="dp-grid__day">9</div>
+            <div class="dp-grid__day">10</div>
+            <div class="dp-grid__day">11</div>
+            <div class="dp-grid__day">12</div>
+            <div class="dp-grid__day">13</div>
+            <div class="dp-grid__day">14</div>
+            <div class="dp-grid__day dp-grid__day--start">15</div>
+            <div class="dp-grid__day dp-grid__day--between">16</div>
+            <div class="dp-grid__day dp-grid__day--between">17</div>
+            <div class="dp-grid__day dp-grid__day--end">18</div>
+            <div class="dp-grid__day">19</div>
+            <div class="dp-grid__day">20</div>
+            <div class="dp-grid__day">21</div>
+          </div>
+        </div>
+        <div class="ds-demo__caption">8(<code>Outlined</code>=오늘) / 15-18(<code>Active start</code>+<code>between</code>+<code>end</code>) 범위 선택. <code>Datepicker cell</code>은 8가지 상태를 모두 지원합니다.</div>
+      </div>
+
+      <h3 class="ds-h3">Variant 매트릭스</h3>
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Variants</th>
+            <th>매트릭스</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="token-name">Datepicker cell</td><td>8</td><td>State 8 — <code>Initial</code> · <code>Hover</code> · <code>Active</code> · <code>Active start</code> · <code>Active between</code> · <code>Active end</code> · <code>Disabled</code> · <code>Outlined</code></td></tr>
+          <tr><td class="token-name">Datepicker controls</td><td>1</td><td>월 이동 / 연도 / 모드 전환 컨트롤</td></tr>
+          <tr><td class="token-name">Datepicker dropdown menu</td><td>5</td><td>Type 5 — <code>Default</code> · <code>Range</code> · <code>Year picker</code> · <code>Month</code> · <code>Day/Year/Month</code></td></tr>
+          <tr><td class="token-name">Datepicker (ready to use examples)</td><td>2</td><td>Type 2 — <code>Default</code> / <code>Range</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="ds-callout">
+        <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 13v.5"/></svg>
+        <div><strong>한국어 라벨 가이드</strong> — 요일은 <code>일/월/화/수/목/금/토</code> 단음절 (가장 짧음). 포맷은 <code>2026.05.08</code> 또는 <code>2026년 5월 8일</code> 중 하나로 통일 (<code>06-ux-writing.md §8.2</code>).</div>
+      </div>
+    </section>
+
+    <!-- ===== 18. Timepicker ===== -->
+    <section class="ds-section" id="timepicker">
+      <h2 class="ds-h2">18. Timepicker <span class="ds-pill ds-pill--brand">84 + 6 + 4 variants</span> <span style="display: inline-block; padding: 2px var(--spacing-2); background: var(--colors-background-bg-success-soft); color: var(--colors-text-text-fg-success); font-size: 10px; font-weight: var(--typography-font-weight-font-bold); border-radius: var(--border-radius-rounded-sm); vertical-align: middle; letter-spacing: 0.04em;">NEW 2026-05-08</span></h2>
+      <p class="ds-section-desc">시간 선택. Input 자체가 84 variants로 매우 풍부합니다 (3 Type × 4 Size × 7 State).</p>
+
+      <div class="ds-demo">
+        <div class="ds-demo__preview">
+          <div class="tp-input tp-input--placeholder">
+            <span class="tp-input__icon">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M8 4v4l2.5 2"/></svg>
+            </span>
+            -- : --
+          </div>
+          <div class="tp-input tp-input--filled">
+            <span class="tp-input__icon">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M8 4v4l2.5 2"/></svg>
+            </span>
+            14:30
+          </div>
+        </div>
+        <div class="ds-demo__caption">Initial (placeholder) → Filled. tabular-nums로 자릿수 정렬.</div>
+      </div>
+
+      <h3 class="ds-h3">Variant 매트릭스</h3>
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Variants</th>
+            <th>매트릭스</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="token-name">Timepicker input</td><td>84</td><td>Type 3 (<code>Default</code>/<code>Left add-on</code>/<code>Right add-on</code>) × Size 4 × State 7</td></tr>
+          <tr><td class="token-name">Timepicker form</td><td>6</td><td>Type 6 — <code>Default</code> · <code>Inline</code> · <code>With Dropdown</code> · <code>With button</code> · <code>With select</code> · <code>With input</code></td></tr>
+          <tr><td class="token-name">Timepicker dropdown menus</td><td>4</td><td>Type 4 — <code>Default</code> · <code>Timepicker dropdown menus</code> · <code>Advanced with buttons</code> · <code>Advanced with slider</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="ds-callout">
+        <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 13v.5"/></svg>
+        <div><strong>한국어 시간 표기</strong> — <code>오후 2:30</code> 또는 <code>14:30</code> 중 하나로 통일. 시스템/관리 화면은 24시간제 권장 (<code>06-ux-writing.md §8.2</code>).</div>
       </div>
     </section>
 
@@ -1869,8 +2859,8 @@ color: var(--colors-text-text-white);              /* 항상 흰색 */</div>
       <div class="ds-callout">
         <svg class="ds-callout__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 13v.5"/></svg>
         <div>
-          <strong>나머지 37개 카테고리</strong>는 Figma 라이브러리에서 직접 확인하세요.
-          Accordion, Banner, Bottom navigation, Breadcrumbs, Carousel, Datepicker, Drawer, File upload, Floating label inputs, Forms, Gallery, Icon shape, Jumbotron, KBD, List, Megamenu, Mobile menu, OTP Inputs, Pagination, Popovers, Progress Bars, Range slider, Rating, Rich text editor, Skeleton, Speed Dial, Spinners, Stepper, Tables, Tag input, Textarea, Timelines, Timepicker, Toggle, Tooltips, Checkbox & radio, Autocomplete input.
+          <strong>나머지 29개 카테고리</strong>는 Figma 라이브러리에서 직접 확인하세요.
+          Accordion, Banner, Bottom navigation, Breadcrumbs, Carousel, Drawer, File upload, Forms, Gallery, Icon shape, Jumbotron, KBD, List, Megamenu, Mobile menu, OTP Inputs, Pagination, Popovers, Progress Bars, Rating, Rich text editor, Skeleton, Speed Dial, Spinners, Stepper, Tables, Tag input, Textarea, Timelines, Autocomplete input.
         </div>
       </div>
     </section>
