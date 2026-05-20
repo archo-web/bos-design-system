@@ -82,22 +82,22 @@ Claude:
 
 **중요**: BOS 4.0은 다크 모드를 정식 지원하므로, 토큰 동기화 시 **항상 Light/Dark 두 모드 값을 함께** 가져와야 합니다.
 
-### 토큰 변경 시 4단계 동기화 룰
+### 토큰 변경 시 동기화 룰
 
-토큰 하나를 바꾸려면 아래 **네 곳을 모두 동시에 챙겨야** 합니다. 한 곳만 빠뜨리면 디자인-코드 불일치가 발생합니다.
+토큰 하나를 바꾸려면 아래 **세 곳을 모두 동시에 챙겨야** 합니다. 한 곳만 빠뜨리면 디자인-코드 불일치가 발생합니다.
 
 ```
 Figma 변수 (Themes 컬렉션)
     ↓
 tokens/bos4-design-tokens.css (단일 진실 공급원)
     ↓
-site/*.html — inline된 토큰 (4개 파일 모두)
+site/components.html — 라이브러리 안에 inline된 토큰 (재생성 필요)
     ↓
 Figma "Publish library" — 다른 Figma 파일에 변경사항 전파 (수동)
 ```
 
 **놓치기 쉬운 부분**
-- HTML 4개 파일에 토큰이 `<style>` 안에 inline돼 있어요. `site/shared.css`만 바꾸면 안 됩니다.
+- `site/components.html`은 React SPA로 빌드된 단일 파일이라 토큰이 안쪽 `<style>` 블록에 인라인되어 있습니다. 토큰 변경 시 라이브러리 재생성이 필요합니다.
 - Figma Publish는 Plugin API로 안 되니 **사람이 직접** 해야 합니다.
 
 ### 정기 검증 — Figma-코드 일치 점검
@@ -192,7 +192,7 @@ const themes = (await figma.variables.getLocalVariableCollectionsAsync())
 
 ### 아이콘 마크업/크기/색상 규칙
 
-
+아이콘 마크업 자체와 크기/stroke-width 규칙은 `03-component-usage.md §11`을 따릅니다. 이 섹션은 "어떻게 로드할지"만 다룹니다.
 
 ---
 
@@ -217,7 +217,7 @@ const themes = (await figma.variables.getLocalVariableCollectionsAsync())
 **컴포넌트가 47개 카테고리, 변형이 수백 개**인 광범위한 시스템입니다. Claude는 다음을 유의합니다:
 
 1. **모든 컴포넌트를 외우려 하지 않음** — `figma.search_design_system`을 적극적으로 사용
-2. **자주 쓰이는 핵심 18개 컴포넌트는 `component-usage.md`에 인덱스화** — 나머지는 필요할 때 검색
+2. **24개 핵심 컴포넌트는 `component-usage.md`에 인덱스화** — 라이브 데모는 `site/components.html` 참조. 그 외 Figma 컴포넌트는 필요할 때 검색
 3. **variant 매트릭스가 클수록 신중하게 선택** — Button은 500개 variant가 있으니 "Color/Size/State"를 명확히 정해야 함
 4. **다크모드 색조 동조 함정** — 같은 hue 계열 배경+텍스트는 다크모드에서 묻혀 보입니다. Active/Selected 상태는 흰 텍스트 또는 좌측 indicator 사용. 상세: `05-interaction-patterns.md §1.3`
 5. **접근성은 구현 단계에서 체크** — 디자인만 이쁘게 만들고 끝이 아님. 모든 인터랙티브 요소는 키보드 접근 가능해야 하고, 폼 필드는 label 연결, 아이콘 버튼은 aria-label 필수. 상세: `07-accessibility.md`
@@ -237,3 +237,4 @@ const themes = (await figma.variables.getLocalVariableCollectionsAsync())
 - `2026-04-20 (접근성 가이드 추가)` — `07-accessibility.md` 신설. WCAG 2.1 AA 기준 실무 가이드. 시멘틱 토큰 대비비 검증, 키보드/ARIA/폼 접근성, 한국어 특수사항, 개발자 체크리스트 포함. 문서 라우팅·의사결정 순서·금지 사항에도 접근성 반영
 - `2026-04-21 (Figma 토큰 전수 동기화)` — Figma Tailwind v4 팔레트 기준으로 코드 토큰 전면 업데이트. Primitive 23개 hex 수정 (emerald/rose/indigo/pink/purple/teal/cyan/sky), 4개 추가 (emerald-400, emerald-950, cyan-600, lime-500/600), 시멘틱 토큰 9개 추가·수정 (text-fg-yellow/purple/cyan/indigo/pink/lime, border-purple/orange, text-fg-success Dark). 6개 파일 모두 동기화 (tokens.css + shared.css + 4 HTML). Figma와 100% 일치 확인
 - `2026-04-22 (아이콘 로더 자동화)` — `icon-loader-boilerplate.md` 신설 및 `00-CLAUDE.md`에 환경 자동 선택 규칙 추가. 새 HTML 화면 생성 시 환경(외부망/폐쇄망/하이브리드)에 따라 Lucide 보일러플레이트 자동 삽입. 기본값 하이브리드 (CDN 시도 → self-host 폴백). Self-host 표준 경로: `/assets/vendor/lucide-0.460.0.min.js`. 문서 라우팅, 의사결정 순서, 금지 사항에도 반영.
+- `2026-05-20 (컴포넌트 라이브러리 v2)` — **컴포넌트 라이브러리 React SPA로 재구축**, 10 → 24 컴포넌트로 확장. 단일 HTML 파일 `components.html`로 배포. 5개 Foundations 페이지 + 신규 15개 컴포넌트 (Avatar, Icon shape, Select, Checkbox/Radio, Toggle, Range slider, Datepicker, Timepicker, Toast, Drawer, Tooltip, Empty state, Stepper, Breadcrumbs, Misc) 추가. 각 컴포넌트는 variant 매트릭스 · 라이브 데모 · API 표 · 권장/지양 가이드 포함. `docs/03-component-usage.md` 24개 기준으로 재작성. 기존 `site/components/` 개별 페이지 10개와 `bos4-app.html` SPA는 v2로 통합되어 제거. 상세 변경: `CHANGELOG.md`

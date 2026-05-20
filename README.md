@@ -1,10 +1,9 @@
-# BOS 4.0 Design System
+# NSTAR 1.0 Design System
 
-> Flowbite + Tailwind 기반 한국어 디자인 시스템. 시멘틱 토큰, 다크 모드 정식 지원, 47개 컴포넌트 카테고리.
+> Flowbite + Tailwind 기반 한국어 디자인 시스템. 시멘틱 토큰, 다크 모드 정식 지원, 24개 컴포넌트 라이브 가이드.
 
-**🌐 라이브 사이트**: `https://<your-github-username>.github.io/bos4-design-system/site/`
-(GitHub Pages 설정 후 실제 URL로 교체하세요)
-
+**🌐 라이브 사이트**: `https://<your-github-username>.github.io/bos4-design-system/site/components.html`
+**📚 컴포넌트 라이브러리**: [components.html](site/components.html) — 24 컴포넌트 + 5 Foundations, 단일 HTML SPA (외부 의존성 0, 오프라인 동작)
 **🎨 Figma 파일**: [`jmK75D3yVgpYh0wHAlsAwy`](https://figma.com/design/jmK75D3yVgpYh0wHAlsAwy)
 
 ---
@@ -15,7 +14,7 @@
 
 1. **Figma 파일 열기** → 위 링크
 2. **가이드라인 읽기** → [`docs/00-CLAUDE.md`](docs/00-CLAUDE.md)부터 시작
-3. **컴포넌트 사용** → Figma에서 BOS 4.0 라이브러리를 Enable
+3. **컴포넌트 사용** → Figma에서 NSTAR 1.0 라이브러리를 Enable
 4. **새 화면 만들 때** → [`docs/04-layout-patterns.md`](docs/04-layout-patterns.md) 5가지 패턴 중 선택
 
 ### 개발자로서
@@ -41,9 +40,17 @@
 <html data-theme="dark"> <!-- 또는 "light" -->
 ```
 
-**옵션 2 — 전체 디자인 시스템 참조**
+**옵션 2 — 컴포넌트 라이브러리 라이브 뷰**
 
-`site/` 폴더의 HTML 파일들을 브라우저로 열면 토큰, 컴포넌트, 패턴을 라이브로 확인 가능 (외부 의존성 없음).
+`site/components.html` 파일을 브라우저로 열면:
+
+- 24개 컴포넌트의 인터랙티브 라이브 데모
+- 각 컴포넌트의 variant 매트릭스 + API 표
+- 복사 가능한 코드 스니펫
+- 권장 / 지양 가이드
+- 5개 Foundations (Colors / Type / Spacing / Radii & Shadows / Icons)
+
+외부 의존성 없는 단일 HTML 파일. 오프라인에서도 동작합니다.
 
 ### Claude AI와 작업하기
 
@@ -59,26 +66,25 @@
 
 ```
 bos4-design-system/
-├── README.md                       ← 이 파일
-├── CONTRIBUTING.md                 ← 기여 방법
-├── SETUP.md                        ← GitHub 관리법 (디자이너용)
-├── docs/                           ← 가이드라인 문서 8개
-│   ├── 00-CLAUDE.md                ← 마스터 진입점
-│   ├── 01-design-tokens.md         ← 토큰 카탈로그
-│   ├── 02-design-principles.md     ← 6가지 디자인 원칙
-│   ├── 03-component-usage.md       ← 47개 카테고리 + 핵심 18개 가이드
-│   ├── 04-layout-patterns.md       ← 12가지 페이지 패턴
-│   ├── 05-interaction-patterns.md  ← 상태/인터랙션 표준
-│   ├── 06-ux-writing.md            ← 한국어 UX 라이팅
-│   └── 07-accessibility.md         ← 웹 접근성 가이드 (WCAG AA)
+├── README.md                          ← 이 파일
+├── CHANGELOG.md                       ← 버전별 변경 이력
+├── CONTRIBUTING.md                    ← 기여 방법
+├── SETUP.md                           ← GitHub 관리법 (디자이너용)
+├── docs/                              ← 가이드라인 문서 9개
+│   ├── 00-CLAUDE.md                   ← 마스터 진입점
+│   ├── 01-design-tokens.md            ← 토큰 카탈로그
+│   ├── 02-design-principles.md        ← 6가지 디자인 원칙
+│   ├── 03-component-usage.md          ← 24개 컴포넌트 + 5 Foundations 가이드
+│   ├── 04-layout-patterns.md          ← 5가지 페이지 패턴
+│   ├── 05-interaction-patterns.md     ← 상태/인터랙션 표준
+│   ├── 06-ux-writing.md               ← 한국어 UX 라이팅
+│   ├── 07-accessibility.md            ← 웹 접근성 가이드 (WCAG AA)
+│   ├── 08-dependency-guardrails.md    ← 외부 의존성 룰
+│   └── icon-loader-boilerplate.md     ← Lucide 환경별 로더
 ├── tokens/
-│   └── bos4-design-tokens.css      ← 단일 진실 공급원 (489 토큰)
-└── site/                           ← 인터랙티브 사이트 (GitHub Pages 배포)
-    ├── index.html                  ← 홈
-    ├── tokens.html                 ← 토큰 시각 카탈로그
-    ├── components.html             ← 핵심 18개 컴포넌트 라이브 갤러리
-    ├── patterns.html               ← 12가지 페이지 패턴
-    └── shared.css                  ← 사이트 공통 스타일
+│   └── bos4-design-tokens.css         ← 단일 진실 공급원 (489 토큰)
+└── site/                              ← 컴포넌트 라이브러리 (GitHub Pages 배포)
+    └── components.html                ← NSTAR 1.0 라이브러리 (24 컴포넌트 + 5 Foundations, React SPA)
 ```
 
 ---
@@ -102,8 +108,24 @@ bos4-design-system/
 - Button: `Color × Size × State × Outline × Icon-only` = **500 variants**
 - Input field: `Type × Size × State` = **140 variants**
 - Badge: `Theme × Size × Type` = **84 variants**
+- Dropdown: 16 menu × 48 items × 5 headers × 6 ready-to-use = **75 variants**
 
-47개 카테고리, 수천 개 variant — 상세는 [`docs/03-component-usage.md`](docs/03-component-usage.md).
+라이브 데모와 코드는 [`site/components.html`](site/) 참조.
+
+---
+
+## 🆕 v2 라이브러리 — 추가된 15개 컴포넌트
+
+기존 v1(10 컴포넌트)에서 v2(24 컴포넌트)로 확장되었습니다.
+
+| 카테고리 | 신규 컴포넌트 |
+|---|---|
+| 액션 | Avatar, Icon shape |
+| 폼 | Select, Checkbox/Radio, Toggle, **Range slider**, Datepicker, Timepicker |
+| 피드백 | Toast, Drawer, Tooltip, Empty state |
+| 네비/데이터 | Stepper, Breadcrumbs, Misc (KBD, Rating, Progress, Spinner, Skeleton, Carousel 등) |
+
+각 컴포넌트의 variant 매트릭스, 라이브 데모, 코드 스니펫, 접근성 가이드는 라이브러리에서 직접 확인하세요. 자세한 변경 사항은 [`CHANGELOG.md`](CHANGELOG.md) 참조.
 
 ---
 
@@ -117,7 +139,7 @@ bos4-design-system/
 3. 이 레포에서 관련 파일 업데이트
    - tokens/bos4-design-tokens.css
    - docs/*.md (해당되는 경우)
-   - site/*.html (inline된 토큰 주의)
+   - site/components.html (라이브러리 재생성 — 토큰 변경 시 인라인된 부분 갱신)
 4. Git commit + push
 5. GitHub Pages 자동 재배포
 ```
@@ -137,59 +159,20 @@ bos4-design-system/
 
 ## 📝 최근 변경 이력
 
-### 2026-05-08 — 레이아웃 패턴 5개 → 12개로 확장
+### 2026-05-20 — v2 컴포넌트 라이브러리 출시
 
-**배경**: 실무에서 자주 만드는 화면 중 기존 5개 패턴으로 분류되지 않던 7가지 화면(이메일 클라이언트형 Master-Detail, 상품 카탈로그형 Card Grid, 단계별 Wizard, 카테고리별 Settings, 첫 진입 Onboarding, 빈/오류 상태)을 표준 패턴으로 추가.
+**변경**:
+- 컴포넌트 라이브러리 v2 출시 — 10 → 24 컴포넌트로 확장
+- React 기반 단일 HTML SPA로 전환 (`components.html`)
+- 5개 Foundations 페이지 추가 (Colors / Type / Spacing / Radii & Shadows / Icons)
+- 신규 컴포넌트 15개 추가 — Avatar, Icon shape, Select, Checkbox/Radio, Toggle, Range slider, Datepicker, Timepicker, Toast, Drawer, Tooltip, Empty state, Stepper, Breadcrumbs, Misc
+- `docs/03-component-usage.md`를 24 컴포넌트 기준으로 재작성
 
-**추가된 패턴 (7개)**:
-- **§2 Master-Detail** — 좌측 리스트 + 우측 상세 동시 표시 (이메일·메시지·코드 리뷰)
-- **§3 Card Grid** — 시각적 항목을 카드로 펼치기 (상품·갤러리·템플릿)
-- **§7 Wizard / Stepper** — 단계별 긴 프로세스 (회원가입·결제·워크스페이스 만들기)
-- **§9 Settings** — 카테고리별 환경설정 (즉시/저장 반영 분리)
-- **§11 Onboarding** — 첫 진입 사용자 안내
-- **§12 Empty / 404 / Error** — 4가지 변형 (Empty/404/403/500)
+**제거**:
+- 기존 `site/components/` 폴더의 개별 컴포넌트 페이지 10개 (v2 라이브러리로 통합)
+- 기존 `bos4-app.html` SPA (v2 라이브러리가 대체)
 
-**의사결정 트리 재구성 — 다면적 3단계**:
-- Step 1: 액션 동사 (본다·한다·바꾼다·진입한다)
-- Step 2: 정보 구조 (행/카드/단일/폼/멀티지표)
-- Step 3: 마이크로 분기 (5개 이하 / 100개 이상 / 모바일 / 첫 진입 등)
-- 세 관점이 같은 패턴을 가리키는지 검증
-
-**기타**: 반응형 브레이크포인트별 동작 표 추가, 흔한 실수 6개 → **12개**로 확장.
-
-**적용 범위**: `docs/04-layout-patterns.md` 메인 문서 + `site/patterns.html` 시각 패턴 12개 (디자이너도 참조 가능).
-
-**학습**: "패턴은 단순 분류가 아니라 의사결정 도구다. 트리를 다면적으로 만들면 모호한 요구사항을 더 빨리 잡아낼 수 있다."
-
----
-
-### 2026-05-08 — 핵심 컴포넌트 가이드를 18개로 확장
-
-**배경**: Figma 공식 파일(`jmK75D3yVgpYh0wHAlsAwy`)과의 1:1 대조를 통해 기존 가이드의 정합성을 점검하고, 자주 쓰는 컴포넌트 8종의 깊이 가이드를 추가.
-
-**추가된 깊이 가이드 (8개)**:
-- **§11 Tooltip** (4 variants) — Position 4종 (Top/Bottom/Left/Right)
-- **§12 Nav Tabs** (12 variants) — Type 7종 × Mobile
-- **§13 Toggle** (12+8+3 variants) — Switches / Inputs / Group
-- **§14 Checkbox & Radio** (12+54+10 variants) — Input / Form 54 / Group 10
-- **§15 Floating label inputs** (84 variants) — 3 Type × 4 Size × 7 State
-- **§16 Range slider** (2+1+2+2 variants) — 단일/범위 선택
-- **§17 Datepicker** (8+1+5+2 variants) — Cell 8 state + Range 선택
-- **§18 Timepicker** (84+6+4 variants) — Input 84 + Form 6 + Dropdown 4
-
-**기존 가이드 정합성 수정**:
-- **Card §6** — `CTA card` 제거(Figma에 없음), `With full width tabs` / `With nav tabs` / `Cars with list` 추가, variant 수 `18 types` → `16 variants` 정정
-- **Modal §5** — 동반 컴포넌트 `Modal header` (7), `Modal footer` (4) 추가
-- **Dropdown §8** — 조립 단위 `Dropdown list item` (48), `Dropdown header` (5), `ready to use examples` (6) 추가
-
-**구조 갱신**:
-- Icons 섹션 자리이동: §11 → **§19**
-- 핵심 컴포넌트 카운트: 10 → **18** (사이트 4개 페이지 사이드바 동기화)
-- 페이지 상단에 "What's New" 배너 추가 — 변경된 모든 섹션으로 점프 링크 제공
-
-**학습**: "기억과 추측이 아닌 Figma `componentPropertyDefinitions`를 직접 추출해서 검증하는 것이 가장 빠른 정합성 점검 방법."
-
----
+자세한 사항은 [`CHANGELOG.md`](CHANGELOG.md) 참조.
 
 ### 2026-04-20 — Navigation Active 표준화
 
@@ -212,5 +195,5 @@ bos4-design-system/
 
 ---
 
-**Maintained by**: BOS Design Team
-**Last Updated**: 2026-05-08
+**Maintained by**: NSTAR Design Team
+**Last Updated**: 2026-05-20
