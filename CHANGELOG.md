@@ -4,6 +4,35 @@
 
 ---
 
+## [2.1.0] — 2026-05-27
+
+Figma → 코드 상세 가이드 신설. 변형 매트릭스 + UX 의도 + Do/Don't + 시나리오 레시피.
+
+### Added
+
+- **`docs/09-figma-component-guide.md`** (2,013 lines)
+  - Figma Plugin API 로 113 COMPONENT_SET 의 variantGroupProperties + componentPropertyDefinitions 일괄 추출
+  - 38 카테고리 × 변형 매트릭스 표 (Property × Values · variant 합계)
+  - Component Props (BOOLEAN · TEXT · INSTANCE_SWAP) 카운트 + 명세
+  - 사용 규칙 (ARIA · 키보드 · 시멘틱 HTML)
+  - 10 핵심 컴포넌트(Button · Input · Alert · Modal · Toast · Tooltip · Dropdown · Card · Tabs · Stepper · Pagination · Table) 에 4-블록 UX 가이드:
+    - 🎯 UX 의도 — 시선 흐름 · 상태 피드백 · 타격 영역 · 인지 패턴
+    - ✅ 권장 (Do) — Vue 코드 예시 3-5개
+    - ❌ 지양 (Don't) — 흔한 실수 + 대체안
+    - 📐 추가 가이드 — 라벨 규칙 · 키보드 · 모바일 · ARIA 매핑
+  - **부록 C — 전사 UX 권장/지양 요약** (22 Do + 22 Don't 항목)
+  - **부록 D — 시나리오별 컴포넌트 조합 레시피** 4종:
+    - 거래 상세 페이지 (Breadcrumbs → Header → Tabs → KV/Table/Stat/Timeline → Action)
+    - 신규 등록 폼 모달 (Modal+Header+Form+Footer + Toast + Alert)
+    - 데이터 목록 페이지 (Filter → 3상태 처리 → Table+Dropdown → Pagination)
+    - T5 Step-up MFA + Maker-Checker 결재 5단계
+
+### Changed
+
+- `docs/00-CLAUDE.md` — 문서 라우팅 표에 09 항목 추가, 변경 이력에 한 줄 추가
+
+---
+
 ## [2.0.0] — 2026-05-20
 
 컴포넌트 라이브러리 v2 출시. 10 → 24 컴포넌트로 확장, React 기반 단일 HTML SPA로 재구축.

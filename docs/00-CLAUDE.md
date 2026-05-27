@@ -48,6 +48,7 @@ vibe coding 작업 유형에 따라 아래 문서를 **반드시 먼저** 참조
 | 한국어 문구 작성 | `ux-writing.md` | 라벨, 메시지, 안내 문구 작성 시 |
 | 웹 접근성 준수 | `accessibility.md` | 모든 구현 작업 (WCAG AA 기준) |
 | 외부 의존성 추가 | `08-dependency-guardrails.md` | npm 패키지/CDN 도입 시 |
+| Figma → 코드 상세 가이드 | `09-figma-component-guide.md` | 113 컴포넌트 세트 variant 매트릭스 · UX 의도 · Do/Don't · 시나리오 레시피 |
 | 아이콘 로드 (HTML 화면) | `icon-loader-boilerplate.md` | 새 HTML 화면 생성 시 (CDN/Self-host/하이브리드) |
 | 디자인 토큰 (색상/간격/폰트) | `bos4-design-tokens.css` | 모든 스타일링 작업 |
 
@@ -238,3 +239,4 @@ const themes = (await figma.variables.getLocalVariableCollectionsAsync())
 - `2026-04-21 (Figma 토큰 전수 동기화)` — Figma Tailwind v4 팔레트 기준으로 코드 토큰 전면 업데이트. Primitive 23개 hex 수정 (emerald/rose/indigo/pink/purple/teal/cyan/sky), 4개 추가 (emerald-400, emerald-950, cyan-600, lime-500/600), 시멘틱 토큰 9개 추가·수정 (text-fg-yellow/purple/cyan/indigo/pink/lime, border-purple/orange, text-fg-success Dark). 6개 파일 모두 동기화 (tokens.css + shared.css + 4 HTML). Figma와 100% 일치 확인
 - `2026-04-22 (아이콘 로더 자동화)` — `icon-loader-boilerplate.md` 신설 및 `00-CLAUDE.md`에 환경 자동 선택 규칙 추가. 새 HTML 화면 생성 시 환경(외부망/폐쇄망/하이브리드)에 따라 Lucide 보일러플레이트 자동 삽입. 기본값 하이브리드 (CDN 시도 → self-host 폴백). Self-host 표준 경로: `/assets/vendor/lucide-0.460.0.min.js`. 문서 라우팅, 의사결정 순서, 금지 사항에도 반영.
 - `2026-05-20 (컴포넌트 라이브러리 v2)` — **컴포넌트 라이브러리 React SPA로 재구축**, 10 → 24 컴포넌트로 확장. 단일 HTML 파일 `components.html`로 배포. 5개 Foundations 페이지 + 신규 15개 컴포넌트 (Avatar, Icon shape, Select, Checkbox/Radio, Toggle, Range slider, Datepicker, Timepicker, Toast, Drawer, Tooltip, Empty state, Stepper, Breadcrumbs, Misc) 추가. 각 컴포넌트는 variant 매트릭스 · 라이브 데모 · API 표 · 권장/지양 가이드 포함. `docs/03-component-usage.md` 24개 기준으로 재작성. 기존 `site/components/` 개별 페이지 10개와 `bos4-app.html` SPA는 v2로 통합되어 제거. 상세 변경: `CHANGELOG.md`
+- `2026-05-27 (Figma 상세 가이드)` — `09-figma-component-guide.md` 신설. Figma Plugin API 로 113 COMPONENT_SET 의 variantGroupProperties + componentPropertyDefinitions 일괄 추출 → 38 카테고리 × 변형 매트릭스 표 + Component Props 명세 + 사용 규칙. 10 핵심 컴포넌트(Button·Input·Alert·Modal·Toast·Tooltip·Dropdown·Card·Tabs·Stepper·Pagination·Table)에 🎯 UX 의도 · ✅ Do · ❌ Don't · 📐 추가 가이드 4-블록. 부록 C 전사 권장/지양 요약(22+22 항목) · 부록 D 시나리오별 컴포넌트 조합 레시피 4종(거래 상세 · 등록 모달 · 데이터 목록 · ★ T5 Step-up MFA + Maker-Checker 결재).
