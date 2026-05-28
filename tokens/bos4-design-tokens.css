@@ -109,6 +109,8 @@
   --colors-rose-050: #fef0f2;
   --colors-rose-100: #ffe4e6;
   --colors-rose-200: #ffccd3;
+  --colors-rose-300: #ffa1ad;
+  --colors-rose-400: #ff637e;
   --colors-rose-500: #ff2056;
   --colors-rose-600: #ec003f;
   --colors-rose-700: #c70036;
@@ -274,13 +276,13 @@
 
   --colors-background-bg-danger-soft:    var(--colors-rose-050);
   --colors-background-bg-danger-medium:  var(--colors-rose-100);
-  --colors-background-bg-danger:         var(--colors-rose-700);
-  --colors-background-bg-danger-strong:  var(--colors-rose-800);
+  --colors-background-bg-danger:         var(--colors-rose-600);
+  --colors-background-bg-danger-strong:  var(--colors-rose-700);
 
   --colors-background-bg-warning-soft:   var(--colors-orange-050);
   --colors-background-bg-warning-medium: var(--colors-orange-100);
   --colors-background-bg-warning:        var(--colors-orange-500);
-  --colors-background-bg-warning-strong: var(--colors-orange-700);
+  --colors-background-bg-warning-strong: var(--colors-orange-600);
 
   /* ----- Text ----- */
   --colors-text-text-white:   var(--white);
@@ -293,12 +295,12 @@
   --colors-text-text-fg-brand:        var(--colors-brand-700);
   --colors-text-text-fg-brand-strong: var(--colors-brand-900);
 
-  --colors-text-text-fg-success:        var(--colors-emerald-700);
-  --colors-text-text-fg-success-strong: var(--colors-emerald-900);
+  --colors-text-text-fg-success:        var(--colors-emerald-600);
+  --colors-text-text-fg-success-strong: var(--colors-emerald-700);
   --colors-text-text-fg-danger:         var(--colors-rose-700);
   --colors-text-text-fg-danger-strong:  var(--colors-rose-900);
-  --colors-text-text-fg-warning-subtle: var(--colors-orange-600);
-  --colors-text-text-fg-warning:        var(--colors-orange-900);
+  --colors-text-text-fg-warning-subtle: var(--colors-orange-400);
+  --colors-text-text-fg-warning:        var(--colors-orange-600);
 
   --colors-text-text-fg-info:     var(--colors-brand-900);
   --colors-text-text-fg-disabled: var(--colors-gray-400);
@@ -322,11 +324,11 @@
   --colors-border-border-brand:         var(--colors-brand-700);
 
   --colors-border-border-success-subtle: var(--colors-emerald-200);
-  --colors-border-border-success:        var(--colors-emerald-700);
+  --colors-border-border-success:        var(--colors-emerald-600);
   --colors-border-border-danger-subtle:  var(--colors-rose-200);
-  --colors-border-border-danger:         var(--colors-rose-700);
+  --colors-border-border-danger:         var(--colors-rose-600);
   --colors-border-border-warning-subtle: var(--colors-orange-200);
-  --colors-border-border-warning:        var(--colors-orange-600);
+  --colors-border-border-warning:        var(--colors-orange-500);
 
   /* ----- Accent text/border colors ----- */
   --colors-text-text-fg-yellow:  var(--colors-yellow-400);
