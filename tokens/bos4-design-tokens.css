@@ -271,8 +271,8 @@
   /* Status backgrounds */
   --colors-background-bg-success-soft:   var(--colors-emerald-050);
   --colors-background-bg-success-medium: var(--colors-emerald-100);
-  --colors-background-bg-success:        var(--colors-emerald-700);
-  --colors-background-bg-success-strong: var(--colors-emerald-800);
+  --colors-background-bg-success:        var(--colors-emerald-500);
+  --colors-background-bg-success-strong: var(--colors-emerald-600);
 
   --colors-background-bg-danger-soft:    var(--colors-rose-050);
   --colors-background-bg-danger-medium:  var(--colors-rose-100);
@@ -380,7 +380,7 @@
   --colors-background-bg-brand-strong: var(--colors-brand-700);
 
   /* Status backgrounds */
-  --colors-background-bg-success-soft:   var(--colors-emerald-900);
+  --colors-background-bg-success-soft:   var(--colors-emerald-950);
   --colors-background-bg-success-medium: var(--colors-emerald-900);
   --colors-background-bg-success:        var(--colors-emerald-600);
   --colors-background-bg-success-strong: var(--colors-emerald-700);
@@ -390,7 +390,7 @@
   --colors-background-bg-danger:         var(--colors-rose-700);
   --colors-background-bg-danger-strong:  var(--colors-rose-800);
 
-  --colors-background-bg-warning-soft:   var(--colors-orange-900);
+  --colors-background-bg-warning-soft:   var(--colors-orange-950);
   --colors-background-bg-warning-medium: var(--colors-orange-900);
   --colors-background-bg-warning:        var(--colors-orange-600);
   --colors-background-bg-warning-strong: var(--colors-orange-700);
